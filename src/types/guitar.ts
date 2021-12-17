@@ -4,7 +4,7 @@ export type Guitar = {
   vendorCode: string,
   type: string,
   description: string,
-  previewImg: string
+  previewImg: string,
   stringCount: number,
   rating: number,
   price: number,

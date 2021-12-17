@@ -3,14 +3,14 @@ import { loadGuitars } from './actions';
 import { State } from '../types/state';
 
 const initialState: State = {
-  guitarList: [],
+  guitars: [],
   isDataLoaded: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadGuitars, (state, action) => {
-      state.guitarList = action.payload;
+      state.guitars = action.payload;
       state.isDataLoaded = true;
     });
 });
