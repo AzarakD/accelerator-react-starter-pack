@@ -6,3 +6,8 @@ export const loadGuitars = createAction(
   ActionType.LoadGuitars,
   (guitars: Guitar[]) => ({payload: guitars}),
 );
+
+export const loadGuitar = createAction(
+  ActionType.LoadGuitar,
+  (guitar: Guitar) => ({payload: guitar}),
+);

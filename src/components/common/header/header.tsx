@@ -1,16 +1,32 @@
+import {
+  Link,
+  useHistory
+} from 'react-router-dom';
 import FormSearch from './form-search/form-search';
+import { AppRoute } from '../../../const';
 
 export default function Header(): JSX.Element {
+  const history = useHistory();
+  const pathname = history.location.pathname;
+
   return (
     <header className="header" id="header">
-      <div className="container header__wrapper"><a className="header__logo logo" href="#todo"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип"/></a>
+      <div className="container header__wrapper">
+        <Link to={AppRoute.Main} className="header__logo logo">
+          <img className="logo__img" width="70" height="70" src="../img/svg/logo.svg" alt="Логотип"/>
+        </Link>
         <nav className="main-nav">
           <ul className="main-nav__list">
-            <li><a className="link main-nav__link link--current" href="#todo">Каталог</a>
+            <li>
+              <Link to={AppRoute.Main} className={`link main-nav__link ${pathname === AppRoute.Main ? 'link--current' : ''}`}>
+                Каталог
+              </Link>
             </li>
-            <li><a className="link main-nav__link" href="#todo">Где купить?</a>
+            <li>
+              <a className="link main-nav__link" href="#todo">Где купить?</a>
             </li>
-            <li><a className="link main-nav__link" href="#todo">О компании</a>
+            <li>
+              <a className="link main-nav__link" href="#todo">О компании</a>
             </li>
           </ul>
         </nav>

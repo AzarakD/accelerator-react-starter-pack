@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom';
 import RatingStars from '../rating-stars/rating-stars';
 import { setPrice } from '../../../../utils';
 import { GuitarCardProps } from './type';
+import { AppRoute } from '../../../../const';
 
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
   const {
+    id,
     name,
     type,
     previewImg,
@@ -16,7 +19,7 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
       <img src={previewImg.replace('/', '/content/')} width="75" height="190" alt={`${type} ${name}`}/>
       <div className="product-card__info">
         <div className="rate product-card__rate" aria-hidden="true">
-          <RatingStars rating={rating}/>
+          <RatingStars rating={rating} />
           <span className="rate__count">9</span>
           <span className="rate__message"></span>
         </div>
@@ -26,7 +29,12 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <a className="button button--mini" href="#todo">Подробнее</a>
+        <Link
+          to={AppRoute.Product.replace(':id', String(id))}
+          className="button button--mini"
+        >
+          Подробнее
+        </Link>
         <a className="button button--red button--mini button--add-to-cart" href="#todo">Купить</a>
       </div>
     </div>

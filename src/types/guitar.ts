@@ -1,8 +1,14 @@
+export type GuitarType = {
+  acoustic: 'Акустическая',
+  electric: 'Электрическая',
+  ukulele: 'Укулеле',
+};
+
 export type Guitar = {
   id: number,
   name: string,
   vendorCode: string,
-  type: string,
+  type: keyof GuitarType,
   description: string,
   previewImg: string,
   stringCount: number,

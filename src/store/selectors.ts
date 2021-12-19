@@ -3,3 +3,4 @@ import { State } from '../types/state';
 
 export const getIsDataLoaded = ({isDataLoaded}: State): boolean => isDataLoaded;
 export const getGuitars = ({guitars}: State): Guitar[] => guitars;
+export const getGuitar = ({guitar}: State): Guitar => guitar;
