@@ -1,5 +1,5 @@
-import RatingStars from './rating-stars/rating-stars';
-import { setPrice } from '../../../../../utils';
+import RatingStars from '../rating-stars/rating-stars';
+import { setPrice } from '../../../../utils';
 import { GuitarCardProps } from './type';
 
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {

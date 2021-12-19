@@ -1,4 +1,4 @@
-import { Guitar } from '../../../../../types/guitar';
+import { Guitar } from '../../../../types/guitar';
 
 export type GuitarCardProps = {
   guitar: Guitar,

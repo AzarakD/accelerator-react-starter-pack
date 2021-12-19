@@ -1,4 +1,4 @@
-import { setRatingStar } from '../../../../../../utils';
+import { setRatingStar } from '../../../../utils';
 
 const STAR_COUNT = 5;
 

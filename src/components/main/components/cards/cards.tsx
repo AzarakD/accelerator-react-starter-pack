@@ -3,7 +3,7 @@ import {
   getGuitars,
   getIsDataLoaded
 } from '../../../../store/selectors';
-import GuitarCard from './guitar-card/guitar-card';
+import GuitarCard from '../guitar-card/guitar-card';
 
 export default function Cards(): JSX.Element {
   const guitars = useSelector(getGuitars);
