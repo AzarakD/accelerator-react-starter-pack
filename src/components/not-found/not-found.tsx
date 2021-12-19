@@ -1,4 +1,7 @@
-import { Link, useHistory } from 'react-router-dom';
+import {
+  Link,
+  useHistory
+} from 'react-router-dom';
 import { AppRoute } from '../../const';
 
 export default function NotFound(): JSX.Element {
