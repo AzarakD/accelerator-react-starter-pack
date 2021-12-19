@@ -21,17 +21,19 @@ export default function FormSearch(): JSX.Element {
     [guitars],
   );
 
-  const filterNames = (evt: FormEvent<HTMLInputElement>) => {
-    if (!isOpened) {setIsOpened(true);}
-
+  const onUserInput = useCallback((evt: FormEvent<HTMLInputElement>) => {
     const currentInput = evt.currentTarget.value.toLowerCase();
-
-    setShownNames(guitarNames.filter(
+    const filteredNames = guitarNames.filter(
       (name) => name
         .toLowerCase()
         .includes(currentInput),
-    ));
-  };
+    );
+
+    setShownNames(filteredNames);
+
+    if (filteredNames.length !== 0 && !isOpened) {setIsOpened(true);}
+    if (filteredNames.length === 0) {setIsOpened(false);}
+  }, [guitarNames, isOpened]);
 
   const onOutsideClick = useCallback((evt) => {
     if (refInput.current !== evt.target) {
@@ -66,7 +68,7 @@ export default function FormSearch(): JSX.Element {
         </button>
         <input
           ref={refInput}
-          onInput={(evt) => filterNames(evt)}
+          onInput={(evt) => onUserInput(evt)}
           className="form-search__input"
           id="search"
           type="text"
