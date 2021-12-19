@@ -1,3 +1,7 @@
+export enum AppRoute {
+  Main = '/',
+}
+
 export enum APIRoute {
   Guitars = '/guitars',
   Guitar = '/guitars/:id',
