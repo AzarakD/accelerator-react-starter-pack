@@ -22,3 +22,15 @@ export const filterByName = (items: Guitar[], name: string) => items.filter(
     .toLowerCase()
     .includes(name),
 );
+
+export const sortToBiggerPrice = (items: Guitar[]) =>
+  items.slice().sort((a, b) => a.price - b.price);
+
+export const sortToLesserPrice = (items: Guitar[]) =>
+  items.slice().sort((a, b) => b.price - a.price);
+
+export const sortToBiggerRating = (items: Guitar[]) =>
+  items.slice().sort((a, b) => a.rating - b.rating);
+
+export const sortToLesserRating = (items: Guitar[]) =>
+  items.slice().sort((a, b) => b.rating - a.rating);

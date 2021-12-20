@@ -1,17 +1,9 @@
 import { useSelector } from 'react-redux';
-import {
-  getFilteredGuitars,
-  getIsDataLoaded
-} from '../../../../store/selectors';
+import { getFilteredGuitars } from '../../../../store/selectors';
 import GuitarCard from '../guitar-card/guitar-card';
 
 export default function Cards(): JSX.Element {
   const guitars = useSelector(getFilteredGuitars);
-  const isLoaded = useSelector(getIsDataLoaded);
-
-  if (!isLoaded) {
-    return <>Loading...</>;
-  }
 
   return (
     <div className="cards catalog__cards">
