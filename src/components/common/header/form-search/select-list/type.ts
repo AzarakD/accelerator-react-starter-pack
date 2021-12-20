@@ -1,4 +1,6 @@
+import { Guitar } from '../../../../../types/guitar';
+
 export type SelectListProps = {
   isOpened: boolean,
-  shownItems: Array<[string, number]>,
+  shownItems: Guitar[],
 };

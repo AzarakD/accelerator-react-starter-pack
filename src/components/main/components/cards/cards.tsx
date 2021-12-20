@@ -1,22 +1,26 @@
 import { useSelector } from 'react-redux';
 import {
-  getGuitars,
+  getFilteredGuitars,
   getIsDataLoaded
 } from '../../../../store/selectors';
 import GuitarCard from '../guitar-card/guitar-card';
 
 export default function Cards(): JSX.Element {
-  const guitars = useSelector(getGuitars);
+  const guitars = useSelector(getFilteredGuitars);
   const isLoaded = useSelector(getIsDataLoaded);
+
+  if (!isLoaded) {
+    return <>Loading...</>;
+  }
 
   return (
     <div className="cards catalog__cards">
       {
-        isLoaded
+        guitars.length !== 0
           ?
           guitars.map((guitar) => <GuitarCard guitar={guitar} key={guitar.id}/>)
           :
-          <>Loading...</>
+          <>Товар не найден.</>
       }
     </div>
   );

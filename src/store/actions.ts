@@ -11,3 +11,8 @@ export const loadGuitar = createAction(
   ActionType.LoadGuitar,
   (guitar: Guitar) => ({payload: guitar}),
 );
+
+export const filterGuitars = createAction(
+  ActionType.FilterGuitars,
+  (guitars: Guitar[]) => ({payload: guitars}),
+);

@@ -1,4 +1,7 @@
-import { GuitarType } from './types/guitar';
+import {
+  Guitar,
+  GuitarType
+} from './types/guitar';
 
 export const setRatingStar = (rating: number, place: number) =>
   `#icon-${ rating >= place ? 'full-star' : 'star' }`;
@@ -13,3 +16,9 @@ const guitarType: GuitarType = {
 };
 
 export const setGuitarType = (type: keyof GuitarType) => guitarType[type];
+
+export const filterByName = (items: Guitar[], name: string) => items.filter(
+  (item) => item.name
+    .toLowerCase()
+    .includes(name),
+);

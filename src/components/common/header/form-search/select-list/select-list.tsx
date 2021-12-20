@@ -14,17 +14,17 @@ export default function SelectList({isOpened, shownItems}: SelectListProps): JSX
         shownItems.map((item) =>
           (
             <li
-              onClick={() => history.push(AppRoute.Product.replace(':id', String(item[1])))}
+              onClick={() => history.push(AppRoute.Product.replace(':id', String(item.id)))}
               onKeyPress={(evt) => {
                 if (evt.key === 'Enter') {
-                  history.push(AppRoute.Product.replace(':id', String(item[1])));
+                  history.push(AppRoute.Product.replace(':id', String(item.id)));
                 }
               }}
-              key={item[1]}
+              key={item.id}
               className="form-search__select-item"
               tabIndex={0}
             >
-              {item[0]}
+              {item.name}
             </li>
           ),
         )

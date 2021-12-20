@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
+  filterGuitars,
   loadGuitar,
   loadGuitars
 } from './actions';
@@ -10,6 +11,7 @@ const initialState: State = {
   guitars: [],
   isDataLoaded: false,
   guitar: {} as Guitar,
+  filteredGuitars: [],
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -20,5 +22,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;
+    })
+    .addCase(filterGuitars, (state, action) => {
+      state.filteredGuitars = action.payload;
     });
 });

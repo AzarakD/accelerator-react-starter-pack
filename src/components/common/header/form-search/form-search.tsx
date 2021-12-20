@@ -5,36 +5,36 @@ import {
   useRef,
   useState
 } from 'react';
-import { useSelector } from 'react-redux';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
+import { filterGuitars } from '../../../../store/actions';
 import { getGuitars } from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
+import { filterByName } from '../../../../utils';
+import { Guitar } from '../../../../types/guitar';
 
 export default function FormSearch(): JSX.Element {
+  const [userInput, setUserInput] = useState('');
   const [isOpened, setIsOpened] = useState(false);
-  const [guitarItems, setGuitarItems] = useState<Array<[string, number]>>([]);
-  const [shownItems, setShownItems] = useState<Array<[string, number]>>([]);
+  const [shownGuitars, setShownGuitars] = useState<Guitar[]>([]);
 
+  const dispatch = useDispatch();
   const guitars = useSelector(getGuitars);
   const refInput = useRef(null);
 
-  useEffect(
-    () => setGuitarItems(Array.from(guitars, (guitar) => [guitar.name, guitar.id])),
-    [guitars],
-  );
+  const checkIsOpened = useCallback((filteredItems: Guitar[]) => {
+    if (filteredItems.length !== 0) {setIsOpened(true);}
+    if (filteredItems.length === 0 || userInput === '') {setIsOpened(false);}
+  }, [userInput]);
 
-  const onUserInput = useCallback((evt: FormEvent<HTMLInputElement>) => {
-    const currentInput = evt.currentTarget.value.toLowerCase();
-    const filteredNames = guitarItems.filter(
-      (item) => item[0]
-        .toLowerCase()
-        .includes(currentInput),
-    );
+  useEffect(() => {
+    const filteredGuitars = filterByName(guitars, userInput);
 
-    setShownItems(filteredNames);
-
-    if (filteredNames.length !== 0 && !isOpened) {setIsOpened(true);}
-    if (filteredNames.length === 0 || currentInput === '') {setIsOpened(false);}
-  }, [guitarItems, isOpened]);
+    setShownGuitars(filteredGuitars);
+    checkIsOpened(filteredGuitars);
+  }, [checkIsOpened, guitars, userInput]);
 
   const onOutsideClick = useCallback((evt) => {
     if (refInput.current !== evt.target) {
@@ -58,8 +58,15 @@ export default function FormSearch(): JSX.Element {
     };
   }, [onEscKeyDown, onOutsideClick]);
 
+  const onSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    const filteredGuitars = filterByName(guitars, userInput);
+
+    dispatch(filterGuitars(filteredGuitars));
+  };
+
   return (
-    <div className="form-search">
+    <div className="form-search" onSubmit={onSubmit}>
       <form className="form-search__form">
         <button className="form-search__submit" type="submit">
           <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
@@ -69,7 +76,8 @@ export default function FormSearch(): JSX.Element {
         </button>
         <input
           ref={refInput}
-          onInput={(evt) => onUserInput(evt)}
+          onInput={(evt) => setUserInput(evt.currentTarget.value.toLowerCase())}
+          value={userInput}
           className="form-search__input"
           id="search"
           type="text"
@@ -78,7 +86,7 @@ export default function FormSearch(): JSX.Element {
         />
         <label className="visually-hidden" htmlFor="search">Поиск</label>
       </form>
-      <SelectList isOpened={isOpened} shownItems={shownItems} />
+      <SelectList isOpened={isOpened} shownItems={shownGuitars} />
     </div>
   );
 }

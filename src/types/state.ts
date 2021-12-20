@@ -4,4 +4,5 @@ export type State = {
   guitars: Guitar[],
   isDataLoaded: boolean,
   guitar: Guitar,
+  filteredGuitars: Guitar[],
 };
