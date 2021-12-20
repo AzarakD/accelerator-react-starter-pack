@@ -3,15 +3,21 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
-import { AppRoute } from '../../const';
+import {
+  Link,
+  useParams
+} from 'react-router-dom';
 import { fetchGuitarAction } from '../../store/api-actioms';
 import { getGuitar } from '../../store/selectors';
-import { setGuitarType, setPrice } from '../../utils';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
 import RatingStars from '../main/components/rating-stars/rating-stars';
+import {
+  setGuitarType,
+  setPrice
+} from '../../utils';
+import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
   const guitar = useSelector(getGuitar);

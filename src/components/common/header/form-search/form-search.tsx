@@ -7,33 +7,34 @@ import {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { getGuitars } from '../../../../store/selectors';
+import SelectList from './select-list/select-list';
 
 export default function FormSearch(): JSX.Element {
   const [isOpened, setIsOpened] = useState(false);
-  const [guitarNames, setGuitarNames] = useState<string[]>([]);
-  const [shownNames, setShownNames] = useState<string[]>([]);
+  const [guitarItems, setGuitarItems] = useState<Array<[string, number]>>([]);
+  const [shownItems, setShownItems] = useState<Array<[string, number]>>([]);
 
   const guitars = useSelector(getGuitars);
   const refInput = useRef(null);
 
   useEffect(
-    () => setGuitarNames(Array.from(guitars, (guitar) => guitar.name)),
+    () => setGuitarItems(Array.from(guitars, (guitar) => [guitar.name, guitar.id])),
     [guitars],
   );
 
   const onUserInput = useCallback((evt: FormEvent<HTMLInputElement>) => {
     const currentInput = evt.currentTarget.value.toLowerCase();
-    const filteredNames = guitarNames.filter(
-      (name) => name
+    const filteredNames = guitarItems.filter(
+      (item) => item[0]
         .toLowerCase()
         .includes(currentInput),
     );
 
-    setShownNames(filteredNames);
+    setShownItems(filteredNames);
 
     if (filteredNames.length !== 0 && !isOpened) {setIsOpened(true);}
-    if (filteredNames.length === 0) {setIsOpened(false);}
-  }, [guitarNames, isOpened]);
+    if (filteredNames.length === 0 || currentInput === '') {setIsOpened(false);}
+  }, [guitarItems, isOpened]);
 
   const onOutsideClick = useCallback((evt) => {
     if (refInput.current !== evt.target) {
@@ -77,15 +78,7 @@ export default function FormSearch(): JSX.Element {
         />
         <label className="visually-hidden" htmlFor="search">Поиск</label>
       </form>
-      <ul
-        style={{ zIndex: '1' }}
-        className={`form-search__select-list ${isOpened ? 'list-opened' : 'hidden'}`}
-      >
-        {
-          shownNames.map((name) =>
-            <li key={name} className="form-search__select-item" tabIndex={0}>{name}</li>)
-        }
-      </ul>
+      <SelectList isOpened={isOpened} shownItems={shownItems} />
     </div>
   );
 }
