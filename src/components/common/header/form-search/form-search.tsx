@@ -9,11 +9,12 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { displayGuitars } from '../../../../store/actions';
+import { displayGuitars, sortGuitars } from '../../../../store/actions';
 import { getGuitars } from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
 import { filterByName } from '../../../../utils';
 import { Guitar } from '../../../../types/guitar';
+import { SortMethods } from '../../../../const';
 
 export default function FormSearch(): JSX.Element {
   const [userInput, setUserInput] = useState('');
@@ -62,6 +63,7 @@ export default function FormSearch(): JSX.Element {
     evt.preventDefault();
     const filteredGuitars = filterByName(guitars, userInput);
 
+    dispatch(sortGuitars(SortMethods.Default));
     dispatch(displayGuitars(filteredGuitars));
   };
 

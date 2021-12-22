@@ -1,6 +1,13 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import {
+  useEffect,
+  useState
+} from 'react';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { sortGuitars } from '../../../../store/actions';
+import { getSortMethod } from '../../../../store/selectors';
 import { SortMethods } from '../../../../const';
 
 export default function Sort(): JSX.Element {
@@ -8,6 +15,14 @@ export default function Sort(): JSX.Element {
   const [sortArrows, setSortArrows] = useState([false, false]);
 
   const dispatch = useDispatch();
+  const storedSortMethod = useSelector(getSortMethod);
+
+  useEffect(() => {
+    if (storedSortMethod === SortMethods.Default) {
+      setSortMethods([false, false]);
+      setSortArrows([false, false]);
+    }
+  }, [storedSortMethod]);
 
   const onPriceButtonClick = () => {
     setSortMethods([true, false]);
