@@ -1,23 +1,12 @@
 import { useState } from 'react';
-// import {
-//   useDispatch,
-//   useSelector
-// } from 'react-redux';
-// import { filterGuitars } from '../../../../store/actions';
-// import {
-//   getDisplayedGuitars
-//   // getGuitars
-// } from '../../../../store/selectors';
-// import { Guitar } from '../../../../types/guitar';
-
-type GuitarType = {
-  acoustic: boolean,
-  electric: boolean,
-  ukulele: boolean,
-};
+import { useDispatch } from 'react-redux';
+import { useDidUpdateEffect } from '../../../../hooks/use-did-update-effect';
+import { filterGuitarsAction } from '../../../../store/api-actioms';
+import { FilterQuery } from '../../../../const';
+import { GuitarFilterType } from '../../../../types/filter';
 
 export default function Filter(): JSX.Element {
-  const [guitarType, setGuitarType] = useState<GuitarType>(
+  const [guitarType, setGuitarType] = useState<GuitarFilterType>(
     {
       acoustic: false,
       electric: false,
@@ -25,29 +14,23 @@ export default function Filter(): JSX.Element {
     },
   );
 
-  // const guitars = useSelector(getGuitars);
-  // const filteredGuitars = useSelector(getDisplayedGuitars);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // eslint-disable-next-line no-console
-  // console.log();
+  useDidUpdateEffect(() => {
+    let query = '';
 
-  // const onAcousticChange = () => {
-  //   setGuitarType({...guitarType, acoustic: !guitarType.acoustic});
+    if (guitarType.acoustic) {
+      query = query.concat(FilterQuery.Acoustic);
+    }
+    if (guitarType.electric) {
+      query = query.concat(FilterQuery.Electric);
+    }
+    if (guitarType.ukulele) {
+      query = query.concat(FilterQuery.Ukulele);
+    }
 
-  //   if (guitarType.acoustic) {
-  //     const guitarsToDispatch = filteredGuitars.filter((guitar) => guitar.type === 'acoustic');
-  //     dispatch(filterGuitars(guitarsToDispatch));
-  //   }
-  //   if (guitarType.electric) {
-  //     const guitarsToDispatch = filteredGuitars.filter((guitar) => guitar.type === 'electric');
-  //     dispatch(filterGuitars(guitarsToDispatch));
-  //   }
-  //   if (guitarType.ukulele) {
-  //     const guitarsToDispatch = filteredGuitars.filter((guitar) => guitar.type === 'ukulele');
-  //     dispatch(filterGuitars(guitarsToDispatch));
-  //   }
-  // };
+    dispatch(filterGuitarsAction(query));
+  }, [dispatch, guitarType.acoustic, guitarType.electric, guitarType.ukulele]);
 
   return (
     <form className="catalog-filter">

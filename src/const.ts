@@ -10,6 +10,7 @@ export enum APIRoute {
   Comment = '/comments',
   Coupons = '/coupons',
   Orders = '/orders',
+  Query = '/guitars?:query',
 }
 
 export enum SortMethods {
@@ -18,4 +19,10 @@ export enum SortMethods {
   SortToBiggerRating = 'sortToBiggerRating',
   SortToLesserRating = 'sortToLesserRating',
   Default = 'default',
+}
+
+export enum FilterQuery {
+  Acoustic = '&type=acoustic',
+  Electric = '&type=electric',
+  Ukulele = '&type=ukulele',
 }

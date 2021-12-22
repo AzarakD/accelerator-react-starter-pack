@@ -24,10 +24,5 @@ export const sortGuitars = createAction(
 
 export const filterGuitars = createAction(
   ActionType.FilterGuitars,
-  (filterMethod: string) => ({payload: filterMethod}),
+  (guitars: Guitar[]) => ({payload: guitars}),
 );
-
-// export const changeSortMethod = createAction(
-//   ActionType.ChangeSortMethod,
-//   (sortMethod: string) => ({payload: sortMethod}),
-// );

@@ -54,6 +54,3 @@ export const sortItems = (items: Guitar[], sortMethod: string) => {
       return items;
   }
 };
-
-// TODO
-export const filterItems = (items: Guitar[], sortMethod: string) => items;
