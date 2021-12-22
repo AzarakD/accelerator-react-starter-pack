@@ -9,7 +9,7 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { filterGuitars } from '../../../../store/actions';
+import { displayGuitars } from '../../../../store/actions';
 import { getGuitars } from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
 import { filterByName } from '../../../../utils';
@@ -62,7 +62,7 @@ export default function FormSearch(): JSX.Element {
     evt.preventDefault();
     const filteredGuitars = filterByName(guitars, userInput);
 
-    dispatch(filterGuitars(filteredGuitars));
+    dispatch(displayGuitars(filteredGuitars));
   };
 
   return (

@@ -1,5 +1,5 @@
 import {
-  filterGuitars,
+  displayGuitars,
   loadGuitar,
   loadGuitars
 } from './actions';
@@ -11,7 +11,7 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Guitar[]>(APIRoute.Guitars);
     dispatch(loadGuitars(data));
-    dispatch(filterGuitars(data));
+    dispatch(displayGuitars(data));
   };
 
 export const fetchGuitarAction = (id: number): ThunkActionResult =>

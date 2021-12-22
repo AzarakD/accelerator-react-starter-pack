@@ -1,22 +1,12 @@
 import { useState } from 'react';
-import {
-  useDispatch,
-  useSelector
-} from 'react-redux';
-import { filterGuitars } from '../../../../store/actions';
-import { getFilteredGuitars } from '../../../../store/selectors';
-import {
-  sortToBiggerPrice,
-  sortToBiggerRating,
-  sortToLesserPrice,
-  sortToLesserRating
-} from '../../../../utils';
+import { useDispatch } from 'react-redux';
+import { sortGuitars } from '../../../../store/actions';
+import { SortMethods } from '../../../../const';
 
 export default function Sort(): JSX.Element {
   const [sortMethods, setSortMethods] = useState([false, false]);
   const [sortArrows, setSortArrows] = useState([false, false]);
 
-  const guitars = useSelector(getFilteredGuitars);
   const dispatch = useDispatch();
 
   const onPriceButtonClick = () => {
@@ -25,8 +15,8 @@ export default function Sort(): JSX.Element {
     if (!sortArrows[0] && !sortArrows[1]) {setSortArrows([true, false]);}
 
     !sortArrows[1]
-      ? dispatch(filterGuitars(sortToBiggerPrice(guitars)))
-      : dispatch(filterGuitars(sortToLesserPrice(guitars)));
+      ? dispatch(sortGuitars(SortMethods.SortToBiggerPrice))
+      : dispatch(sortGuitars(SortMethods.SortToLesserPrice));
   };
 
   const onRatingButtonClick = () => {
@@ -35,30 +25,30 @@ export default function Sort(): JSX.Element {
     if (!sortArrows[0] && !sortArrows[1]) {setSortArrows([true, false]);}
 
     !sortArrows[1]
-      ? dispatch(filterGuitars(sortToBiggerRating(guitars)))
-      : dispatch(filterGuitars(sortToLesserRating(guitars)));
+      ? dispatch(sortGuitars(SortMethods.SortToBiggerRating))
+      : dispatch(sortGuitars(SortMethods.SortToLesserRating));
   };
 
   const onUpArrowClick = () => {
     setSortArrows([true, false]);
 
     if (sortMethods[1]) {
-      dispatch(filterGuitars(sortToBiggerRating(guitars)));
+      dispatch(sortGuitars(SortMethods.SortToBiggerRating));
       return;
     }
     if (!sortMethods[0]) {setSortMethods([true, false]);}
-    dispatch(filterGuitars(sortToBiggerPrice(guitars)));
+    dispatch(sortGuitars(SortMethods.SortToBiggerPrice));
   };
 
   const onDownArrowClick = () => {
     setSortArrows([false, true]);
 
     if (sortMethods[1]) {
-      dispatch(filterGuitars(sortToLesserRating(guitars)));
+      dispatch(sortGuitars(SortMethods.SortToLesserRating));
       return;
     }
     if (!sortMethods[0]) {setSortMethods([true, false]);}
-    dispatch(filterGuitars(sortToLesserPrice(guitars)));
+    dispatch(sortGuitars(SortMethods.SortToLesserPrice));
   };
 
   return (

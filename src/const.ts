@@ -11,3 +11,11 @@ export enum APIRoute {
   Coupons = '/coupons',
   Orders = '/orders',
 }
+
+export enum SortMethods {
+  SortToBiggerPrice = 'sortToBiggerPrice',
+  SortToLesserPrice = 'sortToLesserPrice',
+  SortToBiggerRating = 'sortToBiggerRating',
+  SortToLesserRating = 'sortToLesserRating',
+  Default = 'default',
+}

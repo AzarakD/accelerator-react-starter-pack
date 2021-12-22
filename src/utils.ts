@@ -1,19 +1,20 @@
+import { SortMethods } from './const';
 import {
   Guitar,
   GuitarType
 } from './types/guitar';
-
-export const setRatingStar = (rating: number, place: number) =>
-  `#icon-${ rating >= place ? 'full-star' : 'star' }`;
-
-export const setPrice = (price: number, divider=1000) =>
-  `${Math.floor(price / divider)} ${price % divider === 0 ? '000' : price % divider} ₽`;
 
 const guitarType: GuitarType = {
   acoustic: 'Акустическая',
   electric: 'Электрическая',
   ukulele: 'Укулеле',
 };
+
+export const setRatingStar = (rating: number, place: number) =>
+  `#icon-${ rating >= place ? 'full-star' : 'star' }`;
+
+export const setPrice = (price: number, divider=1000) =>
+  `${Math.floor(price / divider)} ${price % divider === 0 ? '000' : price % divider} ₽`;
 
 export const setGuitarType = (type: keyof GuitarType) => guitarType[type];
 
@@ -34,3 +35,25 @@ export const sortToBiggerRating = (items: Guitar[]) =>
 
 export const sortToLesserRating = (items: Guitar[]) =>
   items.slice().sort((a, b) => b.rating - a.rating);
+
+export const sortItems = (items: Guitar[], sortMethod: string) => {
+  switch (sortMethod) {
+    case SortMethods.SortToBiggerPrice:
+      return sortToBiggerPrice(items);
+
+    case SortMethods.SortToLesserPrice:
+      return sortToLesserPrice(items);
+
+    case SortMethods.SortToBiggerRating:
+      return sortToBiggerRating(items);
+
+    case SortMethods.SortToLesserRating:
+      return sortToLesserRating(items);
+
+    default:
+      return items;
+  }
+};
+
+// TODO
+export const filterItems = (items: Guitar[], sortMethod: string) => items;
