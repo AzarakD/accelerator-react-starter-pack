@@ -3,12 +3,12 @@ import {
   useRef
 } from 'react';
 
-export const useDidUpdateEffect = (func: () => void, deps: unknown) => {
+export const useDidUpdateEffect = (effect: () => void, deps: unknown) => {
   const isInitialMount = useRef(false);
 
   useEffect(() => {
     isInitialMount.current
-      ? func()
+      ? effect()
       : isInitialMount.current = true;
-  }, [func, deps]);
+  }, [effect, deps]);
 };

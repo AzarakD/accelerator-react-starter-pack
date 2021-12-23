@@ -1,11 +1,17 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useDidUpdateEffect } from '../../../../hooks/use-did-update-effect';
+import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { filterGuitarsAction } from '../../../../store/api-actioms';
 import { FilterQuery } from '../../../../const';
 import { GuitarFilterType } from '../../../../types/filter';
 
 export default function Filter(): JSX.Element {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [locationSearch] = useState(history.location.search);
   const [guitarType, setGuitarType] = useState<GuitarFilterType>(
     {
       acoustic: false,
@@ -14,22 +20,25 @@ export default function Filter(): JSX.Element {
     },
   );
 
-  const dispatch = useDispatch();
+  useDidMountEffect(() => {
+    setGuitarType({
+      acoustic: locationSearch.includes(FilterQuery.Acoustic),
+      electric: locationSearch.includes(FilterQuery.Electric),
+      ukulele: locationSearch.includes(FilterQuery.Ukulele),
+    });
+  });
 
   useDidUpdateEffect(() => {
-    let query = '';
-
-    if (guitarType.acoustic) {
-      query = query.concat(FilterQuery.Acoustic);
-    }
-    if (guitarType.electric) {
-      query = query.concat(FilterQuery.Electric);
-    }
-    if (guitarType.ukulele) {
-      query = query.concat(FilterQuery.Ukulele);
-    }
+    const query = `${
+      guitarType.acoustic ? FilterQuery.Acoustic : ''
+    }${
+      guitarType.electric ? FilterQuery.Electric : ''
+    }${
+      guitarType.ukulele ? FilterQuery.Ukulele : ''
+    }`;
 
     dispatch(filterGuitarsAction(query));
+    history.push(`?${query}`);
   }, [dispatch, guitarType.acoustic, guitarType.electric, guitarType.ukulele]);
 
   return (
