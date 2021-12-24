@@ -6,4 +6,5 @@ export type State = {
   guitar: Guitar,
   displayedGuitars: Guitar[],
   sortMethod: string,
+  filter: string,
 };

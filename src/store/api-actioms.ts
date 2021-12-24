@@ -1,13 +1,12 @@
 import {
+  changeFilter,
+  changeSortMethod,
   filterGuitars,
   loadGuitar,
   loadGuitars,
   sortGuitars
 } from './actions';
-import {
-  APIRoute,
-  SortMethods
-} from '../const';
+import { APIRoute } from '../const';
 import { ThunkActionResult } from '../types/actions';
 import { Guitar } from '../types/guitar';
 
@@ -23,12 +22,18 @@ export const fetchGuitarAction = (id: number): ThunkActionResult =>
     dispatch(loadGuitar(data));
   };
 
-export const filterGuitarsAction = (type: string): ThunkActionResult =>
-  async (dispatch, getState, api): Promise<void> => {
-    const {data} = await api.get<Guitar[]>(APIRoute.Query.replace(':query', type));
-    dispatch(filterGuitars(data));
+export const filterGuitarsAction = (query: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<Guitar[]>(APIRoute.Query.replace(':query', query));
 
-    if (getState().sortMethod !== SortMethods.Default) {
-      dispatch(sortGuitars(getState().sortMethod));
-    }
+    dispatch(changeFilter(query));
+    dispatch(filterGuitars(data));
+  };
+
+export const sortGuitarsAction = (query: string, sortMethod: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<Guitar[]>(APIRoute.Query.replace(':query', query));
+
+    dispatch(changeSortMethod(sortMethod));
+    dispatch(sortGuitars(data));
   };

@@ -1,12 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
+  changeFilter,
+  changeSortMethod,
   displayGuitars,
   filterGuitars,
   loadGuitar,
   loadGuitars,
   sortGuitars
 } from './actions';
-import { sortItems } from '../utils';
 import { SortMethods } from '../const';
 import { State } from '../types/state';
 import { Guitar } from '../types/guitar';
@@ -17,6 +18,7 @@ const initialState: State = {
   guitar: {} as Guitar,
   displayedGuitars: [],
   sortMethod: SortMethods.Default,
+  filter: '',
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -33,10 +35,15 @@ export const reducer = createReducer(initialState, (builder) => {
       state.displayedGuitars = action.payload;
     })
     .addCase(sortGuitars, (state, action) => {
-      state.displayedGuitars = sortItems(state.displayedGuitars, action.payload);
+      state.displayedGuitars = action.payload;
+    })
+    .addCase(changeSortMethod, (state, action) => {
       state.sortMethod = action.payload;
     })
     .addCase(filterGuitars, (state, action) => {
       state.displayedGuitars = action.payload;
+    })
+    .addCase(changeFilter, (state, action) => {
+      state.filter = action.payload;
     });
 });

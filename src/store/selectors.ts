@@ -6,3 +6,4 @@ export const getGuitars = ({guitars}: State): Guitar[] => guitars;
 export const getGuitar = ({guitar}: State): Guitar => guitar;
 export const getDisplayedGuitars = ({displayedGuitars}: State): Guitar[] => displayedGuitars;
 export const getSortMethod = ({sortMethod}: State): string => sortMethod;
+export const getFilter = ({filter}: State): string => filter;

@@ -6,64 +6,89 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { sortGuitars } from '../../../../store/actions';
-import { getSortMethod } from '../../../../store/selectors';
-import { SortMethods } from '../../../../const';
+import {
+  getFilter,
+  getSortMethod
+} from '../../../../store/selectors';
+import { sortGuitarsAction } from '../../../../store/api-actioms';
+import {
+  SortMethods,
+  SortQuery
+} from '../../../../const';
 
 export default function Sort(): JSX.Element {
-  const [sortMethods, setSortMethods] = useState([false, false]);
-  const [sortArrows, setSortArrows] = useState([false, false]);
+  const [sortMethods, setSortMethods] = useState({
+    price: false,
+    rating: false,
+  });
+  const [sortArrows, setSortArrows] = useState({
+    toBigger: false,
+    toLesser: false,
+  });
 
   const dispatch = useDispatch();
-  const storedSortMethod = useSelector(getSortMethod);
+  const sortMethod = useSelector(getSortMethod);
+  const filter = useSelector(getFilter);
 
   useEffect(() => {
-    if (storedSortMethod === SortMethods.Default) {
-      setSortMethods([false, false]);
-      setSortArrows([false, false]);
+    if (sortMethod === SortMethods.Default) {
+      setSortMethods({price: false, rating: false});
+      setSortArrows({toBigger: false, toLesser: false});
     }
-  }, [storedSortMethod]);
+  }, [sortMethod]);
+
+  const sortGuitars = (query: string) => {
+    dispatch(sortGuitarsAction(`${filter}${query}`, query));
+  };
 
   const onPriceButtonClick = () => {
-    setSortMethods([true, false]);
+    setSortMethods({price: true, rating: false});
 
-    if (!sortArrows[0] && !sortArrows[1]) {setSortArrows([true, false]);}
+    if (!sortArrows.toBigger && !sortArrows.toLesser) {
+      setSortArrows({toBigger: true, toLesser: false});
+    }
 
-    !sortArrows[1]
-      ? dispatch(sortGuitars(SortMethods.SortToBiggerPrice))
-      : dispatch(sortGuitars(SortMethods.SortToLesserPrice));
+    !sortArrows.toLesser
+      ? sortGuitars(SortQuery.SortToBiggerPrice)
+      : sortGuitars(SortQuery.SortToLesserPrice);
   };
 
   const onRatingButtonClick = () => {
-    setSortMethods([false, true]);
+    setSortMethods({price: false, rating: true});
 
-    if (!sortArrows[0] && !sortArrows[1]) {setSortArrows([true, false]);}
+    if (!sortArrows.toBigger && !sortArrows.toLesser) {
+      setSortArrows({toBigger: true, toLesser: false});
+    }
 
-    !sortArrows[1]
-      ? dispatch(sortGuitars(SortMethods.SortToBiggerRating))
-      : dispatch(sortGuitars(SortMethods.SortToLesserRating));
+    !sortArrows.toLesser
+      ? sortGuitars(SortQuery.SortToBiggerRating)
+      : sortGuitars(SortQuery.SortToLesserRating);
   };
 
   const onUpArrowClick = () => {
-    setSortArrows([true, false]);
+    setSortArrows({toBigger: true, toLesser: false});
 
-    if (sortMethods[1]) {
-      dispatch(sortGuitars(SortMethods.SortToBiggerRating));
+    if (sortMethods.rating) {
+      sortGuitars(SortQuery.SortToBiggerRating);
       return;
     }
-    if (!sortMethods[0]) {setSortMethods([true, false]);}
-    dispatch(sortGuitars(SortMethods.SortToBiggerPrice));
+    if (!sortMethods.price) {
+      setSortMethods({price: true, rating: false});
+    }
+    sortGuitars(SortQuery.SortToBiggerPrice);
   };
 
   const onDownArrowClick = () => {
-    setSortArrows([false, true]);
+    setSortArrows({toBigger: false, toLesser: true});
 
-    if (sortMethods[1]) {
-      dispatch(sortGuitars(SortMethods.SortToLesserRating));
+    if (sortMethods.rating) {
+      sortGuitars(SortQuery.SortToLesserRating);
       return;
     }
-    if (!sortMethods[0]) {setSortMethods([true, false]);}
-    dispatch(sortGuitars(SortMethods.SortToLesserPrice));
+    if (!sortMethods.price) {
+      setSortMethods({price: true, rating: false});
+    }
+    sortGuitars(SortQuery.SortToLesserPrice);
   };
 
   return (
@@ -72,7 +97,7 @@ export default function Sort(): JSX.Element {
       <div className="catalog-sort__type">
         <button
           onClick={onPriceButtonClick}
-          className={`catalog-sort__type-button ${sortMethods[0] ? 'catalog-sort__type-button--active' : ''}`}
+          className={`catalog-sort__type-button ${sortMethods.price ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по цене"
           tabIndex={-1}
         >
@@ -80,7 +105,7 @@ export default function Sort(): JSX.Element {
         </button>
         <button
           onClick={onRatingButtonClick}
-          className={`catalog-sort__type-button ${sortMethods[1] ? 'catalog-sort__type-button--active' : ''}`}
+          className={`catalog-sort__type-button ${sortMethods.rating ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
         >
           по популярности
@@ -89,14 +114,14 @@ export default function Sort(): JSX.Element {
       <div className="catalog-sort__order">
         <button
           onClick={onUpArrowClick}
-          className={`catalog-sort__order-button catalog-sort__order-button--up ${sortArrows[0] ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--up ${sortArrows.toBigger ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По возрастанию"
           tabIndex={-1}
         >
         </button>
         <button
           onClick={onDownArrowClick}
-          className={`catalog-sort__order-button catalog-sort__order-button--down ${sortArrows[1] ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--down ${sortArrows.toLesser ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
         >
         </button>

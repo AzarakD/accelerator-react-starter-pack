@@ -3,28 +3,33 @@ import {
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { createAPI } from '../../../../services/api';
 import { filterGuitarsAction } from '../../../../store/api-actioms';
+import { getSortMethod } from '../../../../store/selectors';
+import { checkGuitarType } from '../../../../utils';
 import {
   FilterQuery,
   SortQuery
 } from '../../../../const';
-import { checkGuitarType } from '../../../../utils';
 import { Guitar } from '../../../../types/guitar';
 
 const MIN_PRICE = 0;
 
 const api = createAPI();
 const getInfo = async () => {
-  const { data } = await api.get<Guitar[]>(SortQuery.SortToBiggerPrice);
+  const { data } = await api.get<Guitar[]>(`/guitars?${SortQuery.SortToBiggerPrice}`);
   return data;
 };
 
 export default function Filter(): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
+  const sortMethod = useSelector(getSortMethod);
 
   const [locationSearch] = useState(history.location.search);
   const [isGuitarTypeChecked, setIsGuitarTypeChecked] = useState(checkGuitarType(locationSearch));
@@ -75,7 +80,7 @@ export default function Filter(): JSX.Element {
       stringCount.seven ? FilterQuery.SevenString : ''
     }${
       stringCount.twelve ? FilterQuery.TwelveString : ''
-    }${price.query}`;
+    }${price.query}${sortMethod}`;
 
     dispatch(filterGuitarsAction(query));
     history.push(`?${query}`);
@@ -83,6 +88,7 @@ export default function Filter(): JSX.Element {
   }, [
     dispatch,
     history,
+    sortMethod,
     guitarType.acoustic,
     guitarType.electric,
     guitarType.ukulele,
@@ -159,7 +165,12 @@ export default function Filter(): JSX.Element {
         <legend className="catalog-filter__block-title">Тип гитар</legend>
         <div className="form-checkbox catalog-filter__block-item">
           <input
-            onChange={() => setGuitarType({...guitarType, acoustic: !guitarType.acoustic})}
+            onChange={() => {
+              setGuitarType({...guitarType, acoustic: !guitarType.acoustic});
+              if (!guitarType.acoustic) {
+                setStringCount({...stringCount, four: false});
+              }
+            }}
             className="visually-hidden"
             type="checkbox"
             id="acoustic"
@@ -170,7 +181,12 @@ export default function Filter(): JSX.Element {
         </div>
         <div className="form-checkbox catalog-filter__block-item">
           <input
-            onChange={() => setGuitarType({...guitarType, electric: !guitarType.electric})}
+            onChange={() => {
+              setGuitarType({...guitarType, electric: !guitarType.electric});
+              if (!guitarType.electric) {
+                setStringCount({...stringCount, twelve: false});
+              }
+            }}
             className="visually-hidden"
             type="checkbox"
             id="electric"
@@ -181,7 +197,12 @@ export default function Filter(): JSX.Element {
         </div>
         <div className="form-checkbox catalog-filter__block-item">
           <input
-            onChange={() => setGuitarType({...guitarType, ukulele: !guitarType.ukulele})}
+            onChange={() => {
+              setGuitarType({...guitarType, ukulele: !guitarType.ukulele});
+              if (!guitarType.ukulele) {
+                setStringCount({...stringCount, six: false, seven: false, twelve: false});
+              }
+            }}
             className="visually-hidden"
             type="checkbox"
             id="ukulele"

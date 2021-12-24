@@ -14,18 +14,14 @@ export enum APIRoute {
 }
 
 export enum SortMethods {
-  SortToBiggerPrice = 'sortToBiggerPrice',
-  SortToLesserPrice = 'sortToLesserPrice',
-  SortToBiggerRating = 'sortToBiggerRating',
-  SortToLesserRating = 'sortToLesserRating',
-  Default = 'default',
+  Default = '',
 }
 
 export enum SortQuery {
-  SortToBiggerPrice = '/guitars?_sort=price&_order=asc',
-  SortToLesserPrice = '/guitars?_sort=price&_order=desc',
-  SortToBiggerRating = '/guitars?_sort=rating&_order=asc',
-  SortToLesserRating = '/guitars?_sort=rating&_order=desc',
+  SortToBiggerPrice = '&_sort=price&_order=asc',
+  SortToLesserPrice = '&_sort=price&_order=desc',
+  SortToBiggerRating = '&_sort=rating&_order=asc',
+  SortToLesserRating = '&_sort=rating&_order=desc',
 }
 
 export enum FilterQuery {

@@ -1,7 +1,4 @@
-import {
-  FilterQuery,
-  SortMethods
-} from './const';
+import { FilterQuery } from './const';
 import {
   Guitar,
   GuitarType
@@ -26,37 +23,6 @@ export const filterByName = (items: Guitar[], name: string) => items.filter(
     .toLowerCase()
     .includes(name),
 );
-
-export const sortToBiggerPrice = (items: Guitar[]) =>
-  items.slice().sort((a, b) => a.price - b.price);
-
-export const sortToLesserPrice = (items: Guitar[]) =>
-  items.slice().sort((a, b) => b.price - a.price);
-
-export const sortToBiggerRating = (items: Guitar[]) =>
-  items.slice().sort((a, b) => a.rating - b.rating);
-
-export const sortToLesserRating = (items: Guitar[]) =>
-  items.slice().sort((a, b) => b.rating - a.rating);
-
-export const sortItems = (items: Guitar[], sortMethod: string) => {
-  switch (sortMethod) {
-    case SortMethods.SortToBiggerPrice:
-      return sortToBiggerPrice(items);
-
-    case SortMethods.SortToLesserPrice:
-      return sortToLesserPrice(items);
-
-    case SortMethods.SortToBiggerRating:
-      return sortToBiggerRating(items);
-
-    case SortMethods.SortToLesserRating:
-      return sortToLesserRating(items);
-
-    default:
-      return items;
-  }
-};
 
 export const checkGuitarType = (search: string) =>
   search.includes(FilterQuery.Acoustic)
