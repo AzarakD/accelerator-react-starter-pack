@@ -1,20 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useDidUpdateEffect } from '../../../../hooks/use-did-update-effect';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { createAPI } from '../../../../services/api';
 import { filterGuitarsAction } from '../../../../store/api-actioms';
-import { FilterQuery } from '../../../../const';
-import { GuitarFilterType } from '../../../../types/filter';
+import {
+  FilterQuery,
+  SortQuery
+} from '../../../../const';
+import { checkGuitarType } from '../../../../utils';
 import { Guitar } from '../../../../types/guitar';
 
 const MIN_PRICE = 0;
 
 const api = createAPI();
 const getInfo = async () => {
-  const { data } = await api.get<Guitar[]>('/guitars?_sort=price&_order=asc');
+  const { data } = await api.get<Guitar[]>(SortQuery.SortToBiggerPrice);
   return data;
 };
 
@@ -23,7 +27,7 @@ export default function Filter(): JSX.Element {
   const dispatch = useDispatch();
 
   const [locationSearch] = useState(history.location.search);
-
+  const [isGuitarTypeChecked, setIsGuitarTypeChecked] = useState(checkGuitarType(locationSearch));
   const [placeholder, setPlaceholder] = useState({
     min: MIN_PRICE,
     max: MIN_PRICE,
@@ -33,13 +37,19 @@ export default function Filter(): JSX.Element {
     max: '',
     query: '',
   });
-  const [guitarType, setGuitarType] = useState<GuitarFilterType>(
+  const [guitarType, setGuitarType] = useState(
     {
       acoustic: locationSearch.includes(FilterQuery.Acoustic),
       electric: locationSearch.includes(FilterQuery.Electric),
       ukulele: locationSearch.includes(FilterQuery.Ukulele),
     },
   );
+  const [stringCount, setStringCount] = useState({
+    four: locationSearch.includes(FilterQuery.FourString),
+    six: locationSearch.includes(FilterQuery.SixString),
+    seven: locationSearch.includes(FilterQuery.SevenString),
+    twelve: locationSearch.includes(FilterQuery.TwelveString),
+  });
 
   useDidMountEffect(() => {
     getInfo().then((value) => {
@@ -57,11 +67,31 @@ export default function Filter(): JSX.Element {
       guitarType.electric ? FilterQuery.Electric : ''
     }${
       guitarType.ukulele ? FilterQuery.Ukulele : ''
+    }${
+      stringCount.four ? FilterQuery.FourString : ''
+    }${
+      stringCount.six ? FilterQuery.SixString : ''
+    }${
+      stringCount.seven ? FilterQuery.SevenString : ''
+    }${
+      stringCount.twelve ? FilterQuery.TwelveString : ''
     }${price.query}`;
 
     dispatch(filterGuitarsAction(query));
     history.push(`?${query}`);
-  }, [dispatch, guitarType.acoustic, guitarType.electric, guitarType.ukulele, history, price.query]);
+    setIsGuitarTypeChecked(checkGuitarType(query));
+  }, [
+    dispatch,
+    history,
+    guitarType.acoustic,
+    guitarType.electric,
+    guitarType.ukulele,
+    stringCount.four,
+    stringCount.seven,
+    stringCount.six,
+    stringCount.twelve,
+    price.query,
+  ]);
 
   const onPriceMinBlur = () => {
     let min = Math.trunc(Math.abs(+price.min));
@@ -82,7 +112,7 @@ export default function Filter(): JSX.Element {
     const min = Math.trunc(Math.abs(+price.min));
     let max = Math.trunc(Math.abs(+price.max));
 
-    if (max > placeholder.max) {
+    if (max > placeholder.max || max === 0) {
       max = placeholder.max;
     }
 
@@ -108,7 +138,6 @@ export default function Filter(): JSX.Element {
               id="priceMin"
               name="от"
               value={price.min}
-              // onBlur={(evt) => onPriceBlur(evt.target.id, price.min)}
               onBlur={onPriceMinBlur}
             />
           </div>
@@ -121,7 +150,6 @@ export default function Filter(): JSX.Element {
               id="priceMax"
               name="до"
               value={price.max}
-              // onBlur={(evt) => onPriceBlur(evt.target.id, price.max)}
               onBlur={onPriceMaxBlur}
             />
           </div>
@@ -166,19 +194,51 @@ export default function Filter(): JSX.Element {
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Количество струн</legend>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="4-strings" name="4-strings"/>
+          <input
+            onChange={() => setStringCount({...stringCount, four: !stringCount.four})}
+            className="visually-hidden"
+            type="checkbox"
+            id="4-strings"
+            name="4-strings"
+            checked={stringCount.four}
+            disabled={!guitarType.ukulele && !guitarType.electric && isGuitarTypeChecked}
+          />
           <label htmlFor="4-strings">4</label>
         </div>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="6-strings" name="6-strings"/>
+          <input
+            onChange={() => setStringCount({...stringCount, six: !stringCount.six})}
+            className="visually-hidden"
+            type="checkbox"
+            id="6-strings"
+            name="6-strings"
+            checked={stringCount.six}
+            disabled={!guitarType.acoustic && !guitarType.electric && isGuitarTypeChecked}
+          />
           <label htmlFor="6-strings">6</label>
         </div>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="7-strings" name="7-strings"/>
+          <input
+            onChange={() => setStringCount({...stringCount, seven: !stringCount.seven})}
+            className="visually-hidden"
+            type="checkbox"
+            id="7-strings"
+            name="7-strings"
+            checked={stringCount.seven}
+            disabled={!guitarType.acoustic && !guitarType.electric && isGuitarTypeChecked}
+          />
           <label htmlFor="7-strings">7</label>
         </div>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="12-strings" name="12-strings" disabled/>
+          <input
+            onChange={() => setStringCount({...stringCount, twelve: !stringCount.twelve})}
+            className="visually-hidden"
+            type="checkbox"
+            id="12-strings"
+            name="12-strings"
+            checked={stringCount.twelve}
+            disabled={!guitarType.acoustic && isGuitarTypeChecked}
+          />
           <label htmlFor="12-strings">12</label>
         </div>
       </fieldset>

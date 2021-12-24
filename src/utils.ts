@@ -1,4 +1,7 @@
-import { SortMethods } from './const';
+import {
+  FilterQuery,
+  SortMethods
+} from './const';
 import {
   Guitar,
   GuitarType
@@ -54,3 +57,8 @@ export const sortItems = (items: Guitar[], sortMethod: string) => {
       return items;
   }
 };
+
+export const checkGuitarType = (search: string) =>
+  search.includes(FilterQuery.Acoustic)
+  || search.includes(FilterQuery.Electric)
+  || search.includes(FilterQuery.Ukulele);
