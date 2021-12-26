@@ -4,7 +4,6 @@ export type State = {
   guitars: Guitar[],
   isDataLoaded: boolean,
   guitar: Guitar,
-  displayedGuitars: Guitar[],
-  sortMethod: string,
+  sorting: string,
   filter: string,
 };

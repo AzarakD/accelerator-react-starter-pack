@@ -12,24 +12,9 @@ export const loadGuitar = createAction(
   (guitar: Guitar) => ({payload: guitar}),
 );
 
-export const displayGuitars = createAction(
-  ActionType.DisplayGuitars,
-  (guitars: Guitar[]) => ({payload: guitars}),
-);
-
-export const sortGuitars = createAction(
-  ActionType.SortGuitars,
-  (guitars: Guitar[]) => ({payload: guitars}),
-);
-
-export const changeSortMethod = createAction(
-  ActionType.ChangeSortMethod,
-  (sortMethod: string) => ({payload: sortMethod}),
-);
-
-export const filterGuitars = createAction(
-  ActionType.FilterGuitars,
-  (guitars: Guitar[]) => ({payload: guitars}),
+export const changeSorting = createAction(
+  ActionType.ChangeSorting,
+  (sorting: string) => ({payload: sorting}),
 );
 
 export const changeFilter = createAction(

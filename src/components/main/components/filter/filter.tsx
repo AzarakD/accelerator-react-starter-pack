@@ -3,17 +3,18 @@ import {
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  useDispatch,
-  useSelector
-} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
+import { useDebounce } from '../../../../hooks/use-debounce';
+import { changeFilter } from '../../../../store/actions';
 import { createAPI } from '../../../../services/api';
-import { filterGuitarsAction } from '../../../../store/api-actioms';
-import { getSortMethod } from '../../../../store/selectors';
-import { checkGuitarType } from '../../../../utils';
+import {
+  checkGuitarType,
+  getPriceFromUrl
+} from '../../../../utils';
 import {
   FilterQuery,
+  QueryKey,
   SortQuery
 } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
@@ -27,20 +28,21 @@ const getInfo = async () => {
 };
 
 export default function Filter(): JSX.Element {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const sortMethod = useSelector(getSortMethod);
+  const history = useHistory();
 
-  const [locationSearch] = useState(history.location.search);
+  const locationSearch = history.location.search;
+  const priceMin = getPriceFromUrl(locationSearch, QueryKey.PriceMax);
+  const priceMax = getPriceFromUrl(locationSearch, QueryKey.PriceMin);
+
   const [isGuitarTypeChecked, setIsGuitarTypeChecked] = useState(checkGuitarType(locationSearch));
   const [placeholder, setPlaceholder] = useState({
     min: MIN_PRICE,
     max: MIN_PRICE,
   });
   const [price, setPrice] = useState({
-    min: '',
-    max: '',
-    query: '',
+    min: priceMin,
+    max: priceMax,
   });
   const [guitarType, setGuitarType] = useState(
     {
@@ -55,6 +57,9 @@ export default function Filter(): JSX.Element {
     seven: locationSearch.includes(FilterQuery.SevenString),
     twelve: locationSearch.includes(FilterQuery.TwelveString),
   });
+
+  const debouncedMin = useDebounce(price.min);
+  const debouncedMax = useDebounce(price.max);
 
   useDidMountEffect(() => {
     getInfo().then((value) => {
@@ -80,15 +85,16 @@ export default function Filter(): JSX.Element {
       stringCount.seven ? FilterQuery.SevenString : ''
     }${
       stringCount.twelve ? FilterQuery.TwelveString : ''
-    }${price.query}${sortMethod}`;
+    }${
+      debouncedMin !== '' ? `&${QueryKey.PriceMin}${debouncedMin}` : ''
+    }${
+      debouncedMax !== '' ? `&${QueryKey.PriceMax}${debouncedMax}` : ''
+    }`;
 
-    dispatch(filterGuitarsAction(query));
-    history.push(`?${query}`);
+    dispatch(changeFilter(query));
     setIsGuitarTypeChecked(checkGuitarType(query));
   }, [
     dispatch,
-    history,
-    sortMethod,
     guitarType.acoustic,
     guitarType.electric,
     guitarType.ukulele,
@@ -96,35 +102,24 @@ export default function Filter(): JSX.Element {
     stringCount.seven,
     stringCount.six,
     stringCount.twelve,
-    price.query,
+    debouncedMin,
+    debouncedMax,
   ]);
 
   const onPriceMinBlur = () => {
     let min = Math.trunc(Math.abs(+price.min));
-    const max = Math.trunc(Math.abs(+price.max));
 
     if (min < placeholder.min) {
       min = placeholder.min;
-    }
-
-    if (price.min !== '' && (max > min)) {
-      setPrice({min: `${min}`, max: `${max}`, query: `&price_gte=${min}&price_lte=${max}`});
-      return;
     }
     setPrice({...price, min: `${min}`});
   };
 
   const onPriceMaxBlur = () => {
-    const min = Math.trunc(Math.abs(+price.min));
     let max = Math.trunc(Math.abs(+price.max));
 
     if (max > placeholder.max || max === 0) {
       max = placeholder.max;
-    }
-
-    if (price.min !== '' && (max > min)) {
-      setPrice({min: `${min}`, max: `${max}`, query: `&price_gte=${min}&price_lte=${max}`});
-      return;
     }
     setPrice({...price, max: `${max}`});
   };
@@ -138,7 +133,7 @@ export default function Filter(): JSX.Element {
           <div className="form-input">
             <label className="visually-hidden">Минимальная цена</label>
             <input
-              onInput={(evt) => setPrice({...price, min: evt.currentTarget.value})}
+              onChange={(evt) => setPrice({...price, min: (Math.abs(+evt.currentTarget.value)).toFixed(0)})}
               type="number"
               placeholder={`${placeholder.min}`}
               id="priceMin"
@@ -150,7 +145,7 @@ export default function Filter(): JSX.Element {
           <div className="form-input">
             <label className="visually-hidden">Максимальная цена</label>
             <input
-              onInput={(evt) => setPrice({...price, max: evt.currentTarget.value})}
+              onInput={(evt) => setPrice({...price, max: (Math.abs(+evt.currentTarget.value)).toFixed(0)})}
               type="number"
               placeholder={`${placeholder.max}`}
               id="priceMax"

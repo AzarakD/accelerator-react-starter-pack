@@ -2,44 +2,49 @@ import {
   useEffect,
   useState
 } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { changeSorting } from '../../../../store/actions';
 import {
-  useDispatch,
-  useSelector
-} from 'react-redux';
-import {
-  getFilter,
-  getSortMethod
-} from '../../../../store/selectors';
-import { sortGuitarsAction } from '../../../../store/api-actioms';
-import {
-  SortMethods,
+  QueryKey,
   SortQuery
 } from '../../../../const';
 
 export default function Sort(): JSX.Element {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const locationSearch = history.location.search;
+
   const [sortMethods, setSortMethods] = useState({
-    price: false,
-    rating: false,
+    price: locationSearch.includes(QueryKey.SortPrice),
+    rating: locationSearch.includes(QueryKey.SortRating),
   });
   const [sortArrows, setSortArrows] = useState({
-    toBigger: false,
-    toLesser: false,
+    toBigger: locationSearch.includes(QueryKey.OrderAsc),
+    toLesser: locationSearch.includes(QueryKey.OrderDesc),
   });
 
-  const dispatch = useDispatch();
-  const sortMethod = useSelector(getSortMethod);
-  const filter = useSelector(getFilter);
-
   useEffect(() => {
-    if (sortMethod === SortMethods.Default) {
-      setSortMethods({price: false, rating: false});
-      setSortArrows({toBigger: false, toLesser: false});
-    }
-  }, [sortMethod]);
+    let sort = '';
 
-  const sortGuitars = (query: string) => {
-    dispatch(sortGuitarsAction(`${filter}${query}`, query));
-  };
+    if (sortMethods.price && sortArrows.toBigger) {
+      sort = SortQuery.SortToBiggerPrice;
+    } else if (sortMethods.price && sortArrows.toLesser) {
+      sort = SortQuery.SortToLesserPrice;
+    } else if (sortMethods.rating && sortArrows.toBigger) {
+      sort = SortQuery.SortToBiggerRating;
+    } else if (sortMethods.rating && sortArrows.toLesser) {
+      sort = SortQuery.SortToLesserRating;
+    }
+
+    dispatch(changeSorting(sort));
+  }, [
+    dispatch,
+    sortArrows.toBigger,
+    sortArrows.toLesser,
+    sortMethods.price,
+    sortMethods.rating,
+  ]);
 
   const onPriceButtonClick = () => {
     setSortMethods({price: true, rating: false});
@@ -47,10 +52,6 @@ export default function Sort(): JSX.Element {
     if (!sortArrows.toBigger && !sortArrows.toLesser) {
       setSortArrows({toBigger: true, toLesser: false});
     }
-
-    !sortArrows.toLesser
-      ? sortGuitars(SortQuery.SortToBiggerPrice)
-      : sortGuitars(SortQuery.SortToLesserPrice);
   };
 
   const onRatingButtonClick = () => {
@@ -59,36 +60,22 @@ export default function Sort(): JSX.Element {
     if (!sortArrows.toBigger && !sortArrows.toLesser) {
       setSortArrows({toBigger: true, toLesser: false});
     }
-
-    !sortArrows.toLesser
-      ? sortGuitars(SortQuery.SortToBiggerRating)
-      : sortGuitars(SortQuery.SortToLesserRating);
   };
 
   const onUpArrowClick = () => {
     setSortArrows({toBigger: true, toLesser: false});
 
-    if (sortMethods.rating) {
-      sortGuitars(SortQuery.SortToBiggerRating);
-      return;
-    }
     if (!sortMethods.price) {
       setSortMethods({price: true, rating: false});
     }
-    sortGuitars(SortQuery.SortToBiggerPrice);
   };
 
   const onDownArrowClick = () => {
     setSortArrows({toBigger: false, toLesser: true});
 
-    if (sortMethods.rating) {
-      sortGuitars(SortQuery.SortToLesserRating);
-      return;
-    }
     if (!sortMethods.price) {
       setSortMethods({price: true, rating: false});
     }
-    sortGuitars(SortQuery.SortToLesserPrice);
   };
 
   return (

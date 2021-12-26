@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import { getDisplayedGuitars } from '../../../../store/selectors';
+import { getGuitars } from '../../../../store/selectors';
 import GuitarCard from '../guitar-card/guitar-card';
 
 export default function Cards(): JSX.Element {
-  const guitars = useSelector(getDisplayedGuitars);
+  const guitars = useSelector(getGuitars);
 
   return (
     <div className="cards catalog__cards">

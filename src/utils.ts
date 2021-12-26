@@ -28,3 +28,12 @@ export const checkGuitarType = (search: string) =>
   search.includes(FilterQuery.Acoustic)
   || search.includes(FilterQuery.Electric)
   || search.includes(FilterQuery.Ukulele);
+
+export const getPriceFromUrl = (url: string, key: string) => {
+  const stringFromUrl = url.split('&').filter((elem) => elem.includes(key))[0];
+  try {
+    return stringFromUrl.substring(10);
+  } catch {
+    return '';
+  }
+};

@@ -9,12 +9,11 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { displayGuitars } from '../../../../store/actions';
+import { changeSorting } from '../../../../store/actions';
 import { getGuitars } from '../../../../store/selectors';
-import { sortGuitarsAction } from '../../../../store/api-actioms';
 import SelectList from './select-list/select-list';
 import { filterByName } from '../../../../utils';
-import { SortMethods } from '../../../../const';
+import { SortQuery } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
 
 export default function FormSearch(): JSX.Element {
@@ -62,10 +61,10 @@ export default function FormSearch(): JSX.Element {
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-    const filteredGuitars = filterByName(guitars, userInput);
+    // const filteredGuitars = filterByName(guitars, userInput);
 
-    dispatch(sortGuitarsAction(SortMethods.Default, ''));
-    dispatch(displayGuitars(filteredGuitars));
+    dispatch(changeSorting(SortQuery.Default));
+    // dispatch(displayGuitars(filteredGuitars));
   };
 
   return (

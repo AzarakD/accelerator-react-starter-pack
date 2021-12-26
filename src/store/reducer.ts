@@ -1,14 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   changeFilter,
-  changeSortMethod,
-  displayGuitars,
-  filterGuitars,
+  changeSorting,
   loadGuitar,
-  loadGuitars,
-  sortGuitars
+  loadGuitars
 } from './actions';
-import { SortMethods } from '../const';
+import {
+  FilterQuery,
+  SortQuery
+} from '../const';
 import { State } from '../types/state';
 import { Guitar } from '../types/guitar';
 
@@ -16,9 +16,8 @@ const initialState: State = {
   guitars: [],
   isDataLoaded: false,
   guitar: {} as Guitar,
-  displayedGuitars: [],
-  sortMethod: SortMethods.Default,
-  filter: '',
+  sorting: SortQuery.Default,
+  filter: FilterQuery.Default,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -26,22 +25,12 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
       state.isDataLoaded = true;
-      state.displayedGuitars = action.payload;
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;
     })
-    .addCase(displayGuitars, (state, action) => {
-      state.displayedGuitars = action.payload;
-    })
-    .addCase(sortGuitars, (state, action) => {
-      state.displayedGuitars = action.payload;
-    })
-    .addCase(changeSortMethod, (state, action) => {
-      state.sortMethod = action.payload;
-    })
-    .addCase(filterGuitars, (state, action) => {
-      state.displayedGuitars = action.payload;
+    .addCase(changeSorting, (state, action) => {
+      state.sorting = action.payload;
     })
     .addCase(changeFilter, (state, action) => {
       state.filter = action.payload;

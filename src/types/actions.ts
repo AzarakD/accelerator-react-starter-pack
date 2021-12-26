@@ -8,10 +8,7 @@ import { State } from './state';
 export enum ActionType {
   LoadGuitars = 'data/loadGuitars',
   LoadGuitar = 'data/loadGuitar',
-  DisplayGuitars = 'app/displayGuitars',
-  SortGuitars = 'app/sortGuitars',
-  FilterGuitars = 'app/filterGuitars',
-  ChangeSortMethod = 'app/changeSortMethod',
+  ChangeSorting = 'app/changeSorting',
   ChangeFilter = 'app/changeFilter',
 }
 
