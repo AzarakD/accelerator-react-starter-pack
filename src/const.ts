@@ -31,6 +31,11 @@ export enum FilterQuery {
   Default = '',
 }
 
+export enum SearchQuery {
+  Similar = '&name_like=',
+  Default = '',
+}
+
 export enum PlaceholderQuery {
   Min = 'guitars?&_sort=price&_order=asc&_start=0&_limit=1',
   Max = 'guitars?&_sort=price&_order=desc&_start=0&_limit=1',

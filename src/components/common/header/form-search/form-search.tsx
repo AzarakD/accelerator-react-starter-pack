@@ -9,33 +9,50 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { changeSorting } from '../../../../store/actions';
-import { getGuitars } from '../../../../store/selectors';
+import { useHistory } from 'react-router-dom';
+import { useDebounce } from '../../../../hooks/use-debounce';
+import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
+import { createAPI } from '../../../../services/api';
+import {
+  changeSearch,
+  resetForm
+} from '../../../../store/actions';
+import { getIsDataLoaded } from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
-import { filterByName } from '../../../../utils';
-import { SortQuery } from '../../../../const';
+import { getSearchFromUrl } from '../../../../utils';
+import {
+  APIRoute,
+  SearchQuery
+} from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
 
+const api = createAPI();
+const getSimilarGuitars = async (query: string) => {
+  const route = APIRoute.Guitars.replace(':query', `?${SearchQuery.Similar}${query}`);
+  try {
+    const { data } = await api.get<Guitar[]>(route);
+    return data;
+
+  } catch {
+    // eslint-disable-next-line no-console
+    console.log('search is not available');
+    return [];
+  }
+};
+
 export default function FormSearch(): JSX.Element {
-  const [userInput, setUserInput] = useState('');
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const isLoaded = useSelector(getIsDataLoaded);
+  const search = getSearchFromUrl(history.location.search);
+
+  const [userInput, setUserInput] = useState(search);
   const [isOpened, setIsOpened] = useState(false);
   const [shownGuitars, setShownGuitars] = useState<Guitar[]>([]);
 
-  const dispatch = useDispatch();
-  const guitars = useSelector(getGuitars);
   const refInput = useRef(null);
-
-  const checkIsOpened = useCallback((filteredItems: Guitar[]) => {
-    if (filteredItems.length !== 0) {setIsOpened(true);}
-    if (filteredItems.length === 0 || userInput === '') {setIsOpened(false);}
-  }, [userInput]);
-
-  useEffect(() => {
-    const filteredGuitars = filterByName(guitars, userInput);
-
-    setShownGuitars(filteredGuitars);
-    checkIsOpened(filteredGuitars);
-  }, [checkIsOpened, guitars, userInput]);
+  const isInitialMount = useRef(true);
+  const debouncedInput = useDebounce(userInput);
 
   const onOutsideClick = useCallback((evt) => {
     if (refInput.current !== evt.target) {
@@ -49,6 +66,29 @@ export default function FormSearch(): JSX.Element {
     }
   }, []);
 
+  const onSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    dispatch(resetForm());
+    dispatch(changeSearch(`${SearchQuery.Similar}${userInput}`));
+  };
+
+  useEffect(() => {
+    if (!isInitialMount.current) {
+      if (debouncedInput) {
+        getSimilarGuitars(debouncedInput).then((value) => {
+          setShownGuitars(value);
+        });
+        return;
+      }
+      setShownGuitars([]);
+    }
+  }, [debouncedInput]);
+
+  useEffect(() => {
+    if (shownGuitars.length !== 0) {setIsOpened(true);}
+    if (shownGuitars.length === 0) {setIsOpened(false);}
+  }, [shownGuitars]);
+
   useEffect(() => {
     document.addEventListener('click', onOutsideClick);
     document.addEventListener('keydown', onEscKeyDown);
@@ -59,13 +99,15 @@ export default function FormSearch(): JSX.Element {
     };
   }, [onEscKeyDown, onOutsideClick]);
 
-  const onSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    // const filteredGuitars = filterByName(guitars, userInput);
+  useEffect(() => {
+    if (isLoaded && search) {
+      dispatch(changeSearch(`${SearchQuery.Similar}${search}`));
+    }
+  }, [dispatch, isLoaded, search]);
 
-    dispatch(changeSorting(SortQuery.Default));
-    // dispatch(displayGuitars(filteredGuitars));
-  };
+  useDidMountEffect(() => {
+    isInitialMount.current = false;
+  });
 
   return (
     <div className="form-search" onSubmit={onSubmit}>

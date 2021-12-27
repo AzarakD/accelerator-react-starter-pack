@@ -12,6 +12,7 @@ import { fetchGuitarsAction } from '../../../../store/api-actioms';
 import {
   getFilter,
   getIsDataLoaded,
+  getSearch,
   getSorting
 } from '../../../../store/selectors';
 import Cards from '../cards/cards';
@@ -23,23 +24,31 @@ export default function Catalog(): JSX.Element {
   const isLoaded = useSelector(getIsDataLoaded);
   const sorting = useSelector(getSorting);
   const filter = useSelector(getFilter);
+  const search = useSelector(getSearch);
 
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const isMountedRef = useRef(false);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    if (isMountedRef.current && (history.location.search !== `?${filter}${sorting}`)) {
-      const query = `?${filter}${sorting}`;
+    const query = `?${search}${filter}${sorting}`;
 
+    // eslint-disable-next-line no-console
+    console.log(query);
+    if (!isInitialMount.current && (history.location.search !== query)) {
       dispatch(fetchGuitarsAction(query));
       history.push(query);
     }
-  }, [dispatch, filter, history, sorting]);
+  }, [
+    dispatch,
+    filter,
+    history,
+    search,
+    sorting,
+  ]);
 
   useDidMountEffect(() => {
-    isMountedRef.current = true;
+    isInitialMount.current = false;
     dispatch(fetchGuitarsAction(history.location.search));
   });
 

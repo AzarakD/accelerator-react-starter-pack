@@ -1,12 +1,17 @@
 import {
   useEffect,
+  useRef,
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { useDebounce } from '../../../../hooks/use-debounce';
 import { changeFilter } from '../../../../store/actions';
+import { getFormReset } from '../../../../store/selectors';
 import { createAPI } from '../../../../services/api';
 import {
   checkGuitarType,
@@ -35,6 +40,8 @@ const getPlaceholderInfo = async () => {
 export default function Filter(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
+  const isInitialMount = useRef(true);
+  const formReset = useSelector(getFormReset);
 
   const locationSearch = history.location.search;
   const priceMin = getPriceFromUrl(locationSearch, QueryKey.PriceMax);
@@ -66,14 +73,25 @@ export default function Filter(): JSX.Element {
   const debouncedMin = useDebounce(price.min);
   const debouncedMax = useDebounce(price.max);
 
-  useDidMountEffect(() => {
-    getPlaceholderInfo().then((value) => {
-      setPlaceholder({
-        min: value.minPrice,
-        max: value.maxPrice,
+  useEffect(() => {
+    if (!isInitialMount.current) {
+      setPrice({
+        min: '',
+        max: '',
       });
-    });
-  });
+      setGuitarType({
+        acoustic: false,
+        electric: false,
+        ukulele: false,
+      });
+      setStringCount({
+        four: false,
+        six: false,
+        seven: false,
+        twelve: false,
+      });
+    }
+  }, [formReset]);
 
   useEffect(() => {
     const query = `${
@@ -91,9 +109,9 @@ export default function Filter(): JSX.Element {
     }${
       stringCount.twelve ? FilterQuery.TwelveString : ''
     }${
-      debouncedMin !== '' ? `&${QueryKey.PriceMin}${debouncedMin}` : ''
+      debouncedMin ? `&${QueryKey.PriceMin}${debouncedMin}` : ''
     }${
-      debouncedMax !== '' ? `&${QueryKey.PriceMax}${debouncedMax}` : ''
+      debouncedMax ? `&${QueryKey.PriceMax}${debouncedMax}` : ''
     }`;
 
     dispatch(changeFilter(query));
@@ -110,6 +128,17 @@ export default function Filter(): JSX.Element {
     debouncedMin,
     debouncedMax,
   ]);
+
+  useDidMountEffect(() => {
+    isInitialMount.current = false;
+
+    getPlaceholderInfo().then((value) => {
+      setPlaceholder({
+        min: value.minPrice,
+        max: value.maxPrice,
+      });
+    });
+  });
 
   const onPriceMinBlur = () => {
     let min = Math.trunc(Math.abs(+price.min));

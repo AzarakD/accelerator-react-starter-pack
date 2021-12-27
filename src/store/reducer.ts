@@ -1,12 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
   changeFilter,
+  changeSearch,
   changeSorting,
   loadGuitar,
-  loadGuitars
+  loadGuitars,
+  resetForm
 } from './actions';
 import {
   FilterQuery,
+  SearchQuery,
   SortQuery
 } from '../const';
 import { State } from '../types/state';
@@ -18,6 +21,8 @@ const initialState: State = {
   guitar: {} as Guitar,
   sorting: SortQuery.Default,
   filter: FilterQuery.Default,
+  search: SearchQuery.Default,
+  formReset: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -34,5 +39,11 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(changeFilter, (state, action) => {
       state.filter = action.payload;
+    })
+    .addCase(changeSearch, (state, action) => {
+      state.search = action.payload;
+    })
+    .addCase(resetForm, (state, _action) => {
+      state.formReset = !state.formReset;
     });
 });

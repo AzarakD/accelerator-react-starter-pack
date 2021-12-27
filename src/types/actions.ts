@@ -10,6 +10,8 @@ export enum ActionType {
   LoadGuitar = 'data/loadGuitar',
   ChangeSorting = 'app/changeSorting',
   ChangeFilter = 'app/changeFilter',
+  ChangeSearch = 'app/changeSearch',
+  ResetForm = 'app/resetForm',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

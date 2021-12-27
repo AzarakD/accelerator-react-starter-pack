@@ -21,3 +21,12 @@ export const changeFilter = createAction(
   ActionType.ChangeFilter,
   (filter: string) => ({payload: filter}),
 );
+
+export const changeSearch = createAction(
+  ActionType.ChangeSearch,
+  (search: string) => ({payload: search}),
+);
+
+export const resetForm = createAction(
+  ActionType.ResetForm,
+);

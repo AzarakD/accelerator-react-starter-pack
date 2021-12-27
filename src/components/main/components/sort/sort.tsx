@@ -1,10 +1,15 @@
 import {
   useEffect,
+  useRef,
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { changeSorting } from '../../../../store/actions';
+import { getFormReset } from '../../../../store/selectors';
 import {
   QueryKey,
   SortQuery
@@ -13,6 +18,9 @@ import {
 export default function Sort(): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
+  const isInitialMount = useRef(true);
+  const formReset = useSelector(getFormReset);
+
   const locationSearch = history.location.search;
 
   const [sortMethods, setSortMethods] = useState({
@@ -23,6 +31,21 @@ export default function Sort(): JSX.Element {
     toBigger: locationSearch.includes(QueryKey.OrderAsc),
     toLesser: locationSearch.includes(QueryKey.OrderDesc),
   });
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    setSortMethods({
+      price: false,
+      rating: false,
+    });
+    setSortArrows({
+      toBigger: false,
+      toLesser: false,
+    });
+  }, [formReset]);
 
   useEffect(() => {
     let sort = '';

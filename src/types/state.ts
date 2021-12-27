@@ -6,4 +6,6 @@ export type State = {
   guitar: Guitar,
   sorting: string,
   filter: string,
+  search: string,
+  formReset: boolean,
 };
