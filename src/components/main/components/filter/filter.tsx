@@ -14,17 +14,22 @@ import {
 } from '../../../../utils';
 import {
   FilterQuery,
-  QueryKey,
-  SortQuery
+  PlaceholderQuery,
+  QueryKey
 } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
 
 const MIN_PRICE = 0;
 
 const api = createAPI();
-const getInfo = async () => {
-  const { data } = await api.get<Guitar[]>(`/guitars?${SortQuery.SortToBiggerPrice}`);
-  return data;
+const getPlaceholderInfo = async () => {
+  const minPriceCard = await api.get<Guitar[]>(PlaceholderQuery.Min);
+  const maxPriceCard = await api.get<Guitar[]>(PlaceholderQuery.Max);
+
+  return {
+    minPrice: minPriceCard.data[0].price,
+    maxPrice: maxPriceCard.data[0].price,
+  };
 };
 
 export default function Filter(): JSX.Element {
@@ -62,10 +67,10 @@ export default function Filter(): JSX.Element {
   const debouncedMax = useDebounce(price.max);
 
   useDidMountEffect(() => {
-    getInfo().then((value) => {
+    getPlaceholderInfo().then((value) => {
       setPlaceholder({
-        min: value[0].price,
-        max: value[value.length - 1].price,
+        min: value.minPrice,
+        max: value.maxPrice,
       });
     });
   });

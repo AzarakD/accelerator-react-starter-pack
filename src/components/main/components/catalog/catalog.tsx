@@ -1,4 +1,7 @@
-import { useEffect } from 'react';
+import {
+  useEffect,
+  useRef
+} from 'react';
 import {
   useDispatch,
   useSelector
@@ -18,25 +21,27 @@ import Sort from '../sort/sort';
 
 export default function Catalog(): JSX.Element {
   const isLoaded = useSelector(getIsDataLoaded);
+  const sorting = useSelector(getSorting);
+  const filter = useSelector(getFilter);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const sortMethod = useSelector(getSorting);
-  const filter = useSelector(getFilter);
-
-  useDidMountEffect(() => {
-    dispatch(fetchGuitarsAction(history.location.search));
-  });
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
-    if (isLoaded && (history.location.search !== `?${filter}${sortMethod}`)) {
-      const query = `?${filter}${sortMethod}`;
+    if (isMountedRef.current && (history.location.search !== `?${filter}${sorting}`)) {
+      const query = `?${filter}${sorting}`;
 
       dispatch(fetchGuitarsAction(query));
       history.push(query);
     }
-  }, [dispatch, filter, history, sortMethod]);
+  }, [dispatch, filter, history, sorting]);
+
+  useDidMountEffect(() => {
+    isMountedRef.current = true;
+    dispatch(fetchGuitarsAction(history.location.search));
+  });
 
   if (!isLoaded) {
     return <>Loading...</>;
