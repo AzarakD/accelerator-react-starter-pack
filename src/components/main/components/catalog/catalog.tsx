@@ -1,13 +1,10 @@
 import {
-  useEffect,
-  useRef
-} from 'react';
-import {
   useDispatch,
   useSelector
 } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
+import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { fetchGuitarsAction } from '../../../../store/api-actioms';
 import {
   getFilter,
@@ -28,14 +25,11 @@ export default function Catalog(): JSX.Element {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const isInitialMount = useRef(true);
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     const query = `?${search}${filter}${sorting}`;
 
-    // eslint-disable-next-line no-console
-    console.log(query);
-    if (!isInitialMount.current && (history.location.search !== query)) {
+    if (history.location.search !== query) {
       dispatch(fetchGuitarsAction(query));
       history.push(query);
     }
@@ -48,7 +42,6 @@ export default function Catalog(): JSX.Element {
   ]);
 
   useDidMountEffect(() => {
-    isInitialMount.current = false;
     dispatch(fetchGuitarsAction(history.location.search));
   });
 

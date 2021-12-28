@@ -1,6 +1,5 @@
 import {
   useEffect,
-  useRef,
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -8,8 +7,12 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
+import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { changeSorting } from '../../../../store/actions';
-import { getFormReset } from '../../../../store/selectors';
+import {
+  getFormReset,
+  getSorting
+} from '../../../../store/selectors';
 import {
   QueryKey,
   SortQuery
@@ -18,8 +21,8 @@ import {
 export default function Sort(): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
-  const isInitialMount = useRef(true);
   const formReset = useSelector(getFormReset);
+  const sorting = useSelector(getSorting);
 
   const locationSearch = history.location.search;
 
@@ -32,11 +35,7 @@ export default function Sort(): JSX.Element {
     toLesser: locationSearch.includes(QueryKey.OrderDesc),
   });
 
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
+  useDidUpdateEffect(() => {
     setSortMethods({
       price: false,
       rating: false,
@@ -45,24 +44,28 @@ export default function Sort(): JSX.Element {
       toBigger: false,
       toLesser: false,
     });
-  }, [formReset]);
+    dispatch(changeSorting(SortQuery.Default));
+  }, [dispatch, formReset]);
 
   useEffect(() => {
-    let sort = '';
+    let sortQuery = '';
 
     if (sortMethods.price && sortArrows.toBigger) {
-      sort = SortQuery.SortToBiggerPrice;
+      sortQuery = SortQuery.SortToBiggerPrice;
     } else if (sortMethods.price && sortArrows.toLesser) {
-      sort = SortQuery.SortToLesserPrice;
+      sortQuery = SortQuery.SortToLesserPrice;
     } else if (sortMethods.rating && sortArrows.toBigger) {
-      sort = SortQuery.SortToBiggerRating;
+      sortQuery = SortQuery.SortToBiggerRating;
     } else if (sortMethods.rating && sortArrows.toLesser) {
-      sort = SortQuery.SortToLesserRating;
+      sortQuery = SortQuery.SortToLesserRating;
     }
 
-    dispatch(changeSorting(sort));
+    if (sorting !== sortQuery) {
+      dispatch(changeSorting(sortQuery));
+    }
   }, [
     dispatch,
+    sorting,
     sortArrows.toBigger,
     sortArrows.toLesser,
     sortMethods.price,

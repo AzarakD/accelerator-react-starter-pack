@@ -1,6 +1,5 @@
 import {
   useEffect,
-  useRef,
   useState
 } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -9,9 +8,13 @@ import {
   useSelector
 } from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
+import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { useDebounce } from '../../../../hooks/use-debounce';
 import { changeFilter } from '../../../../store/actions';
-import { getFormReset } from '../../../../store/selectors';
+import {
+  getFilter,
+  getFormReset
+} from '../../../../store/selectors';
 import { createAPI } from '../../../../services/api';
 import {
   checkGuitarType,
@@ -40,8 +43,8 @@ const getPlaceholderInfo = async () => {
 export default function Filter(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
-  const isInitialMount = useRef(true);
   const formReset = useSelector(getFormReset);
+  const filter  = useSelector(getFilter);
 
   const locationSearch = history.location.search;
   const priceMin = getPriceFromUrl(locationSearch, QueryKey.PriceMax);
@@ -73,28 +76,28 @@ export default function Filter(): JSX.Element {
   const debouncedMin = useDebounce(price.min);
   const debouncedMax = useDebounce(price.max);
 
-  useEffect(() => {
-    if (!isInitialMount.current) {
-      setPrice({
-        min: '',
-        max: '',
-      });
-      setGuitarType({
-        acoustic: false,
-        electric: false,
-        ukulele: false,
-      });
-      setStringCount({
-        four: false,
-        six: false,
-        seven: false,
-        twelve: false,
-      });
-    }
-  }, [formReset]);
+  useDidUpdateEffect(() => {
+    setPrice({
+      min: '',
+      max: '',
+    });
+    setGuitarType({
+      acoustic: false,
+      electric: false,
+      ukulele: false,
+    });
+    setStringCount({
+      four: false,
+      six: false,
+      seven: false,
+      twelve: false,
+    });
+    dispatch(changeFilter(FilterQuery.Default));
+    setIsGuitarTypeChecked(checkGuitarType(FilterQuery.Default));
+  }, [dispatch, formReset]);
 
   useEffect(() => {
-    const query = `${
+    const filterQuery = `${
       guitarType.acoustic ? FilterQuery.Acoustic : ''
     }${
       guitarType.electric ? FilterQuery.Electric : ''
@@ -114,10 +117,13 @@ export default function Filter(): JSX.Element {
       debouncedMax ? `&${QueryKey.PriceMax}${debouncedMax}` : ''
     }`;
 
-    dispatch(changeFilter(query));
-    setIsGuitarTypeChecked(checkGuitarType(query));
+    if (filter !== filterQuery) {
+      dispatch(changeFilter(filterQuery));
+      setIsGuitarTypeChecked(checkGuitarType(filterQuery));
+    }
   }, [
     dispatch,
+    filter,
     guitarType.acoustic,
     guitarType.electric,
     guitarType.ukulele,
@@ -130,8 +136,6 @@ export default function Filter(): JSX.Element {
   ]);
 
   useDidMountEffect(() => {
-    isInitialMount.current = false;
-
     getPlaceholderInfo().then((value) => {
       setPlaceholder({
         min: value.minPrice,

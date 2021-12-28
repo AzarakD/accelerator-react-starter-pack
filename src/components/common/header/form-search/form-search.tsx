@@ -11,13 +11,16 @@ import {
 } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useDebounce } from '../../../../hooks/use-debounce';
-import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
+import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { createAPI } from '../../../../services/api';
 import {
   changeSearch,
   resetForm
 } from '../../../../store/actions';
-import { getIsDataLoaded } from '../../../../store/selectors';
+import {
+  getFormReset,
+  getIsDataLoaded
+} from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
 import { getSearchFromUrl } from '../../../../utils';
 import {
@@ -25,6 +28,8 @@ import {
   SearchQuery
 } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
+
+const INPUT_DELAY = 500;
 
 const api = createAPI();
 const getSimilarGuitars = async (query: string) => {
@@ -44,6 +49,7 @@ export default function FormSearch(): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
   const isLoaded = useSelector(getIsDataLoaded);
+  const formReset = useSelector(getFormReset);
   const search = getSearchFromUrl(history.location.search);
 
   const [userInput, setUserInput] = useState(search);
@@ -51,8 +57,7 @@ export default function FormSearch(): JSX.Element {
   const [shownGuitars, setShownGuitars] = useState<Guitar[]>([]);
 
   const refInput = useRef(null);
-  const isInitialMount = useRef(true);
-  const debouncedInput = useDebounce(userInput);
+  const debouncedInput = useDebounce(userInput, INPUT_DELAY);
 
   const onOutsideClick = useCallback((evt) => {
     if (refInput.current !== evt.target) {
@@ -69,22 +74,23 @@ export default function FormSearch(): JSX.Element {
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     dispatch(resetForm());
-    dispatch(changeSearch(`${SearchQuery.Similar}${userInput}`));
   };
 
-  useEffect(() => {
-    if (!isInitialMount.current) {
-      if (debouncedInput) {
-        getSimilarGuitars(debouncedInput).then((value) => {
-          setShownGuitars(value);
-        });
-        return;
-      }
-      setShownGuitars([]);
+  useDidUpdateEffect(() => {
+    dispatch(changeSearch(`${SearchQuery.Similar}${userInput}`));
+  }, [dispatch, formReset]);
+
+  useDidUpdateEffect(() => {
+    if (debouncedInput) {
+      getSimilarGuitars(debouncedInput).then((value) => {
+        setShownGuitars(value);
+      });
+      return;
     }
+    setShownGuitars([]);
   }, [debouncedInput]);
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     if (shownGuitars.length !== 0) {setIsOpened(true);}
     if (shownGuitars.length === 0) {setIsOpened(false);}
   }, [shownGuitars]);
@@ -104,10 +110,6 @@ export default function FormSearch(): JSX.Element {
       dispatch(changeSearch(`${SearchQuery.Similar}${search}`));
     }
   }, [dispatch, isLoaded, search]);
-
-  useDidMountEffect(() => {
-    isInitialMount.current = false;
-  });
 
   return (
     <div className="form-search" onSubmit={onSubmit}>
