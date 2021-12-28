@@ -5,7 +5,8 @@ import {
   changeSorting,
   loadGuitar,
   loadGuitars,
-  resetForm
+  resetForm,
+  setCurrentPage
 } from './actions';
 import {
   FilterQuery,
@@ -23,12 +24,15 @@ const initialState: State = {
   filter: FilterQuery.Default,
   search: SearchQuery.Default,
   formReset: false,
+  currentPage: 1,
+  totalCount: null,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadGuitars, (state, action) => {
-      state.guitars = action.payload;
+      state.guitars = action.payload.guitars;
+      state.totalCount = action.payload.itemCount;
       state.isDataLoaded = true;
     })
     .addCase(loadGuitar, (state, action) => {
@@ -45,5 +49,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(resetForm, (state, _action) => {
       state.formReset = !state.formReset;
+    })
+    .addCase(setCurrentPage, (state, action) => {
+      state.currentPage = action.payload;
     });
 });

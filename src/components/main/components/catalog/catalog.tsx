@@ -7,6 +7,7 @@ import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { fetchGuitarsAction } from '../../../../store/api-actioms';
 import {
+  getCurrentPage,
   getFilter,
   getIsDataLoaded,
   getSearch,
@@ -22,12 +23,13 @@ export default function Catalog(): JSX.Element {
   const sorting = useSelector(getSorting);
   const filter = useSelector(getFilter);
   const search = useSelector(getSearch);
+  const page = useSelector(getCurrentPage);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   useDidUpdateEffect(() => {
-    const query = `?${search}${filter}${sorting}`;
+    const query = `?page_${page}${search}${filter}${sorting}`;
 
     if (history.location.search !== query) {
       dispatch(fetchGuitarsAction(query));
@@ -39,6 +41,7 @@ export default function Catalog(): JSX.Element {
     history,
     search,
     sorting,
+    page,
   ]);
 
   useDidMountEffect(() => {

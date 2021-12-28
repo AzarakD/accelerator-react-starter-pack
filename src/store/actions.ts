@@ -4,7 +4,10 @@ import { Guitar } from '../types/guitar';
 
 export const loadGuitars = createAction(
   ActionType.LoadGuitars,
-  (guitars: Guitar[]) => ({payload: guitars}),
+  (guitars: Guitar[], itemCount: number) => ({payload: {
+    guitars: guitars,
+    itemCount: itemCount,
+  }}),
 );
 
 export const loadGuitar = createAction(
@@ -29,4 +32,9 @@ export const changeSearch = createAction(
 
 export const resetForm = createAction(
   ActionType.ResetForm,
+);
+
+export const setCurrentPage = createAction(
+  ActionType.SetCurrentPage,
+  (currentPage: number) => ({payload: currentPage}),
 );

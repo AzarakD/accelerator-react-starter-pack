@@ -41,6 +41,11 @@ export enum PlaceholderQuery {
   Max = 'guitars?&_sort=price&_order=desc&_start=0&_limit=1',
 }
 
+export enum PageQuery {
+  Start = '&_start=',
+  Limit = '&_limit=',
+}
+
 export enum QueryKey {
   PriceMin = 'price_gte=',
   PriceMax = 'price_lte=',
@@ -48,4 +53,5 @@ export enum QueryKey {
   SortRating = '_sort=rating',
   OrderAsc = '_order=asc',
   OrderDesc = '_order=desc',
+  Page = 'page_',
 }

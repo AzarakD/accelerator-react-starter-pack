@@ -8,4 +8,6 @@ export type State = {
   filter: string,
   search: string,
   formReset: boolean,
+  currentPage: number,
+  totalCount: number | null,
 };

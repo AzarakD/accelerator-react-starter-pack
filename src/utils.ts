@@ -37,3 +37,12 @@ export const getSearchFromUrl = (url: string) => {
     return '';
   }
 };
+
+export const getPageFromUrl = (url: string) => {
+  const stringFromUrl = url.split('&').filter((elem) => elem.includes('page_'))[0];
+  try {
+    return stringFromUrl.substring(6);
+  } catch {
+    return '1';
+  }
+};
