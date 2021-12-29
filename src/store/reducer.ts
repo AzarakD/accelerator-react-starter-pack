@@ -9,6 +9,7 @@ import {
   setCurrentPage
 } from './actions';
 import {
+  DEFAULT_PAGE,
   FilterQuery,
   SearchQuery,
   SortQuery
@@ -24,7 +25,7 @@ const initialState: State = {
   filter: FilterQuery.Default,
   search: SearchQuery.Default,
   formReset: false,
-  currentPage: 1,
+  currentPage: DEFAULT_PAGE,
   totalCount: null,
 };
 

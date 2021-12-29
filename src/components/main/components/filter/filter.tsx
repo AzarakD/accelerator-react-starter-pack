@@ -10,7 +10,10 @@ import {
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { useDebounce } from '../../../../hooks/use-debounce';
-import { changeFilter } from '../../../../store/actions';
+import {
+  changeFilter,
+  setCurrentPage
+} from '../../../../store/actions';
 import {
   getFilter,
   getFormReset
@@ -21,6 +24,7 @@ import {
   getPriceFromUrl
 } from '../../../../utils';
 import {
+  DEFAULT_PAGE,
   FilterQuery,
   PlaceholderQuery,
   QueryKey
@@ -93,6 +97,7 @@ export default function Filter(): JSX.Element {
       twelve: false,
     });
     dispatch(changeFilter(FilterQuery.Default));
+    dispatch(setCurrentPage(DEFAULT_PAGE));
     setIsGuitarTypeChecked(checkGuitarType(FilterQuery.Default));
   }, [dispatch, formReset]);
 
@@ -119,6 +124,7 @@ export default function Filter(): JSX.Element {
 
     if (filter !== filterQuery) {
       dispatch(changeFilter(filterQuery));
+      dispatch(setCurrentPage(DEFAULT_PAGE));
       setIsGuitarTypeChecked(checkGuitarType(filterQuery));
     }
   }, [

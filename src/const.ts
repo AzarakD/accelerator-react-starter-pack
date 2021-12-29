@@ -1,3 +1,7 @@
+export const HEADER = 'x-total-count';
+export const DEFAULT_PAGE = 1;
+export const ITEM_COUNT = 9;
+
 export enum AppRoute {
   Main = '/',
   Product = '/guitars/:id',

@@ -9,3 +9,4 @@ export const getFilter = ({filter}: State): string => filter;
 export const getSearch = ({search}: State): string => search;
 export const getFormReset = ({formReset}: State): boolean => formReset;
 export const getCurrentPage = ({currentPage}: State): number => currentPage;
+export const getTotalCount = ({totalCount}: State): number => totalCount as number;

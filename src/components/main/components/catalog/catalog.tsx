@@ -17,6 +17,7 @@ import Cards from '../cards/cards';
 import Filter from '../filter/filter';
 import Pagination from '../pagination/pagination';
 import Sort from '../sort/sort';
+import { QueryKey } from '../../../../const';
 
 export default function Catalog(): JSX.Element {
   const isLoaded = useSelector(getIsDataLoaded);
@@ -29,7 +30,7 @@ export default function Catalog(): JSX.Element {
   const dispatch = useDispatch();
 
   useDidUpdateEffect(() => {
-    const query = `?page_${page}${search}${filter}${sorting}`;
+    const query = `?${QueryKey.Page}${page}${search}${filter}${sorting}`;
 
     if (history.location.search !== query) {
       dispatch(fetchGuitarsAction(query));

@@ -2,13 +2,17 @@ import {
   loadGuitar,
   loadGuitars
 } from './actions';
-import { APIRoute, PageQuery, QueryKey } from '../const';
 import { ThunkActionResult } from '../types/actions';
-import { Guitar } from '../types/guitar';
 import { getPageFromUrl } from '../utils';
+import {
+  APIRoute,
+  HEADER,
+  ITEM_COUNT,
+  PageQuery,
+  QueryKey
+} from '../const';
+import { Guitar } from '../types/guitar';
 
-const ITEM_COUNT = 9;
-const HEADER = 'x-total-count';
 
 export const fetchGuitarAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -18,7 +22,7 @@ export const fetchGuitarAction = (id: number): ThunkActionResult =>
 
 export const fetchGuitarsAction = (query: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const currentPage = +getPageFromUrl(query);
+    const currentPage = getPageFromUrl(query);
     const index = currentPage * ITEM_COUNT - ITEM_COUNT;
 
     const pageQuery = query.includes(QueryKey.Page)

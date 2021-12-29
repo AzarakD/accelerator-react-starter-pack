@@ -77,7 +77,9 @@ export default function FormSearch(): JSX.Element {
   };
 
   useDidUpdateEffect(() => {
-    dispatch(changeSearch(`${SearchQuery.Similar}${userInput}`));
+    userInput
+      ? dispatch(changeSearch(`${SearchQuery.Similar}${userInput}`))
+      : dispatch(changeSearch(SearchQuery.Default));
   }, [dispatch, formReset]);
 
   useDidUpdateEffect(() => {

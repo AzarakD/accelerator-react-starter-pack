@@ -1,4 +1,7 @@
-import { FilterQuery } from './const';
+import {
+  DEFAULT_PAGE,
+  FilterQuery
+} from './const';
 import { GuitarType } from './types/guitar';
 
 const guitarType: GuitarType = {
@@ -41,8 +44,25 @@ export const getSearchFromUrl = (url: string) => {
 export const getPageFromUrl = (url: string) => {
   const stringFromUrl = url.split('&').filter((elem) => elem.includes('page_'))[0];
   try {
-    return stringFromUrl.substring(6);
+    return +stringFromUrl.substring(6);
   } catch {
-    return '1';
+    return DEFAULT_PAGE;
   }
+};
+
+export const getPages = (pageCount: number) =>
+  Array(pageCount).fill(null).map((_, index) => index + 1);
+
+export const getShownPages = (pages: number[], currentPage: number) => {
+  let shiftBack = 2;
+  let shiftForward = 1;
+
+  if (currentPage < 2) {
+    shiftBack = 1;
+    shiftForward = 2;
+  } else if (currentPage === pages.length && pages.length > 3) {
+    shiftBack = 3;
+  }
+
+  return pages.slice(currentPage - shiftBack, currentPage + shiftForward);
 };
