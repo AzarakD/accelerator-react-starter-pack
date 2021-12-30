@@ -18,6 +18,12 @@ export const setPrice = (price: number, divider=1000) =>
 
 export const setGuitarType = (type: keyof GuitarType) => guitarType[type];
 
+export const getRandomGuitarType = (): keyof GuitarType => {
+  const guitarTypes = Object.keys(guitarType);
+
+  return guitarTypes[Math.floor(Math.random() * guitarTypes.length)] as keyof GuitarType;
+};
+
 export const checkGuitarType = (search: string) =>
   search.includes(FilterQuery.Acoustic)
   || search.includes(FilterQuery.Electric)
