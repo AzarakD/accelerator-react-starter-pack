@@ -17,7 +17,7 @@ import {
 import { State } from '../types/state';
 import { Guitar } from '../types/guitar';
 
-const initialState: State = {
+export const initialState: State = {
   guitars: [],
   isDataLoaded: false,
   guitar: {} as Guitar,
