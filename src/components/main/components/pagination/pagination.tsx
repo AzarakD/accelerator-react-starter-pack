@@ -34,7 +34,6 @@ function Pagination(): JSX.Element {
   const filterRef = useRef(filter);
   const pageCount = Math.ceil(totalCount / ITEM_COUNT);
 
-
   const [pages, setPages] = useState<number[]>(getPages(pageCount));
   const [shownPages, setShownPages] = useState<number[]>(getShownPages(pages, currentPage));
 
@@ -62,7 +61,7 @@ function Pagination(): JSX.Element {
   });
 
   return (
-    <div className="pagination page-content__pagination">
+    <div className="pagination page-content__pagination" title='pagination'>
       <ul className="pagination__list">
         {
           currentPage > 1

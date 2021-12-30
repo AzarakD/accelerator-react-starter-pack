@@ -7,6 +7,7 @@ export default function SelectList({isOpened, shownItems}: SelectListProps): JSX
 
   return (
     <ul
+      title='select-list'
       style={{ zIndex: '1' }}
       className={`form-search__select-list ${isOpened ? 'list-opened' : 'hidden'}`}
     >

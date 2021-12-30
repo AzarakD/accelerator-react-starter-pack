@@ -50,7 +50,7 @@ export default function Catalog(): JSX.Element {
   });
 
   if (!isLoaded) {
-    return <>Loading...</>;
+    return <>Загрузка...</>;
   }
 
   return (

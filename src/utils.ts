@@ -57,7 +57,9 @@ export const getPageFromUrl = (url: string) => {
 };
 
 export const getPages = (pageCount: number) =>
-  Array(pageCount).fill(null).map((_, index) => index + 1);
+  pageCount
+    ? new Array(pageCount).fill(0).map((_, index) => index + 1)
+    : [1];
 
 export const getShownPages = (pages: number[], currentPage: number) => {
   let shiftBack = 2;

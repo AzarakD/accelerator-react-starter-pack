@@ -6,9 +6,9 @@ export default function Cards(): JSX.Element {
   const guitars = useSelector(getGuitars);
 
   return (
-    <div className="cards catalog__cards">
+    <div className="cards catalog__cards" title='cards'>
       {
-        guitars.length !== 0
+        guitars && guitars.length !== 0
           ?
           guitars.map((guitar) => <GuitarCard guitar={guitar} key={guitar.id}/>)
           :
