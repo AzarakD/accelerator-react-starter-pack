@@ -23,10 +23,10 @@ import { loadGuitar, loadGuitars } from './actions';
 import { getPageFromUrl } from '../utils';
 
 const ITEM_PAGE_COUNT = 9;
-const FILM_COUNT = 10;
+const GUITAR_COUNT = 10;
 
 const fakeGuitar = makeFakeGuitar();
-const fakeGuitars = makeFakeGuitarList(FILM_COUNT);
+const fakeGuitars = makeFakeGuitarList(GUITAR_COUNT);
 
 describe('Async actions', () => {
   const api = createAPI();
