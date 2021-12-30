@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { createAPI } from './services/api';
 import { reducer } from './store/reducer';
-// import { fetchGuitarsAction } from './store/api-actioms';
 import App from './components/app/app';
 
 const api = createAPI();
@@ -19,8 +18,6 @@ const store = configureStore({
       thunk: { extraArgument: api },
     }),
 });
-
-// store.dispatch(fetchGuitarsAction());
 
 ReactDOM.render(
   <React.StrictMode>
