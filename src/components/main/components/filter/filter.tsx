@@ -9,7 +9,6 @@ import {
 } from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
-import { useDebounce } from '../../../../hooks/use-debounce';
 import {
   changeFilter,
   setCurrentPage
@@ -51,8 +50,8 @@ export default function Filter(): JSX.Element {
   const filter  = useSelector(getFilter);
 
   const locationSearch = history.location.search;
-  const priceMin = getPriceFromUrl(locationSearch, QueryKey.PriceMax);
-  const priceMax = getPriceFromUrl(locationSearch, QueryKey.PriceMin);
+  const priceMin = getPriceFromUrl(locationSearch, QueryKey.PriceMin);
+  const priceMax = getPriceFromUrl(locationSearch, QueryKey.PriceMax);
 
   const [isGuitarTypeChecked, setIsGuitarTypeChecked] = useState(checkGuitarType(locationSearch));
   const [placeholder, setPlaceholder] = useState({
@@ -62,6 +61,10 @@ export default function Filter(): JSX.Element {
   const [price, setPrice] = useState({
     min: priceMin,
     max: priceMax,
+  });
+  const [queryPrice, setQueryPrice] = useState({
+    min: '',
+    max: '',
   });
   const [guitarType, setGuitarType] = useState(
     {
@@ -76,9 +79,6 @@ export default function Filter(): JSX.Element {
     seven: locationSearch.includes(FilterQuery.SevenString),
     twelve: locationSearch.includes(FilterQuery.TwelveString),
   });
-
-  const debouncedMin = useDebounce(price.min);
-  const debouncedMax = useDebounce(price.max);
 
   useDidUpdateEffect(() => {
     setPrice({
@@ -117,9 +117,9 @@ export default function Filter(): JSX.Element {
     }${
       stringCount.twelve ? FilterQuery.TwelveString : ''
     }${
-      debouncedMin ? `&${QueryKey.PriceMin}${debouncedMin}` : ''
+      queryPrice.min ? `&${QueryKey.PriceMin}${queryPrice.min}` : ''
     }${
-      debouncedMax ? `&${QueryKey.PriceMax}${debouncedMax}` : ''
+      queryPrice.max ? `&${QueryKey.PriceMax}${queryPrice.max}` : ''
     }`;
 
     if (filter !== filterQuery) {
@@ -137,8 +137,8 @@ export default function Filter(): JSX.Element {
     stringCount.seven,
     stringCount.six,
     stringCount.twelve,
-    debouncedMin,
-    debouncedMax,
+    queryPrice.min,
+    queryPrice.max,
   ]);
 
   useDidMountEffect(() => {
@@ -157,6 +157,7 @@ export default function Filter(): JSX.Element {
       min = placeholder.min;
     }
     setPrice({...price, min: `${min}`});
+    setQueryPrice({...queryPrice, min: `${min}`});
   };
 
   const onPriceMaxBlur = () => {
@@ -166,6 +167,7 @@ export default function Filter(): JSX.Element {
       max = placeholder.max;
     }
     setPrice({...price, max: `${max}`});
+    setQueryPrice({...queryPrice, max: `${max}`});
   };
 
   return (
