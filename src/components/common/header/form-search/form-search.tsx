@@ -85,7 +85,12 @@ export default function FormSearch(): JSX.Element {
   useDidUpdateEffect(() => {
     if (debouncedInput) {
       getSimilarGuitars(debouncedInput).then((value) => {
-        setShownGuitars(value);
+        const filteredGuitars = value.filter((item) =>
+          item.name[0]
+            .toLowerCase()
+            .includes(debouncedInput[0].toLowerCase()));
+
+        setShownGuitars(filteredGuitars);
       });
       return;
     }
@@ -124,7 +129,7 @@ export default function FormSearch(): JSX.Element {
         </button>
         <input
           ref={refInput}
-          onInput={(evt) => setUserInput(evt.currentTarget.value.toLowerCase())}
+          onInput={(evt) => setUserInput(evt.currentTarget.value)}
           value={userInput}
           className="form-search__input"
           id="search"
