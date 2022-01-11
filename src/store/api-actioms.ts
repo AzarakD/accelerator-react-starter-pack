@@ -1,4 +1,5 @@
 import {
+  failToFetchData,
   loadGuitar,
   loadGuitars
 } from './actions';
@@ -33,7 +34,6 @@ export const fetchGuitarsAction = (query: string): ThunkActionResult =>
       const response = await api.get<Guitar[]>(APIRoute.Guitars.replace(':query', pageQuery));
       dispatch(loadGuitars(response.data, +response.headers[HEADER]));
     } catch {
-      // eslint-disable-next-line no-console
-      console.log('Server is not available');
+      dispatch(failToFetchData());
     }
   };

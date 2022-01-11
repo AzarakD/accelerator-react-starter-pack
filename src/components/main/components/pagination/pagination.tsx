@@ -61,7 +61,7 @@ function Pagination(): JSX.Element {
   });
 
   return (
-    <div className="pagination page-content__pagination" title='pagination'>
+    <div className="pagination page-content__pagination" data-testid='pagination'>
       <ul className="pagination__list">
         {
           currentPage > 1

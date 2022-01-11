@@ -3,6 +3,7 @@ import {
   changeFilter,
   changeSearch,
   changeSorting,
+  failToFetchData,
   loadGuitar,
   loadGuitars,
   resetForm,
@@ -20,6 +21,7 @@ import { Guitar } from '../types/guitar';
 export const initialState: State = {
   guitars: [],
   isDataLoaded: false,
+  isFailed: false,
   guitar: {} as Guitar,
   sorting: SortQuery.Default,
   filter: FilterQuery.Default,
@@ -35,6 +37,11 @@ export const reducer = createReducer(initialState, (builder) => {
       state.guitars = action.payload.guitars;
       state.totalCount = action.payload.itemCount;
       state.isDataLoaded = true;
+      state.isFailed = false;
+    })
+    .addCase(failToFetchData, (state, action) => {
+      state.isDataLoaded = false;
+      state.isFailed = true;
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;

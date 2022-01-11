@@ -23,7 +23,7 @@ const mockStore = configureMockStore<
 const history = createMemoryHistory();
 
 describe('Component: Catalog', () => {
-  it('should render correctly if dada is loaded', () => {
+  it('should render correctly if data is loaded', () => {
     const store = mockStore({
       isDataLoaded: true,
     });
@@ -38,13 +38,14 @@ describe('Component: Catalog', () => {
 
     expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
     expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
-    expect(screen.getByTitle(/cards/i)).toBeInTheDocument();
-    expect(screen.getByTitle(/pagination/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/cards/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/pagination/i)).toBeInTheDocument();
   });
 
-  it('should render correctly if dada is not loaded', () => {
+  it('should render correctly if data is loading', () => {
     const store = mockStore({
       isDataLoaded: false,
+      isFailed: false,
     });
 
     render(
@@ -56,5 +57,22 @@ describe('Component: Catalog', () => {
     );
 
     expect(screen.getByText(/Загрузка.../i)).toBeInTheDocument();
+  });
+
+  it('should render correctly if data is not loaded', () => {
+    const store = mockStore({
+      isDataLoaded: false,
+      isFailed: true,
+    });
+
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <Catalog />
+        </Router>
+      </Provider>,
+    );
+
+    expect(screen.getByText(/Сервер временно недоступен. Попробуйте позже./i)).toBeInTheDocument();
   });
 });
