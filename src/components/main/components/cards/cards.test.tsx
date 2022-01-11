@@ -41,7 +41,7 @@ describe('Component: Cards', () => {
       </Provider>,
     );
 
-    expect(screen.getByTitle(/cards/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/cards/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Подробнее/i)).toBeTruthy();
     expect(screen.getAllByText(/Купить/i)).toBeTruthy();
   });
@@ -59,7 +59,7 @@ describe('Component: Cards', () => {
       </Provider>,
     );
 
-    expect(screen.getByTitle(/cards/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/cards/i)).toBeInTheDocument();
     expect(screen.getByText(/Товар не найден./i)).toBeInTheDocument();
   });
 });

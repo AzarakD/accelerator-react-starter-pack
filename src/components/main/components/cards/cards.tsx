@@ -6,7 +6,7 @@ export default function Cards(): JSX.Element {
   const guitars = useSelector(getGuitars);
 
   return (
-    <div className="cards catalog__cards" title='cards'>
+    <div className="cards catalog__cards" data-testid='cards'>
       {
         guitars && guitars.length !== 0
           ?

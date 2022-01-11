@@ -10,6 +10,7 @@ import {
   getCurrentPage,
   getFilter,
   getIsDataLoaded,
+  getIsFailed,
   getSearch,
   getSorting
 } from '../../../../store/selectors';
@@ -21,6 +22,7 @@ import { QueryKey } from '../../../../const';
 
 export default function Catalog(): JSX.Element {
   const isLoaded = useSelector(getIsDataLoaded);
+  const isFailed = useSelector(getIsFailed);
   const sorting = useSelector(getSorting);
   const filter = useSelector(getFilter);
   const search = useSelector(getSearch);
@@ -49,8 +51,12 @@ export default function Catalog(): JSX.Element {
     dispatch(fetchGuitarsAction(history.location.search));
   });
 
-  if (!isLoaded) {
+  if (!isLoaded && !isFailed) {
     return <>Загрузка...</>;
+  }
+
+  if (isFailed) {
+    return <>Сервер временно недоступен. Попробуйте позже.</>;
   }
 
   return (

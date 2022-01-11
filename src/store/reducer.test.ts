@@ -10,6 +10,7 @@ import {
   changeFilter,
   changeSearch,
   changeSorting,
+  failToFetchData,
   loadGuitar,
   loadGuitars,
   resetForm,
@@ -37,6 +38,17 @@ describe('Reducer', () => {
         guitars: fakeGuitars,
         totalCount: fakeGuitars.length,
         isDataLoaded: true,
+        isFailed: false,
+      });
+  });
+
+  it('should show fail message', () => {
+
+    expect(reducer(initialState, failToFetchData()))
+      .toEqual({
+        ...initialState,
+        isDataLoaded: false,
+        isFailed: true,
       });
   });
 

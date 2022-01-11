@@ -35,6 +35,6 @@ describe('Component: Pagination', () => {
   it('should render correctly', () => {
     render(fakePagination);
 
-    expect(screen.getByTitle(/pagination/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/pagination/i)).toBeInTheDocument();
   });
 });

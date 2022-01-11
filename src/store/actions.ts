@@ -10,6 +10,10 @@ export const loadGuitars = createAction(
   }}),
 );
 
+export const failToFetchData = createAction(
+  ActionType.FailToFetchData,
+);
+
 export const loadGuitar = createAction(
   ActionType.LoadGuitar,
   (guitar: Guitar) => ({payload: guitar}),
