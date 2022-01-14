@@ -12,11 +12,10 @@ import { getGuitar } from '../../store/selectors';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
-import RatingStars from '../main/components/rating-stars/rating-stars';
-import {
-  setGuitarType,
-  setPrice
-} from '../../utils';
+import RatingStars from '../common/rating-stars/rating-stars';
+import Tabs from './components/tabs/tabs';
+import ReviewList from './components/review-list/review-list';
+import { setPrice } from '../../utils';
 import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
@@ -82,30 +81,12 @@ export default function Product(): JSX.Element {
                   <span className="rate__count"></span>
                   <span className="rate__message"></span>
                 </div>
-                <div className="tabs"><a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>
-                  <a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
-                  <div className="tabs__content" id="characteristics">
-                    <table className="tabs__table">
-                      <tbody>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Артикул:</td>
-                          <td className="tabs__value">{vendorCode}</td>
-                        </tr>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Тип:</td>
-                          <td className="tabs__value">
-                            {setGuitarType(type)}
-                          </td>
-                        </tr>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Количество струн:</td>
-                          <td className="tabs__value">{`${stringCount} струнная`}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <p className="tabs__product-description hidden">{description}</p>
-                  </div>
-                </div>
+                <Tabs
+                  vendorCode={vendorCode}
+                  type={type}
+                  stringCount={stringCount}
+                  description={description}
+                />
               </div>
               <div className="product-container__price-wrapper">
                 <p className="product-container__price-info product-container__price-info--title">Цена:</p>
@@ -113,95 +94,8 @@ export default function Product(): JSX.Element {
                 <a className="button button--red button--big product-container__button" href="#todo">Добавить в корзину</a>
               </div>
             </div>
-            <section className="reviews">
-              <h3 className="reviews__title title title--bigger">Отзывы</h3>
-              <a className="button button--red-border button--big reviews__sumbit-button" href="#todo">Оставить отзыв</a>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Иванов Максим</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-star"></use>
-                  </svg><span className="rate__count"></span><span className="rate__message"></span>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня.</p>
-              </div>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Перова Ольга</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-star"></use>
-                  </svg><span className="rate__count"></span><span className="rate__message"></span>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-              </div>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Преображенская  Ксения</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="#icon-star"></use>
-                  </svg><span className="rate__count"></span><span className="rate__message"></span>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-              </div>
-              <button className="button button--medium reviews__more-button">Показать еще отзывы</button><a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
-            </section>
+
+            <ReviewList />
           </div>
         </main>
         <Footer />

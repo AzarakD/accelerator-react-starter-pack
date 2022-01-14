@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import RatingStars from '../rating-stars/rating-stars';
+import RatingStars from '../../../common/rating-stars/rating-stars';
 import { setPrice } from '../../../../utils';
-import { GuitarCardProps } from './type';
 import { AppRoute } from '../../../../const';
+import { GuitarCardProps } from './type';
 
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
   const {
