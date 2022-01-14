@@ -13,11 +13,9 @@ import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
 import RatingStars from '../common/rating-stars/rating-stars';
+import Tabs from './components/tabs/tabs';
 import ReviewList from './components/review-list/review-list';
-import {
-  setGuitarType,
-  setPrice
-} from '../../utils';
+import { setPrice } from '../../utils';
 import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
@@ -83,30 +81,12 @@ export default function Product(): JSX.Element {
                   <span className="rate__count"></span>
                   <span className="rate__message"></span>
                 </div>
-                <div className="tabs"><a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>
-                  <a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
-                  <div className="tabs__content" id="characteristics">
-                    <table className="tabs__table">
-                      <tbody>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Артикул:</td>
-                          <td className="tabs__value">{vendorCode}</td>
-                        </tr>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Тип:</td>
-                          <td className="tabs__value">
-                            {setGuitarType(type)}
-                          </td>
-                        </tr>
-                        <tr className="tabs__table-row">
-                          <td className="tabs__title">Количество струн:</td>
-                          <td className="tabs__value">{`${stringCount} струнная`}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <p className="tabs__product-description hidden">{description}</p>
-                  </div>
-                </div>
+                <Tabs
+                  vendorCode={vendorCode}
+                  type={type}
+                  stringCount={stringCount}
+                  description={description}
+                />
               </div>
               <div className="product-container__price-wrapper">
                 <p className="product-container__price-info product-container__price-info--title">Цена:</p>
