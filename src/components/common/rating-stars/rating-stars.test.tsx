@@ -8,10 +8,10 @@ import { Provider } from 'react-redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { createAPI } from '../../../../services/api';
-import { makeFakeGuitar } from '../../../../mocks/guitar-data';
+import { createAPI } from '../../../services/api';
+import { makeFakeGuitar } from '../../../mocks/guitar-data';
 import RatingStars from './rating-stars';
-import { State } from '../../../../types/state';
+import { State } from '../../../types/state';
 
 const fakeGuitar = makeFakeGuitar();
 
