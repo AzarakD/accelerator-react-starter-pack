@@ -53,7 +53,7 @@ export default function Product(): JSX.Element {
         <Header />
         <main className="page-content">
           <div className="container">
-            <h1 className="page-content__title title title--bigger">Товар</h1>
+            <h1 className="page-content__title title title--bigger">{name}</h1>
             <ul className="breadcrumbs page-content__breadcrumbs">
               <li className="breadcrumbs__item">
                 <Link to={AppRoute.Main} className="link">Главная</Link>
@@ -62,7 +62,7 @@ export default function Product(): JSX.Element {
                 <Link to={AppRoute.Main} className="link">Каталог</Link>
               </li>
               <li className="breadcrumbs__item">
-                <Link to={'#'} className="link">Товар</Link>
+                <Link to={'#'} className="link">{name}</Link>
               </li>
             </ul>
             <div className="product-container">
