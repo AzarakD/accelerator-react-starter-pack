@@ -25,6 +25,7 @@ export const initialState: State = {
   isFailed: false,
   guitar: {} as Guitar,
   comments: [],
+  commentCount: null,
   sorting: SortQuery.Default,
   filter: FilterQuery.Default,
   search: SearchQuery.Default,
@@ -49,7 +50,8 @@ export const reducer = createReducer(initialState, (builder) => {
       state.guitar = action.payload;
     })
     .addCase(loadComments, (state, action) => {
-      state.comments = action.payload;
+      state.comments = action.payload.comments;
+      state.commentCount = action.payload.commentCount;
     })
     .addCase(changeSorting, (state, action) => {
       state.sorting = action.payload;

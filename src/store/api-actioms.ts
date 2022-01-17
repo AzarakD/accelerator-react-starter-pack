@@ -4,15 +4,16 @@ import {
   loadGuitar,
   loadGuitars
 } from './actions';
-import { ThunkActionResult } from '../types/actions';
 import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
   HEADER,
   ITEM_COUNT,
   PageQuery,
-  QueryKey
+  QueryKey,
+  SortQuery
 } from '../const';
+import { ThunkActionResult } from '../types/actions';
 import { Guitar } from '../types/guitar';
 import { Comment } from '../types/comment';
 
@@ -24,8 +25,13 @@ export const fetchGuitarAction = (id: number): ThunkActionResult =>
 
 export const fetchCommentsAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
-    const {data} = await api.get<Comment[]>(APIRoute.Comments.replace(':id', `${id}`));
-    dispatch(loadComments(data));
+    const route = APIRoute.Comments
+      .replace(':id', `${id}`)
+      .concat(SortQuery.SortToLaterDate)
+      .concat('&_limit=3');
+
+    const response = await api.get<Comment[]>(route);
+    dispatch(loadComments(response.data, +response.headers[HEADER]));
   };
 
 export const fetchGuitarsAction = (query: string): ThunkActionResult =>

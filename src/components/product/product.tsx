@@ -7,8 +7,14 @@ import {
   Link,
   useParams
 } from 'react-router-dom';
-import { fetchGuitarAction } from '../../store/api-actioms';
-import { getGuitar } from '../../store/selectors';
+import {
+  fetchCommentsAction,
+  fetchGuitarAction
+} from '../../store/api-actioms';
+import {
+  getCommentCount,
+  getGuitar
+} from '../../store/selectors';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
@@ -20,6 +26,7 @@ import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
   const guitar = useSelector(getGuitar);
+  const commentCount = useSelector(getCommentCount);
   const dispatch = useDispatch();
 
   const {id}: {id: string} = useParams();
@@ -28,8 +35,9 @@ export default function Product(): JSX.Element {
   useEffect(() => {
     if (guitar.id !== guitarId) {
       dispatch(fetchGuitarAction(guitarId));
+      dispatch(fetchCommentsAction(guitarId));
     }
-  });
+  }, [dispatch, guitar.id, guitarId]);
 
   if (guitar.id !== guitarId) {
     return <>Loading...</>;
@@ -78,7 +86,7 @@ export default function Product(): JSX.Element {
                 <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
                 <div className="rate product-container__rating" aria-hidden="true">
                   <RatingStars rating={rating} />
-                  <span className="rate__count"></span>
+                  <span className="rate__count">{commentCount}</span>
                   <span className="rate__message"></span>
                 </div>
                 <Tabs

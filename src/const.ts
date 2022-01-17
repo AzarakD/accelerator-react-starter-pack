@@ -21,6 +21,7 @@ export enum SortQuery {
   SortToLesserPrice = '&_sort=price&_order=desc',
   SortToBiggerRating = '&_sort=rating&_order=asc',
   SortToLesserRating = '&_sort=rating&_order=desc',
+  SortToLaterDate = '?_sort=createAt&_order=desc',
   Default = '',
 }
 

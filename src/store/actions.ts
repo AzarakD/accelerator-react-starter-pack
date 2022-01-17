@@ -22,7 +22,10 @@ export const loadGuitar = createAction(
 
 export const loadComments = createAction(
   ActionType.LoadComments,
-  (comments: Comment[]) => ({payload: comments}),
+  (comments: Comment[], commentCount: number) => ({payload: {
+    comments: comments,
+    commentCount: commentCount,
+  }}),
 );
 
 export const changeSorting = createAction(
