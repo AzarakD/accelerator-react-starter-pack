@@ -1,5 +1,6 @@
 import {
   failToFetchData,
+  loadComments,
   loadGuitar,
   loadGuitars
 } from './actions';
@@ -13,12 +14,18 @@ import {
   QueryKey
 } from '../const';
 import { Guitar } from '../types/guitar';
-
+import { Comment } from '../types/comment';
 
 export const fetchGuitarAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Guitar>(APIRoute.Guitar.replace(':id', `${id}`));
     dispatch(loadGuitar(data));
+  };
+
+export const fetchCommentsAction = (id: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.get<Comment[]>(APIRoute.Comments.replace(':id', `${id}`));
+    dispatch(loadComments(data));
   };
 
 export const fetchGuitarsAction = (query: string): ThunkActionResult =>
