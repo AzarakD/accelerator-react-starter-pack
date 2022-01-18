@@ -16,6 +16,7 @@ export type Guitar = {
   stringCount: number,
   rating: number,
   price: number,
+  comments: Comment[],
 };
 
-export type GuitarWithComments = Guitar & {comments: Comment[]};
+// export type GuitarWithComments = Guitar & {comments: Comment[]};

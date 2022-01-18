@@ -14,6 +14,7 @@ export enum ActionType {
   ChangeFilter = 'app/changeFilter',
   ChangeSearch = 'app/changeSearch',
   ResetForm = 'app/resetForm',
+  ResetComments = 'app/resetComments',
   SetCurrentPage = 'app/setCurrentPage',
 }
 

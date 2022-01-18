@@ -22,10 +22,7 @@ export const loadGuitar = createAction(
 
 export const loadComments = createAction(
   ActionType.LoadComments,
-  (comments: Comment[], commentCount: number) => ({payload: {
-    comments: comments,
-    commentCount: commentCount,
-  }}),
+  (comments: Comment[]) => ({payload: comments}),
 );
 
 export const changeSorting = createAction(
@@ -45,6 +42,10 @@ export const changeSearch = createAction(
 
 export const resetForm = createAction(
   ActionType.ResetForm,
+);
+
+export const resetComments = createAction(
+  ActionType.ResetComments,
 );
 
 export const setCurrentPage = createAction(

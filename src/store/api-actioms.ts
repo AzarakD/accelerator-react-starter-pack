@@ -30,8 +30,8 @@ export const fetchCommentsAction = (id: number): ThunkActionResult =>
       .concat(SortQuery.SortToLaterDate)
       .concat('&_limit=3');
 
-    const response = await api.get<Comment[]>(route);
-    dispatch(loadComments(response.data, +response.headers[HEADER]));
+    const {data} = await api.get<Comment[]>(route);
+    dispatch(loadComments(data));
   };
 
 export const fetchGuitarsAction = (query: string): ThunkActionResult =>

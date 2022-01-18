@@ -7,7 +7,6 @@ export type State = {
   isFailed: boolean,
   guitar: Guitar,
   comments: Comment[],
-  commentCount: number | null,
   sorting: string,
   filter: string,
   search: string,

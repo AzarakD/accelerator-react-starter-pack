@@ -8,8 +8,8 @@ export enum AppRoute {
 }
 
 export enum APIRoute {
-  Guitars = '/guitars:query',
-  Guitar = '/guitars/:id',
+  Guitars = '/guitars:query&_embed=comments',
+  Guitar = '/guitars/:id?&_embed=comments',
   Comments = '/guitars/:id/comments',
   Comment = '/comments',
   Coupons = '/coupons',

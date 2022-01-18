@@ -34,7 +34,6 @@ describe('Component: Product', () => {
       </Provider>,
     );
 
-    expect(screen.getByText(fakeGuitar.name)).toBeInTheDocument();
     expect(screen.getByAltText(`${fakeGuitar.type} ${fakeGuitar.name}`)).toBeInTheDocument();
   });
 });

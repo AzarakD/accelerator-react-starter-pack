@@ -7,14 +7,9 @@ import {
   Link,
   useParams
 } from 'react-router-dom';
-import {
-  fetchCommentsAction,
-  fetchGuitarAction
-} from '../../store/api-actioms';
-import {
-  getCommentCount,
-  getGuitar
-} from '../../store/selectors';
+import { fetchGuitarAction } from '../../store/api-actioms';
+import { getGuitar } from '../../store/selectors';
+import { resetComments } from '../../store/actions';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
@@ -26,7 +21,6 @@ import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
   const guitar = useSelector(getGuitar);
-  const commentCount = useSelector(getCommentCount);
   const dispatch = useDispatch();
 
   const {id}: {id: string} = useParams();
@@ -35,7 +29,7 @@ export default function Product(): JSX.Element {
   useEffect(() => {
     if (guitar.id !== guitarId) {
       dispatch(fetchGuitarAction(guitarId));
-      dispatch(fetchCommentsAction(guitarId));
+      dispatch(resetComments());
     }
   }, [dispatch, guitar.id, guitarId]);
 
@@ -52,6 +46,7 @@ export default function Product(): JSX.Element {
     stringCount,
     rating,
     price,
+    comments,
   } = guitar;
 
   return (
@@ -86,7 +81,7 @@ export default function Product(): JSX.Element {
                 <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
                 <div className="rate product-container__rating" aria-hidden="true">
                   <RatingStars rating={rating} />
-                  <span className="rate__count">{commentCount}</span>
+                  <span className="rate__count">{comments.length}</span>
                   <span className="rate__message"></span>
                 </div>
                 <Tabs
@@ -103,7 +98,7 @@ export default function Product(): JSX.Element {
               </div>
             </div>
 
-            <ReviewList />
+            <ReviewList guitarId={guitar.id} />
           </div>
         </main>
         <Footer />

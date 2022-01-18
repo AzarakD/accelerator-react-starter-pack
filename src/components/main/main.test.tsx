@@ -10,10 +10,12 @@ import thunk, { ThunkDispatch } from 'redux-thunk';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { createAPI } from '../../services/api';
+import Main from './main';
 import {
   makeFakeGuitar,
   makeFakeGuitarList
 } from '../../mocks/guitar-data';
+import { makeFakeCommentList } from '../../mocks/comment-data';
 import {
   AppRoute,
   DEFAULT_PAGE,
@@ -22,12 +24,12 @@ import {
   SortQuery
 } from '../../const';
 import { State } from '../../types/state';
-import Main from './main';
 
-const GUITAR_COUNT = 10;
+const ITEM_COUNT = 10;
 
 const fakeGuitar = makeFakeGuitar();
-const fakeGuitars = makeFakeGuitarList(GUITAR_COUNT);
+const fakeGuitars = makeFakeGuitarList(ITEM_COUNT);
+const fakeComments = makeFakeCommentList(ITEM_COUNT);
 
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
@@ -41,12 +43,13 @@ const store = mockStore({
   guitars: fakeGuitars,
   isDataLoaded: true,
   guitar: fakeGuitar,
+  comments: fakeComments,
   sorting: SortQuery.Default,
   filter: FilterQuery.Default,
   search: SearchQuery.Default,
   formReset: false,
   currentPage: DEFAULT_PAGE,
-  totalCount: GUITAR_COUNT,
+  totalCount: ITEM_COUNT,
 });
 
 const history = createMemoryHistory();
