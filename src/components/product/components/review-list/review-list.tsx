@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 import {
   useDispatch,
   useSelector
 } from 'react-redux';
+import { useDebounce } from '../../../../hooks/use-debounce';
 import { fetchCommentsAction } from '../../../../store/api-actioms';
 import { getComments } from '../../../../store/selectors';
 import Review from '../review/review';
@@ -12,6 +17,7 @@ const COMMENT_PER_STEP = 3;
 
 export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
   const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);
+
   const comments = useSelector(getComments);
   const dispatch = useDispatch();
 
@@ -19,11 +25,34 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
     dispatch(fetchCommentsAction(guitarId, commentCount));
   }, [dispatch, guitarId, commentCount]);
 
-  const onClickHandler = () => {
+  const onShowMore = useCallback(() => {
     if (commentCount < totalComment) {
       setCommentCount(commentCount + COMMENT_PER_STEP);
     }
-  };
+  }, [commentCount, totalComment]);
+
+  const debouncedShowMore = useDebounce(() => onShowMore);
+
+  const onScroll = useCallback(() => {
+    const height = document.body.offsetHeight;
+    const screenHeight = window.innerHeight;
+    const scrolled = window.scrollY;
+
+    const threshold = height - screenHeight / 4;
+    const position = scrolled + screenHeight;
+
+    if (position >= threshold) {
+      debouncedShowMore();
+    }
+  }, [debouncedShowMore]);
+
+  useEffect(() => {
+    document.addEventListener('scroll', onScroll);
+
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    };
+  }, [onScroll]);
 
   return (
     <section className="reviews">
@@ -39,7 +68,7 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
           ? ''
           :
           <button
-            onClick={onClickHandler}
+            onClick={onShowMore}
             className="button button--medium reviews__more-button"
           >
             Показать еще отзывы
