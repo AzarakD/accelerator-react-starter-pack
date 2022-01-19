@@ -23,12 +23,12 @@ export const fetchGuitarAction = (id: number): ThunkActionResult =>
     dispatch(loadGuitar(data));
   };
 
-export const fetchCommentsAction = (id: number): ThunkActionResult =>
+export const fetchCommentsAction = (id: number, commentCount: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const route = APIRoute.Comments
       .replace(':id', `${id}`)
       .concat(SortQuery.SortToLaterDate)
-      .concat('&_limit=3');
+      .concat(`&_limit=${commentCount}`);
 
     const {data} = await api.get<Comment[]>(route);
     dispatch(loadComments(data));

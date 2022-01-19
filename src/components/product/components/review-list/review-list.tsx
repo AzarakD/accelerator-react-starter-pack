@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useDispatch,
   useSelector
@@ -6,14 +6,24 @@ import {
 import { fetchCommentsAction } from '../../../../store/api-actioms';
 import { getComments } from '../../../../store/selectors';
 import Review from '../review/review';
+import { ReviewListProps } from './type';
 
-export default function ReviewList({guitarId}: {guitarId: number}): JSX.Element {
+const COMMENT_PER_STEP = 3;
+
+export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
+  const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);
   const comments = useSelector(getComments);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCommentsAction(guitarId));
-  }, [dispatch, guitarId]);
+    dispatch(fetchCommentsAction(guitarId, commentCount));
+  }, [dispatch, guitarId, commentCount]);
+
+  const onClickHandler = () => {
+    if (commentCount < totalComment) {
+      setCommentCount(commentCount + COMMENT_PER_STEP);
+    }
+  };
 
   return (
     <section className="reviews">
@@ -24,7 +34,18 @@ export default function ReviewList({guitarId}: {guitarId: number}): JSX.Element 
           ? <>Отзывов нет</>
           : comments.map((comment) => <Review comment={comment} key={comment.id} />)
       }
-      <button className="button button--medium reviews__more-button">Показать еще отзывы</button><a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
+      {
+        commentCount >= totalComment
+          ? ''
+          :
+          <button
+            onClick={onClickHandler}
+            className="button button--medium reviews__more-button"
+          >
+            Показать еще отзывы
+          </button>
+      }
+      <a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
     </section>
   );
 }

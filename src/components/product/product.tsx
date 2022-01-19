@@ -98,7 +98,7 @@ export default function Product(): JSX.Element {
               </div>
             </div>
 
-            <ReviewList guitarId={guitar.id} />
+            <ReviewList guitarId={guitar.id} totalComment={comments.length} />
           </div>
         </main>
         <Footer />
