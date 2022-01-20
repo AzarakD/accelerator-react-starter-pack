@@ -60,3 +60,11 @@ export enum QueryKey {
   OrderDesc = '_order=desc',
   Page = 'page_',
 }
+
+export enum RateValue {
+  Terrible = 1,
+  Bad = 2,
+  Fine = 3,
+  Good = 4,
+  Great = 5,
+}

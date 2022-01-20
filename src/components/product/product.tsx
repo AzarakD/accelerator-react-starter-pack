@@ -9,7 +9,6 @@ import {
 } from 'react-router-dom';
 import { fetchGuitarAction } from '../../store/api-actioms';
 import { getGuitar } from '../../store/selectors';
-import { resetComments } from '../../store/actions';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
@@ -29,7 +28,6 @@ export default function Product(): JSX.Element {
   useEffect(() => {
     if (guitar.id !== guitarId) {
       dispatch(fetchGuitarAction(guitarId));
-      dispatch(resetComments());
     }
   }, [dispatch, guitar.id, guitarId]);
 

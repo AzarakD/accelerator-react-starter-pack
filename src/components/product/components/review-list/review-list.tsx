@@ -10,7 +10,9 @@ import {
 import { useDebounce } from '../../../../hooks/use-debounce';
 import { fetchCommentsAction } from '../../../../store/api-actioms';
 import { getComments } from '../../../../store/selectors';
+import ReactFocusLock from 'react-focus-lock';
 import Review from '../review/review';
+import ReviewModal from '../review-modal/review-modal';
 import { getIsLoadNeeded } from '../../../../utils';
 import { ReviewListProps } from './type';
 
@@ -18,6 +20,7 @@ const COMMENT_PER_STEP = 3;
 
 export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
   const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);
+  const [isModalShown, setIsModalShown] = useState(false);
 
   const comments = useSelector(getComments);
   const dispatch = useDispatch();
@@ -51,22 +54,31 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="#review">Оставить отзыв</a>
+      <a
+        className="button button--red-border button--big reviews__sumbit-button"
+        href="#review"
+        onClick={(evt) => {
+          evt.preventDefault();
+          setIsModalShown(true);
+        }}
+      >
+        Оставить отзыв
+      </a>
       {
         !comments?.length
           ? <>Отзывов нет</>
           : comments.map((comment) => <Review comment={comment} key={comment.id} />)
       }
       {
-        commentCount >= totalComment
-          ? ''
-          :
+        commentCount < totalComment
+          ?
           <button
             onClick={onShowMore}
             className="button button--medium reviews__more-button"
           >
             Показать еще отзывы
           </button>
+          : ''
       }
       <a
         style={{ zIndex: '1' }}
@@ -79,6 +91,14 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
       >
         Наверх
       </a>
+      {
+        isModalShown
+          ?
+          <ReactFocusLock>
+            <ReviewModal closeModal={() => setIsModalShown(false)} />
+          </ReactFocusLock>
+          : ''
+      }
     </section>
   );
 }

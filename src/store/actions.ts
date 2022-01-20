@@ -25,6 +25,11 @@ export const loadComments = createAction(
   (comments: Comment[]) => ({payload: comments}),
 );
 
+export const updateComments = createAction(
+  ActionType.UpdateComments,
+  (comments: Comment[]) => ({payload: comments}),
+);
+
 export const changeSorting = createAction(
   ActionType.ChangeSorting,
   (sorting: string) => ({payload: sorting}),
@@ -42,10 +47,6 @@ export const changeSearch = createAction(
 
 export const resetForm = createAction(
   ActionType.ResetForm,
-);
-
-export const resetComments = createAction(
-  ActionType.ResetComments,
 );
 
 export const setCurrentPage = createAction(

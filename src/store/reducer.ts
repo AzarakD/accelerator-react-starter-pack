@@ -7,9 +7,9 @@ import {
   loadComments,
   loadGuitar,
   loadGuitars,
-  resetComments,
   resetForm,
-  setCurrentPage
+  setCurrentPage,
+  updateComments
 } from './actions';
 import {
   DEFAULT_PAGE,
@@ -48,12 +48,14 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;
+      state.comments = [];
     })
     .addCase(loadComments, (state, action) => {
       state.comments = action.payload;
     })
-    .addCase(resetComments, (state, _action) => {
-      state.comments = [];
+    .addCase(updateComments, (state, action) => {
+      state.comments = action.payload;
+      state.guitar.comments = [action.payload[0], ...state.guitar.comments];
     })
     .addCase(changeSorting, (state, action) => {
       state.sorting = action.payload;
