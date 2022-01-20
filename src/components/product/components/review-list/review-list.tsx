@@ -13,6 +13,7 @@ import { getComments } from '../../../../store/selectors';
 import ReactFocusLock from 'react-focus-lock';
 import Review from '../review/review';
 import ReviewModal from '../review-modal/review-modal';
+import SuccessModal from '../success-modal/success-modal';
 import { getIsLoadNeeded } from '../../../../utils';
 import { ReviewListProps } from './type';
 
@@ -20,7 +21,8 @@ const COMMENT_PER_STEP = 3;
 
 export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
   const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);
-  const [isModalShown, setIsModalShown] = useState(false);
+  const [isReviewModalShown, setIsReviewModalShown] = useState(false);
+  const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
 
   const comments = useSelector(getComments);
   const dispatch = useDispatch();
@@ -59,7 +61,7 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
         href="#review"
         onClick={(evt) => {
           evt.preventDefault();
-          setIsModalShown(true);
+          setIsReviewModalShown(true);
         }}
       >
         Оставить отзыв
@@ -92,10 +94,21 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
         Наверх
       </a>
       {
-        isModalShown
+        isReviewModalShown
           ?
           <ReactFocusLock>
-            <ReviewModal closeModal={() => setIsModalShown(false)} />
+            <ReviewModal
+              closeModal={() => setIsReviewModalShown(false)}
+              openSuccessModal={() => setIsSuccessModalShown(true)}
+            />
+          </ReactFocusLock>
+          : ''
+      }
+      {
+        isSuccessModalShown
+          ?
+          <ReactFocusLock>
+            <SuccessModal closeModal={() => setIsSuccessModalShown(false)} />
           </ReactFocusLock>
           : ''
       }

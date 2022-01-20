@@ -4,17 +4,26 @@ import {
   useEffect,
   useState
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RateValue } from '../../../../const';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { sendReviewAction } from '../../../../store/api-actioms';
 import { getGuitar } from '../../../../store/selectors';
+import { RateValue } from '../../../../const';
 import { CommentPost } from '../../../../types/commentPost';
 
 const ROWS_LIMIT = 10;
 
-export default function ReviewModal({closeModal}: {closeModal: () => void}): JSX.Element {
+type ReviewModalProps = {
+  closeModal: () => void,
+  openSuccessModal: () => void,
+};
+
+export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalProps): JSX.Element {
   const guitar = useSelector(getGuitar);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<CommentPost>({
     guitarId: guitar.id,
     userName: '',
@@ -23,8 +32,6 @@ export default function ReviewModal({closeModal}: {closeModal: () => void}): JSX
     comment: '',
     rating: 0,
   });
-
-  const dispatch = useDispatch();
 
   useDidMountEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -49,17 +56,16 @@ export default function ReviewModal({closeModal}: {closeModal: () => void}): JSX
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log(formData);
 
     dispatch(sendReviewAction(formData));
     onCloseModalEvent();
+    openSuccessModal();
   };
 
   return (
     <div className="modal is-active modal--review">
       <div className="modal__wrapper">
-        <div onClick={onCloseModalEvent} className="modal__overlay" data-close-modal></div>
+        <div className="modal__overlay" onClick={onCloseModalEvent} data-close-modal></div>
         <div className="modal__content">
           <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
           <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
