@@ -160,6 +160,11 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               onInput={(evt) => setFormData({...formData, advantage: evt.currentTarget.value})}
               value={formData.advantage}
             />
+            {
+              formData.advantage.length === 0
+                ? <span className="form-review__warning">Заполните поле</span>
+                : ''
+            }
             <label className="form-review__label" htmlFor="user-name">Недостатки</label>
             <input
               className="form-review__input"
@@ -170,6 +175,11 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               onInput={(evt) => setFormData({...formData, disadvantage: evt.currentTarget.value})}
               value={formData.disadvantage}
             />
+            {
+              formData.disadvantage.length === 0
+                ? <span className="form-review__warning">Заполните поле</span>
+                : ''
+            }
             <label className="form-review__label" htmlFor="user-name">Комментарий</label>
             <textarea
               className="form-review__input form-review__input--textarea"
@@ -181,6 +191,11 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               value={formData.comment}
             >
             </textarea>
+            {
+              formData.comment.length === 0
+                ? <span className="form-review__warning">Заполните поле</span>
+                : ''
+            }
             <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
           </form>
           <button
