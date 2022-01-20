@@ -82,7 +82,11 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
                   onInput={(evt) => setFormData({...formData, userName: evt.currentTarget.value})}
                   value={formData.userName}
                 />
-                <span className="form-review__warning">Заполните поле</span>
+                {
+                  formData.userName.length === 0
+                    ? <span className="form-review__warning">Заполните поле</span>
+                    : ''
+                }
               </div>
               <div>
                 <span className="form-review__label form-review__label--required">Ваша Оценка</span>
@@ -138,7 +142,11 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
                   />
                   <label className="rate__label" htmlFor="star-1" title="Ужасно"></label>
                   <span className="rate__count"></span>
-                  <span className="rate__message">Поставьте оценку</span>
+                  {
+                    formData.rating === 0
+                      ? <span className="rate__message">Поставьте оценку</span>
+                      : ''
+                  }
                 </div>
               </div>
             </div>
@@ -148,6 +156,7 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               id="pros"
               type="text"
               autoComplete="off"
+              required
               onInput={(evt) => setFormData({...formData, advantage: evt.currentTarget.value})}
               value={formData.advantage}
             />
@@ -157,6 +166,7 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               id="user-name"
               type="text"
               autoComplete="off"
+              required
               onInput={(evt) => setFormData({...formData, disadvantage: evt.currentTarget.value})}
               value={formData.disadvantage}
             />
@@ -166,6 +176,7 @@ export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalP
               id="user-name"
               rows={ROWS_LIMIT}
               autoComplete="off"
+              required
               onInput={(evt) => setFormData({...formData, comment: evt.currentTarget.value})}
               value={formData.comment}
             >
