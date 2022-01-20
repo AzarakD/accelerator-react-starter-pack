@@ -11,6 +11,7 @@ import { useDebounce } from '../../../../hooks/use-debounce';
 import { fetchCommentsAction } from '../../../../store/api-actioms';
 import { getComments } from '../../../../store/selectors';
 import Review from '../review/review';
+import { getIsLoadNeeded } from '../../../../utils';
 import { ReviewListProps } from './type';
 
 const COMMENT_PER_STEP = 3;
@@ -34,14 +35,7 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
   const debouncedShowMore = useDebounce(() => onShowMore);
 
   const onScroll = useCallback(() => {
-    const height = document.body.offsetHeight;
-    const screenHeight = window.innerHeight;
-    const scrolled = window.scrollY;
-
-    const threshold = height - screenHeight / 4;
-    const position = scrolled + screenHeight;
-
-    if (position >= threshold) {
+    if (getIsLoadNeeded()) {
       debouncedShowMore();
     }
   }, [debouncedShowMore]);
@@ -57,7 +51,7 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="#todo">Оставить отзыв</a>
+      <a className="button button--red-border button--big reviews__sumbit-button" href="#review">Оставить отзыв</a>
       {
         !comments?.length
           ? <>Отзывов нет</>
@@ -74,7 +68,17 @@ export default function ReviewList({guitarId, totalComment}: ReviewListProps): J
             Показать еще отзывы
           </button>
       }
-      <a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
+      <a
+        style={{ zIndex: '1' }}
+        className="button button--up button--red-border button--big reviews__up-button"
+        href="#scrollUp"
+        onClick={(evt) => {
+          evt.preventDefault();
+          window.scroll(0,0);
+        }}
+      >
+        Наверх
+      </a>
     </section>
   );
 }

@@ -3,7 +3,7 @@ import { setGuitarType } from '../../../../utils';
 import { TabsProps } from './type';
 
 const tabs = ['characteristics', 'description'];
-const DEFAULT_TAB = 'characteristics';
+const DEFAULT_TAB = tabs[0];
 
 export default function Tabs(props: TabsProps): JSX.Element {
   const {
