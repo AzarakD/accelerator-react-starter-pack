@@ -54,8 +54,9 @@ export const reducer = createReducer(initialState, (builder) => {
       state.comments = action.payload;
     })
     .addCase(updateComments, (state, action) => {
-      state.comments = action.payload;
-      state.guitar.comments = [action.payload[0], ...state.guitar.comments];
+      state.comments = action.payload.comments;
+      state.guitar.comments = action.payload.guitarComments;
+      // state.guitar.comments = [action.payload[0], ...state.guitar.comments];
     })
     .addCase(changeSorting, (state, action) => {
       state.sorting = action.payload;

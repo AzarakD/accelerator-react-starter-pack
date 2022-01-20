@@ -27,7 +27,10 @@ export const loadComments = createAction(
 
 export const updateComments = createAction(
   ActionType.UpdateComments,
-  (comments: Comment[]) => ({payload: comments}),
+  (comments: Comment[], guitarComments: Comment[]) => ({payload: {
+    comments: comments,
+    guitarComments: guitarComments,
+  }}),
 );
 
 export const changeSorting = createAction(
