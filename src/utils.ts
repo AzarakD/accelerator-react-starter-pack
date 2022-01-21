@@ -68,8 +68,9 @@ export const getShownPages = (pages: number[], currentPage: number) => {
   if (currentPage < 2) {
     shiftBack = 1;
     shiftForward = 2;
-  } else if (currentPage === pages.length && pages.length > 3) {
+  } else if (currentPage === pages.length) {
     shiftBack = 3;
+    shiftForward = 0;
   }
 
   return pages.slice(currentPage - shiftBack, currentPage + shiftForward);
