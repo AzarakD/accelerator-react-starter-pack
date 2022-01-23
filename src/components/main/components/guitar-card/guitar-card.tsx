@@ -12,6 +12,7 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
     previewImg,
     rating,
     price,
+    comments,
   } = guitar;
 
   return (
@@ -20,7 +21,7 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
       <div className="product-card__info">
         <div className="rate product-card__rate" aria-hidden="true">
           <RatingStars rating={rating} />
-          <span className="rate__count">9</span>
+          <span className="rate__count">{comments.length}</span>
           <span className="rate__message"></span>
         </div>
         <p className="product-card__title">{name}</p>

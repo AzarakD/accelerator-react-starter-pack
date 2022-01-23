@@ -8,6 +8,8 @@ import { State } from './state';
 export enum ActionType {
   LoadGuitars = 'data/loadGuitars',
   LoadGuitar = 'data/loadGuitar',
+  LoadComments = 'data/loadComments',
+  UpdateComments = 'data/updateComments',
   FailToFetchData = 'data/failToFetchData',
   ChangeSorting = 'app/changeSorting',
   ChangeFilter = 'app/changeFilter',

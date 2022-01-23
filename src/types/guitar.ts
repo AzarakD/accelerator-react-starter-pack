@@ -1,3 +1,5 @@
+import { Comment } from './comment';
+
 export type GuitarType = {
   acoustic: 'Акустическая',
   electric: 'Электрическая',
@@ -14,4 +16,7 @@ export type Guitar = {
   stringCount: number,
   rating: number,
   price: number,
+  comments: Comment[],
 };
+
+// export type GuitarWithComments = Guitar & {comments: Comment[]};

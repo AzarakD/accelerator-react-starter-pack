@@ -4,10 +4,12 @@ import {
   changeSearch,
   changeSorting,
   failToFetchData,
+  loadComments,
   loadGuitar,
   loadGuitars,
   resetForm,
-  setCurrentPage
+  setCurrentPage,
+  updateComments
 } from './actions';
 import {
   DEFAULT_PAGE,
@@ -23,6 +25,7 @@ export const initialState: State = {
   isDataLoaded: false,
   isFailed: false,
   guitar: {} as Guitar,
+  comments: [],
   sorting: SortQuery.Default,
   filter: FilterQuery.Default,
   search: SearchQuery.Default,
@@ -39,12 +42,21 @@ export const reducer = createReducer(initialState, (builder) => {
       state.isDataLoaded = true;
       state.isFailed = false;
     })
-    .addCase(failToFetchData, (state, action) => {
+    .addCase(failToFetchData, (state, _action) => {
       state.isDataLoaded = false;
       state.isFailed = true;
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;
+      state.comments = [];
+    })
+    .addCase(loadComments, (state, action) => {
+      state.comments = action.payload;
+    })
+    .addCase(updateComments, (state, action) => {
+      state.comments = action.payload.comments;
+      state.guitar.comments = action.payload.guitarComments;
+      // state.guitar.comments = [action.payload[0], ...state.guitar.comments];
     })
     .addCase(changeSorting, (state, action) => {
       state.sorting = action.payload;

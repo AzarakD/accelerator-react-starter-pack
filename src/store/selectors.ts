@@ -1,3 +1,4 @@
+import { Comment } from '../types/comment';
 import { Guitar } from '../types/guitar';
 import { State } from '../types/state';
 
@@ -5,6 +6,7 @@ export const getIsDataLoaded = ({isDataLoaded}: State): boolean => isDataLoaded;
 export const getIsFailed = ({isFailed}: State): boolean => isFailed;
 export const getGuitars = ({guitars}: State): Guitar[] => guitars;
 export const getGuitar = ({guitar}: State): Guitar => guitar;
+export const getComments = ({comments}: State): Comment[] => comments;
 export const getSorting = ({sorting}: State): string => sorting;
 export const getFilter = ({filter}: State): string => filter;
 export const getSearch = ({search}: State): string => search;

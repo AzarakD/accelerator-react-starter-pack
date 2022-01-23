@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
+import { Comment } from '../types/comment';
 import { Guitar } from '../types/guitar';
 
 export const loadGuitars = createAction(
@@ -17,6 +18,19 @@ export const failToFetchData = createAction(
 export const loadGuitar = createAction(
   ActionType.LoadGuitar,
   (guitar: Guitar) => ({payload: guitar}),
+);
+
+export const loadComments = createAction(
+  ActionType.LoadComments,
+  (comments: Comment[]) => ({payload: comments}),
+);
+
+export const updateComments = createAction(
+  ActionType.UpdateComments,
+  (comments: Comment[], guitarComments: Comment[]) => ({payload: {
+    comments: comments,
+    guitarComments: guitarComments,
+  }}),
 );
 
 export const changeSorting = createAction(

@@ -1,93 +1,117 @@
-export default function ReviewList(): JSX.Element {
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
+import { useDebounce } from '../../../../hooks/use-debounce';
+import { fetchCommentsAction } from '../../../../store/api-actioms';
+import { getComments } from '../../../../store/selectors';
+import ReactFocusLock from 'react-focus-lock';
+import Review from '../review/review';
+import ReviewModal from '../review-modal/review-modal';
+import SuccessModal from '../success-modal/success-modal';
+import { getIsLoadNeeded } from '../../../../utils';
+import { ReviewListProps } from './type';
+
+const COMMENT_PER_STEP = 3;
+
+export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
+  const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);
+  const [isReviewModalShown, setIsReviewModalShown] = useState(false);
+  const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
+
+  const comments = useSelector(getComments);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCommentsAction(guitarId, commentCount));
+  }, [dispatch, guitarId, commentCount]);
+
+  const onShowMore = useCallback(() => {
+    if (commentCount < totalComment) {
+      setCommentCount(commentCount + COMMENT_PER_STEP);
+    }
+  }, [commentCount, totalComment]);
+
+  const debouncedShowMore = useDebounce(() => onShowMore);
+
+  const onScroll = useCallback(() => {
+    if (getIsLoadNeeded()) {
+      debouncedShowMore();
+    }
+  }, [debouncedShowMore]);
+
+  useEffect(() => {
+    document.addEventListener('scroll', onScroll);
+
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    };
+  }, [onScroll]);
+
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="#todo">Оставить отзыв</a>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Иванов Максим</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня.</p>
-      </div>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Перова Ольга</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-      </div>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Преображенская  Ксения</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-      </div>
-      <button className="button button--medium reviews__more-button">Показать еще отзывы</button><a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
+      <a
+        className="button button--red-border button--big reviews__sumbit-button"
+        href="#review"
+        onClick={(evt) => {
+          evt.preventDefault();
+          setIsReviewModalShown(true);
+        }}
+      >
+        Оставить отзыв
+      </a>
+      {
+        !comments?.length
+          ? <>Отзывов нет</>
+          : comments.map((comment) => <Review comment={comment} key={comment.id} />)
+      }
+      {
+        commentCount < totalComment
+          ?
+          <button
+            onClick={onShowMore}
+            className="button button--medium reviews__more-button"
+          >
+            Показать еще отзывы
+          </button>
+          : ''
+      }
+      <a
+        style={{ zIndex: '1' }}
+        className="button button--up button--red-border button--big reviews__up-button"
+        href="#scrollUp"
+        onClick={(evt) => {
+          evt.preventDefault();
+          window.scroll(0,0);
+        }}
+      >
+        Наверх
+      </a>
+      {
+        isReviewModalShown
+          ?
+          <ReactFocusLock>
+            <ReviewModal
+              closeModal={() => setIsReviewModalShown(false)}
+              openSuccessModal={() => setIsSuccessModalShown(true)}
+            />
+          </ReactFocusLock>
+          : ''
+      }
+      {
+        isSuccessModalShown
+          ?
+          <ReactFocusLock>
+            <SuccessModal closeModal={() => setIsSuccessModalShown(false)} />
+          </ReactFocusLock>
+          : ''
+      }
     </section>
   );
 }

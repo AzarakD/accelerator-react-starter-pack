@@ -6,6 +6,9 @@ import {
 } from 'faker';
 import { getRandomGuitarType } from '../utils';
 import { Guitar } from '../types/guitar';
+import { makeFakeCommentList } from './comment-data';
+
+const ITEM_COUNT = 5;
 
 export const makeFakeGuitar = (): Guitar => ({
   id: datatype.number(),
@@ -17,6 +20,7 @@ export const makeFakeGuitar = (): Guitar => ({
   stringCount: datatype.number(),
   rating: datatype.number(),
   price: datatype.number(),
+  comments: makeFakeCommentList(ITEM_COUNT),
 });
 
 export const makeFakeGuitarList = (count: number): Guitar[] =>

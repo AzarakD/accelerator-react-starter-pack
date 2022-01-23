@@ -68,9 +68,24 @@ export const getShownPages = (pages: number[], currentPage: number) => {
   if (currentPage < 2) {
     shiftBack = 1;
     shiftForward = 2;
-  } else if (currentPage === pages.length && pages.length > 3) {
+  } else if (currentPage === pages.length) {
     shiftBack = 3;
+    shiftForward = 0;
   }
 
   return pages.slice(currentPage - shiftBack, currentPage + shiftForward);
+};
+
+export const getIsLoadNeeded = () => {
+  const height = document.body.offsetHeight;
+  const screenHeight = window.innerHeight;
+  const scrolled = window.scrollY;
+
+  const threshold = height - screenHeight / 4;
+  const position = scrolled + screenHeight;
+
+  if (position >= threshold) {
+    return true;
+  }
+  return false;
 };

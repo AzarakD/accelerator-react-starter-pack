@@ -8,8 +8,8 @@ export enum AppRoute {
 }
 
 export enum APIRoute {
-  Guitars = '/guitars:query',
-  Guitar = '/guitars/:id',
+  Guitars = '/guitars:query&_embed=comments',
+  Guitar = '/guitars/:id?&_embed=comments',
   Comments = '/guitars/:id/comments',
   Comment = '/comments',
   Coupons = '/coupons',
@@ -21,6 +21,7 @@ export enum SortQuery {
   SortToLesserPrice = '&_sort=price&_order=desc',
   SortToBiggerRating = '&_sort=rating&_order=asc',
   SortToLesserRating = '&_sort=rating&_order=desc',
+  SortToLaterDate = '?_sort=createAt&_order=desc',
   Default = '',
 }
 
@@ -58,4 +59,12 @@ export enum QueryKey {
   OrderAsc = '_order=asc',
   OrderDesc = '_order=desc',
   Page = 'page_',
+}
+
+export enum RateValue {
+  Terrible = 1,
+  Bad = 2,
+  Fine = 3,
+  Good = 4,
+  Great = 5,
 }

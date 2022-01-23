@@ -1,24 +1,39 @@
 import {
   failToFetchData,
+  loadComments,
   loadGuitar,
-  loadGuitars
+  loadGuitars,
+  updateComments
 } from './actions';
-import { ThunkActionResult } from '../types/actions';
 import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
   HEADER,
   ITEM_COUNT,
   PageQuery,
-  QueryKey
+  QueryKey,
+  SortQuery
 } from '../const';
+import { ThunkActionResult } from '../types/actions';
 import { Guitar } from '../types/guitar';
-
+import { Comment } from '../types/comment';
+import { CommentPost } from '../types/commentPost';
 
 export const fetchGuitarAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.get<Guitar>(APIRoute.Guitar.replace(':id', `${id}`));
     dispatch(loadGuitar(data));
+  };
+
+export const fetchCommentsAction = (id: number, commentCount: number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const route = APIRoute.Comments
+      .replace(':id', `${id}`)
+      .concat(SortQuery.SortToLaterDate)
+      .concat(`&_limit=${commentCount}`);
+
+    const {data} = await api.get<Comment[]>(route);
+    dispatch(loadComments(data));
   };
 
 export const fetchGuitarsAction = (query: string): ThunkActionResult =>
@@ -36,4 +51,15 @@ export const fetchGuitarsAction = (query: string): ThunkActionResult =>
     } catch {
       dispatch(failToFetchData());
     }
+  };
+
+export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>
+  async (dispatch, getState, api): Promise<void> => {
+    const {data} = await api.post<Comment>(APIRoute.Comment, review);
+
+    const prevComments = getState().comments;
+    const update = [data, ...prevComments.slice(0, prevComments.length - 1)];
+    const guitarUpdate = [data, ...getState().guitar.comments];
+
+    dispatch(updateComments(update, guitarUpdate));
   };

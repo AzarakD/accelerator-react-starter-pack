@@ -5,28 +5,42 @@ import { internet } from 'faker';
 import MockAdapter from 'axios-mock-adapter';
 import { createAPI } from '../services/api';
 import {
+  fetchCommentsAction,
   fetchGuitarAction,
-  fetchGuitarsAction
+  fetchGuitarsAction,
+  sendReviewAction
 } from './api-actioms';
 import {
   makeFakeGuitar,
   makeFakeGuitarList
 } from '../mocks/guitar-data';
+import { State } from '../types/state';
+import {
+  loadComments,
+  loadGuitar,
+  loadGuitars,
+  updateComments
+} from './actions';
+import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
   PageQuery,
-  QueryKey
+  QueryKey,
+  SortQuery
 } from '../const';
-import { State } from '../types/state';
-
-import { loadGuitar, loadGuitars } from './actions';
-import { getPageFromUrl } from '../utils';
+import { makeFakeComment, makeFakeCommentList, makeFakeCommentPost } from '../mocks/comment-data';
+import { Comment } from '../types/comment';
+import { Guitar } from '../types/guitar';
 
 const ITEM_PAGE_COUNT = 9;
 const GUITAR_COUNT = 10;
+const COMMENT_COUNT = 3;
 
 const fakeGuitar = makeFakeGuitar();
 const fakeGuitars = makeFakeGuitarList(GUITAR_COUNT);
+const fakeComment = makeFakeComment();
+const fakeComments = makeFakeCommentList(COMMENT_COUNT);
+const fakeCommentPost = makeFakeCommentPost();
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -74,6 +88,45 @@ describe('Async actions', () => {
 
     expect(store.getActions()).toEqual([
       loadGuitar(fakeGuitar),
+    ]);
+  });
+
+  it('should dispatch loadComments when Get /guitars/:id/comments', async () => {
+    const route = APIRoute.Comments
+      .replace(':id', `${fakeGuitar.id}`)
+      .concat(SortQuery.SortToLaterDate)
+      .concat(`&_limit=${COMMENT_COUNT}`);
+
+    mockAPI.onGet(route).reply(200, fakeComments);
+
+    const store = mockStore();
+
+    await store.dispatch(fetchCommentsAction(fakeGuitar.id, COMMENT_COUNT));
+
+    expect(store.getActions()).toEqual([
+      loadComments(fakeComments),
+    ]);
+  });
+
+  it('should dispatch updateComments when Post /comments', async () => {
+    mockAPI
+      .onPost(APIRoute.Comment)
+      .reply(200, fakeComment);
+
+    const store = mockStore({
+      comments: fakeComments,
+      guitar: fakeGuitar,
+    });
+
+    await store.dispatch(sendReviewAction(fakeCommentPost));
+
+    const prevComments = store.getState().comments as Comment[];
+    const storedGuitar = store.getState().guitar as Guitar;
+    const update = [fakeComment, ...prevComments.slice(0, prevComments.length - 1)];
+    const guitarUpdate = [fakeComment, ...storedGuitar.comments];
+
+    expect(store.getActions()).toEqual([
+      updateComments(update, guitarUpdate),
     ]);
   });
 });

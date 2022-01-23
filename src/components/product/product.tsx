@@ -29,7 +29,7 @@ export default function Product(): JSX.Element {
     if (guitar.id !== guitarId) {
       dispatch(fetchGuitarAction(guitarId));
     }
-  });
+  }, [dispatch, guitar.id, guitarId]);
 
   if (guitar.id !== guitarId) {
     return <>Loading...</>;
@@ -44,6 +44,7 @@ export default function Product(): JSX.Element {
     stringCount,
     rating,
     price,
+    comments,
   } = guitar;
 
   return (
@@ -53,7 +54,7 @@ export default function Product(): JSX.Element {
         <Header />
         <main className="page-content">
           <div className="container">
-            <h1 className="page-content__title title title--bigger">Товар</h1>
+            <h1 className="page-content__title title title--bigger">{name}</h1>
             <ul className="breadcrumbs page-content__breadcrumbs">
               <li className="breadcrumbs__item">
                 <Link to={AppRoute.Main} className="link">Главная</Link>
@@ -62,7 +63,7 @@ export default function Product(): JSX.Element {
                 <Link to={AppRoute.Main} className="link">Каталог</Link>
               </li>
               <li className="breadcrumbs__item">
-                <Link to={'#'} className="link">Товар</Link>
+                <Link to={'#'} className="link">{name}</Link>
               </li>
             </ul>
             <div className="product-container">
@@ -78,7 +79,7 @@ export default function Product(): JSX.Element {
                 <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
                 <div className="rate product-container__rating" aria-hidden="true">
                   <RatingStars rating={rating} />
-                  <span className="rate__count"></span>
+                  <span className="rate__count">{comments.length}</span>
                   <span className="rate__message"></span>
                 </div>
                 <Tabs
@@ -95,7 +96,7 @@ export default function Product(): JSX.Element {
               </div>
             </div>
 
-            <ReviewList />
+            <ReviewList guitarId={guitar.id} totalComment={comments.length} />
           </div>
         </main>
         <Footer />

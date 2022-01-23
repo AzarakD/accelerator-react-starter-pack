@@ -2,6 +2,7 @@ import {
   datatype,
   lorem
 } from 'faker';
+import { makeFakeCommentList } from '../mocks/comment-data';
 import {
   makeFakeGuitar,
   makeFakeGuitarList
@@ -11,10 +12,12 @@ import {
   changeSearch,
   changeSorting,
   failToFetchData,
+  loadComments,
   loadGuitar,
   loadGuitars,
   resetForm,
-  setCurrentPage
+  setCurrentPage,
+  updateComments
 } from './actions';
 import {
   initialState,
@@ -22,6 +25,7 @@ import {
 } from './reducer';
 
 const GUITAR_COUNT = 10;
+const COMMENT_COUNT = 3;
 
 describe('Reducer', () => {
   it('without additional parameters should return initial state', () => {
@@ -59,6 +63,31 @@ describe('Reducer', () => {
       .toEqual({
         ...initialState,
         guitar: fakeGuitar,
+        comments: [],
+      });
+  });
+
+  it('should load comments', () => {
+    const fakeComments = makeFakeCommentList(COMMENT_COUNT);
+
+    expect(reducer(initialState, loadComments(fakeComments)))
+      .toEqual({
+        ...initialState,
+        comments: fakeComments,
+      });
+  });
+
+  it('should update comments', () => {
+    const fakeComments = makeFakeCommentList(COMMENT_COUNT);
+
+    expect(reducer(initialState, updateComments(fakeComments, fakeComments)))
+      .toEqual({
+        ...initialState,
+        comments: fakeComments,
+        guitar: {
+          ...initialState.guitar,
+          comments: fakeComments,
+        },
       });
   });
 

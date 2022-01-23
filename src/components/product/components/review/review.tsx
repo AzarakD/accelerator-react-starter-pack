@@ -1,32 +1,38 @@
-export default function Review(): JSX.Element {
+import RatingStars from '../../../common/rating-stars/rating-stars';
+import { ReviewProps } from './type';
+
+export default function Review({comment}: ReviewProps): JSX.Element {
+  const {
+    userName,
+    advantage,
+    disadvantage,
+    rating,
+    createAt,
+  } = comment;
+
+  const getCommentDate = () => new Date(Date.parse(createAt))
+    .toLocaleString('ru', {
+      month: 'long',
+      day: 'numeric',
+    });
+
   return (
     <div className="review">
       <div className="review__wrapper">
-        <h4 className="review__title review__title--author title title--lesser">Иванов Максим</h4><span className="review__date">12 декабря</span>
+        <h4 className="review__title review__title--author title title--lesser">{userName}</h4>
+        <span className="review__date">{getCommentDate()}</span>
       </div>
-      <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-        <svg width="16" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
-        </svg>
-        <svg width="16" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
-        </svg>
-        <svg width="16" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
-        </svg>
-        <svg width="16" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
-        </svg>
-        <svg width="16" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-star"></use>
-        </svg><span className="rate__count"></span><span className="rate__message"></span>
+      <div className="rate review__rating-panel" aria-hidden="true">
+        <RatingStars rating={rating} />
+        <span className="rate__count"></span>
+        <span className="rate__message"></span>
       </div>
       <h4 className="review__title title title--lesser">Достоинства:</h4>
-      <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
+      <p className="review__value">{advantage}</p>
       <h4 className="review__title title title--lesser">Недостатки:</h4>
-      <p className="review__value">Тугие колонки</p>
+      <p className="review__value">{disadvantage}</p>
       <h4 className="review__title title title--lesser">Комментарий:</h4>
-      <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня.</p>
+      <p className="review__value">{comment.comment}</p>
     </div>
   );
 }
