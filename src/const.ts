@@ -5,6 +5,7 @@ export const ITEM_COUNT = 9;
 export enum AppRoute {
   Main = '/',
   Product = '/guitars/:id',
+  Cart = '/cart',
 }
 
 export enum APIRoute {
