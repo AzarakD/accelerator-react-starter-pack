@@ -2,9 +2,13 @@ import {
   useCallback,
   useEffect
 } from 'react';
+import { useHistory } from 'react-router-dom';
+import { AppRoute } from '../../../const';
 import { useDidMountEffect } from '../../../hooks/use-did-mount-effect';
 
 export default function CartAddSuccessModal({closeModal}: {closeModal: () => void}): JSX.Element {
+  const history = useHistory();
+
   useDidMountEffect(() => {
     document.body.style.overflow = 'hidden';
   });
@@ -26,6 +30,16 @@ export default function CartAddSuccessModal({closeModal}: {closeModal: () => voi
     return () => document.removeEventListener('keydown', onEscKeyDown);
   }, [onEscKeyDown]);
 
+  const onGoToCartEvent = () => {
+    onCloseModalEvent();
+    history.push(AppRoute.Cart);
+  };
+
+  const onContinueEvent = () => {
+    onCloseModalEvent();
+    history.push(AppRoute.Main);
+  };
+
   return (
     <div className="modal is-active modal--success">
       <div className="modal__wrapper">
@@ -36,8 +50,18 @@ export default function CartAddSuccessModal({closeModal}: {closeModal: () => voi
           </svg>
           <p className="modal__message">Товар успешно добавлен в корзину</p>
           <div className="modal__button-container modal__button-container--add">
-            <button className="button button--small modal__button">Перейти в корзину</button>
-            <button className="button button--black-border button--small modal__button modal__button--right">Продолжить покупки</button>
+            <button
+              className="button button--small modal__button"
+              onClick={onGoToCartEvent}
+            >
+              Перейти в корзину
+            </button>
+            <button
+              className="button button--black-border button--small modal__button modal__button--right"
+              onClick={onContinueEvent}
+            >
+              Продолжить покупки
+            </button>
           </div>
           <button
             className="modal__close-btn button-cross"
