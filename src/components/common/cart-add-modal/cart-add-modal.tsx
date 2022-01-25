@@ -13,7 +13,6 @@ import { CartAddModalProps } from './type';
 
 export default function CartAddModal({guitar, closeModal, openSuccessModal}: CartAddModalProps): JSX.Element {
   const dispatch = useDispatch();
-
   const {
     name,
     vendorCode,
@@ -60,7 +59,7 @@ export default function CartAddModal({guitar, closeModal, openSuccessModal}: Car
             <img
               style={{ width: '55px', height: '125px' }}
               className="modal__img"
-              src={previewImg.replace('/', '/content/')}
+              src={`/${previewImg.replace('/', '/content/')}`}
               width="67"
               height="137"
               alt={name}
