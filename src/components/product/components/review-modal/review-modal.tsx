@@ -13,13 +13,9 @@ import { sendReviewAction } from '../../../../store/api-actioms';
 import { getGuitar } from '../../../../store/selectors';
 import { RateValue } from '../../../../const';
 import { CommentPost } from '../../../../types/commentPost';
+import { ReviewModalProps } from './type';
 
 const ROWS_LIMIT = 10;
-
-type ReviewModalProps = {
-  closeModal: () => void,
-  openSuccessModal: () => void,
-};
 
 export default function ReviewModal({closeModal, openSuccessModal}: ReviewModalProps): JSX.Element {
   const guitar = useSelector(getGuitar);

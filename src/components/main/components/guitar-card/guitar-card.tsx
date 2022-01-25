@@ -1,10 +1,17 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ReactFocusLock from 'react-focus-lock';
+import CartAddModal from '../../../common/cart-add-modal/cart-add-modal';
+import CartAddSuccessModal from '../../../common/cart-add-success-modal/cart-add-success-modal';
 import RatingStars from '../../../common/rating-stars/rating-stars';
 import { setPrice } from '../../../../utils';
 import { AppRoute } from '../../../../const';
 import { GuitarCardProps } from './type';
 
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
+  const [isAddModalShown, setIsModalShown] = useState(false);
+  const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
+
   const {
     id,
     name,
@@ -36,8 +43,37 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
         >
           Подробнее
         </Link>
-        <a className="button button--red button--mini button--add-to-cart" href="#todo">Купить</a>
+        <a
+          onClick={(evt) => {
+            evt.preventDefault();
+            setIsModalShown(true);
+          }}
+          className="button button--red button--mini button--add-to-cart"
+          href="#buy"
+        >
+          Купить
+        </a>
       </div>
+      {
+        isAddModalShown
+          ?
+          <ReactFocusLock>
+            <CartAddModal
+              guitar={guitar}
+              closeModal={() => setIsModalShown(false)}
+              openSuccessModal={() => setIsSuccessModalShown(true)}
+            />
+          </ReactFocusLock>
+          : ''
+      }
+      {
+        isSuccessModalShown
+          ?
+          <ReactFocusLock>
+            <CartAddSuccessModal closeModal={() => setIsSuccessModalShown(false)} />
+          </ReactFocusLock>
+          : ''
+      }
     </div>
   );
 }
