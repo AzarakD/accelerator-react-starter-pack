@@ -13,4 +13,5 @@ export type State = {
   formReset: boolean,
   currentPage: number,
   totalCount: number | null,
+  cart: Guitar[],
 };

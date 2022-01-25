@@ -2,7 +2,9 @@ import {
   useCallback,
   useEffect
 } from 'react';
+import { useDispatch } from 'react-redux';
 import { useDidMountEffect } from '../../../hooks/use-did-mount-effect';
+import { addToCart } from '../../../store/actions';
 import {
   setGuitarType,
   setPrice
@@ -10,6 +12,8 @@ import {
 import { CartAddModalProps } from './type';
 
 export default function CartAddModal({guitar, closeModal, openSuccessModal}: CartAddModalProps): JSX.Element {
+  const dispatch = useDispatch();
+
   const {
     name,
     vendorCode,
@@ -34,16 +38,17 @@ export default function CartAddModal({guitar, closeModal, openSuccessModal}: Car
     }
   }, [onCloseModalEvent]);
 
+  const onAddEvent = () => {
+    dispatch(addToCart(guitar));
+    onCloseModalEvent();
+    openSuccessModal();
+  };
+
   useEffect(() => {
     document.addEventListener('keydown', onEscKeyDown);
 
     return () => document.removeEventListener('keydown', onEscKeyDown);
   }, [onEscKeyDown]);
-
-  const onClick = () => {
-    onCloseModalEvent();
-    openSuccessModal();
-  };
 
   return (
     <div className="modal is-active">
@@ -73,7 +78,7 @@ export default function CartAddModal({guitar, closeModal, openSuccessModal}: Car
           <div className="modal__button-container">
             <button
               className="button button--red button--big modal__button modal__button--add"
-              onClick={onClick}
+              onClick={onAddEvent}
             >
               Добавить в корзину
             </button>

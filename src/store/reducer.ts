@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
+  addToCart,
   changeFilter,
   changeSearch,
   changeSorting,
@@ -32,6 +33,7 @@ export const initialState: State = {
   formReset: false,
   currentPage: DEFAULT_PAGE,
   totalCount: null,
+  cart: [],
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -56,7 +58,6 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(updateComments, (state, action) => {
       state.comments = action.payload.comments;
       state.guitar.comments = action.payload.guitarComments;
-      // state.guitar.comments = [action.payload[0], ...state.guitar.comments];
     })
     .addCase(changeSorting, (state, action) => {
       state.sorting = action.payload;
@@ -72,5 +73,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;
+    })
+    .addCase(addToCart, (state, action) => {
+      state.cart = [...state.cart, action.payload];
     });
 });

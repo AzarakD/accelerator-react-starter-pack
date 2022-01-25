@@ -24,12 +24,6 @@ export default function CartAddSuccessModal({closeModal}: {closeModal: () => voi
     }
   }, [onCloseModalEvent]);
 
-  useEffect(() => {
-    document.addEventListener('keydown', onEscKeyDown);
-
-    return () => document.removeEventListener('keydown', onEscKeyDown);
-  }, [onEscKeyDown]);
-
   const onGoToCartEvent = () => {
     onCloseModalEvent();
     history.push(AppRoute.Cart);
@@ -39,6 +33,12 @@ export default function CartAddSuccessModal({closeModal}: {closeModal: () => voi
     onCloseModalEvent();
     history.push(AppRoute.Main);
   };
+
+  useEffect(() => {
+    document.addEventListener('keydown', onEscKeyDown);
+
+    return () => document.removeEventListener('keydown', onEscKeyDown);
+  }, [onEscKeyDown]);
 
   return (
     <div className="modal is-active modal--success">

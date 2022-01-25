@@ -56,3 +56,8 @@ export const setCurrentPage = createAction(
   ActionType.SetCurrentPage,
   (currentPage: number) => ({payload: currentPage}),
 );
+
+export const addToCart = createAction(
+  ActionType.AddToCart,
+  (guitar: Guitar) => ({payload: guitar}),
+);

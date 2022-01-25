@@ -70,3 +70,8 @@ export enum RateValue {
   Good = 4,
   Great = 5,
 }
+
+export enum Count {
+  Max = 99,
+  Min = 1,
+}
