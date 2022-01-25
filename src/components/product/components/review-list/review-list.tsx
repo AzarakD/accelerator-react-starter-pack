@@ -15,9 +15,8 @@ import Review from '../review/review';
 import ReviewModal from '../review-modal/review-modal';
 import SuccessModal from '../success-modal/success-modal';
 import { getIsLoadNeeded } from '../../../../utils';
+import { COMMENT_PER_STEP } from '../../../../const';
 import { ReviewListProps } from './type';
-
-const COMMENT_PER_STEP = 3;
 
 export default function ReviewList({guitarId, totalComment}: ReviewListProps): JSX.Element {
   const [commentCount, setCommentCount] = useState(COMMENT_PER_STEP);

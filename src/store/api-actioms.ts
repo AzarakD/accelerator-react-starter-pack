@@ -8,6 +8,7 @@ import {
 import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
+  COMMENT_PER_STEP,
   HEADER,
   ITEM_COUNT,
   PageQuery,
@@ -58,7 +59,7 @@ export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>
     const {data} = await api.post<Comment>(APIRoute.Comment, review);
 
     const prevComments = getState().comments;
-    const update = [data, ...prevComments.slice(0, prevComments.length - 1)];
+    const update = [data, ...prevComments.slice(0, COMMENT_PER_STEP - 1)];
     const guitarUpdate = [data, ...getState().guitar.comments];
 
     dispatch(updateComments(update, guitarUpdate));

@@ -24,11 +24,16 @@ import {
 import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
+  COMMENT_PER_STEP,
   PageQuery,
   QueryKey,
   SortQuery
 } from '../const';
-import { makeFakeComment, makeFakeCommentList, makeFakeCommentPost } from '../mocks/comment-data';
+import {
+  makeFakeComment,
+  makeFakeCommentList,
+  makeFakeCommentPost
+} from '../mocks/comment-data';
 import { Comment } from '../types/comment';
 import { Guitar } from '../types/guitar';
 
@@ -122,7 +127,7 @@ describe('Async actions', () => {
 
     const prevComments = store.getState().comments as Comment[];
     const storedGuitar = store.getState().guitar as Guitar;
-    const update = [fakeComment, ...prevComments.slice(0, prevComments.length - 1)];
+    const update = [fakeComment, ...prevComments.slice(0, COMMENT_PER_STEP - 1)];
     const guitarUpdate = [fakeComment, ...storedGuitar.comments];
 
     expect(store.getActions()).toEqual([

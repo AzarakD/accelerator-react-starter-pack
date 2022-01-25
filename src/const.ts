@@ -1,6 +1,7 @@
 export const HEADER = 'x-total-count';
 export const DEFAULT_PAGE = 1;
 export const ITEM_COUNT = 9;
+export const COMMENT_PER_STEP = 3;
 
 export enum AppRoute {
   Main = '/',
