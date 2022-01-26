@@ -2,10 +2,13 @@ import {
   Link,
   useHistory
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCart } from '../../../store/selectors';
 import FormSearch from './form-search/form-search';
 import { AppRoute } from '../../../const';
 
 export default function Header(): JSX.Element {
+  const cartItems = useSelector(getCart);
   const history = useHistory();
   const pathname = history.location.pathname;
 
@@ -36,7 +39,7 @@ export default function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">2</span>
+          <span className="header__cart-count">{cartItems?.length}</span>
         </Link>
       </div>
     </header>
