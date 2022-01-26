@@ -1,6 +1,7 @@
 import {
   Action,
-  ThunkAction
+  ThunkAction,
+  ThunkDispatch
 } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { State } from './state';
@@ -10,7 +11,6 @@ export enum ActionType {
   LoadGuitar = 'data/loadGuitar',
   LoadComments = 'data/loadComments',
   UpdateComments = 'data/updateComments',
-  FailToFetchData = 'data/failToFetchData',
   ChangeSorting = 'app/changeSorting',
   ChangeFilter = 'app/changeFilter',
   ChangeSearch = 'app/changeSearch',
@@ -20,3 +20,4 @@ export enum ActionType {
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;

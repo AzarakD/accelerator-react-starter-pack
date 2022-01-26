@@ -40,7 +40,6 @@ const mockStore = configureMockStore<
 
 const store = mockStore({
   guitars: fakeGuitars,
-  isDataLoaded: true,
   guitar: fakeGuitar,
   comments: fakeComments,
   sorting: SortQuery.Default,
@@ -68,8 +67,6 @@ describe('Application Routing', () => {
 
     expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Главная/i)).toBeInTheDocument();
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
-    expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
   });
 
   it('should render "Product" when user navigate to "/guitars/:id"', () => {

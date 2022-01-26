@@ -41,7 +41,6 @@ const mockStore = configureMockStore<
 
 const store = mockStore({
   guitars: fakeGuitars,
-  isDataLoaded: true,
   guitar: fakeGuitar,
   comments: fakeComments,
   sorting: SortQuery.Default,
@@ -68,7 +67,5 @@ describe('Component: Main', () => {
 
     expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Главная/i)).toBeInTheDocument();
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
-    expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
   });
 });

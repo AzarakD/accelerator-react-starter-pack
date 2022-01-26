@@ -1,5 +1,4 @@
 import {
-  failToFetchData,
   loadComments,
   loadGuitar,
   loadGuitars,
@@ -46,12 +45,8 @@ export const fetchGuitarsAction = (query: string): ThunkActionResult =>
       ? query.replace(/page_[0-9]+/, `${PageQuery.Start}${index}${PageQuery.Limit}${ITEM_COUNT}`)
       : query.concat(`?${PageQuery.Start}${index}${PageQuery.Limit}${ITEM_COUNT}`);
 
-    try {
-      const response = await api.get<Guitar[]>(APIRoute.Guitars.replace(':query', pageQuery));
-      dispatch(loadGuitars(response.data, +response.headers[HEADER]));
-    } catch {
-      dispatch(failToFetchData());
-    }
+    const response = await api.get<Guitar[]>(APIRoute.Guitars.replace(':query', pageQuery));
+    dispatch(loadGuitars(response.data, +response.headers[HEADER]));
   };
 
 export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>

@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import ReactFocusLock from 'react-focus-lock';
+import {
+  Link,
+  useHistory
+} from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCart } from '../../../../store/selectors';
 import CartAddModal from '../../../common/cart-add-modal/cart-add-modal';
 import CartAddSuccessModal from '../../../common/cart-add-success-modal/cart-add-success-modal';
 import RatingStars from '../../../common/rating-stars/rating-stars';
@@ -11,6 +16,10 @@ import { GuitarCardProps } from './type';
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
   const [isAddModalShown, setIsModalShown] = useState(false);
   const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
+
+  const history = useHistory();
+  const cart = useSelector(getCart);
+  const isInCart = Boolean(cart?.filter((item) => item.id === guitar.id).length);
 
   const {
     id,
@@ -43,16 +52,31 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
         >
           Подробнее
         </Link>
-        <a
-          onClick={(evt) => {
-            evt.preventDefault();
-            setIsModalShown(true);
-          }}
-          className="button button--red button--mini button--add-to-cart"
-          href="#buy"
-        >
-          Купить
-        </a>
+        {
+          isInCart
+            ?
+            <Link
+              to={'#cart'}
+              className="button button--red-border button--mini button--in-cart"
+              onClick={(evt) => {
+                evt.preventDefault();
+                history.push(AppRoute.Cart);
+              }}
+            >
+              В Корзине
+            </Link>
+            :
+            <Link
+              to={'#buy'}
+              className="button button--red button--mini button--add-to-cart"
+              onClick={(evt) => {
+                evt.preventDefault();
+                setIsModalShown(true);
+              }}
+            >
+              Купить
+            </Link>
+        }
       </div>
       {
         isAddModalShown

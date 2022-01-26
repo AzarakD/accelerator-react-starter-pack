@@ -8,10 +8,10 @@ import {
   makeFakeGuitarList
 } from '../mocks/guitar-data';
 import {
+  addToCart,
   changeFilter,
   changeSearch,
   changeSorting,
-  failToFetchData,
   loadComments,
   loadGuitar,
   loadGuitars,
@@ -41,18 +41,6 @@ describe('Reducer', () => {
         ...initialState,
         guitars: fakeGuitars,
         totalCount: fakeGuitars.length,
-        isDataLoaded: true,
-        isFailed: false,
-      });
-  });
-
-  it('should show fail message', () => {
-
-    expect(reducer(initialState, failToFetchData()))
-      .toEqual({
-        ...initialState,
-        isDataLoaded: false,
-        isFailed: true,
       });
   });
 
@@ -137,6 +125,16 @@ describe('Reducer', () => {
       .toEqual({
         ...initialState,
         currentPage: pageNumber,
+      });
+  });
+
+  it('should add item to Cart', () => {
+    const fakeGuitar = makeFakeGuitar();
+
+    expect(reducer(initialState, addToCart(fakeGuitar)))
+      .toEqual({
+        ...initialState,
+        cart: [...initialState.cart, fakeGuitar],
       });
   });
 });

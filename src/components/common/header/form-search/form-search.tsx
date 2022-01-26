@@ -17,10 +17,7 @@ import {
   changeSearch,
   resetForm
 } from '../../../../store/actions';
-import {
-  getFormReset,
-  getIsDataLoaded
-} from '../../../../store/selectors';
+import { getFormReset } from '../../../../store/selectors';
 import SelectList from './select-list/select-list';
 import { getSearchFromUrl } from '../../../../utils';
 import {
@@ -37,10 +34,7 @@ const getSimilarGuitars = async (query: string) => {
   try {
     const { data } = await api.get<Guitar[]>(route);
     return data;
-
   } catch {
-    // eslint-disable-next-line no-console
-    console.log('search is not available');
     return [];
   }
 };
@@ -48,7 +42,6 @@ const getSimilarGuitars = async (query: string) => {
 export default function FormSearch(): JSX.Element {
   const history = useHistory();
   const dispatch = useDispatch();
-  const isLoaded = useSelector(getIsDataLoaded);
   const formReset = useSelector(getFormReset);
   const search = getSearchFromUrl(history.location.search);
 
@@ -111,12 +104,6 @@ export default function FormSearch(): JSX.Element {
       document.removeEventListener('click', onOutsideClick);
     };
   }, [onEscKeyDown, onOutsideClick]);
-
-  useEffect(() => {
-    if (isLoaded && search) {
-      dispatch(changeSearch(`${SearchQuery.Similar}${search}`));
-    }
-  }, [dispatch, isLoaded, search]);
 
   return (
     <div className="form-search" onSubmit={onSubmit}>
