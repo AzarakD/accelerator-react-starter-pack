@@ -57,3 +57,16 @@ export const addToCart = createAction(
   ActionType.AddToCart,
   (guitar: Guitar) => ({payload: guitar}),
 );
+
+export const removeFromCart = createAction(
+  ActionType.RemoveFromCart,
+  (id: number) => ({payload: id}),
+);
+
+export const setCartItemCount = createAction(
+  ActionType.SetCartItemCount,
+  (id: number, count: number) => ({payload: {
+    id: id,
+    count: count,
+  }}),
+);

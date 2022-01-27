@@ -42,7 +42,7 @@ export default function Header(): JSX.Element {
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
           <span className="header__cart-count">
-            {cart?.reduce((sum, {items}) => sum + items.length, INIT_COUNT)}
+            {cart?.reduce((sum, {count}) => sum + count, INIT_COUNT)}
           </span>
         </Link>
       </div>

@@ -6,7 +6,10 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import { addToCart } from '../../../../store/actions';
+import {
+  removeFromCart,
+  setCartItemCount
+} from '../../../../store/actions';
 import { getCart } from '../../../../store/selectors';
 import {
   setGuitarType,
@@ -17,7 +20,7 @@ import { Guitar } from '../../../../types/guitar';
 
 export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
   const cart = useSelector(getCart);
-  const similarItems = cart.filter((item) => item.id === guitar.id)[0].items;
+  const similarItems = cart.filter((item) => item.id === guitar.id)[0];
 
   const {
     name,
@@ -28,8 +31,8 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     price,
   } = guitar;
 
-  const [totalPrice, setTotalPrice] = useState(price * similarItems.length);
-  const [userInput, setUserInput] = useState(similarItems.length);
+  const [totalPrice, setTotalPrice] = useState(price * similarItems.count);
+  const [userInput, setUserInput] = useState(similarItems.count);
   const dispatch = useDispatch();
 
   const onMinusEvent = () => {
@@ -38,6 +41,9 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     if (total >= Count.Min) {
       setTotalPrice(totalPrice - price);
       setUserInput(total);
+      dispatch(setCartItemCount(guitar.id, total));
+    } else {
+      dispatch(removeFromCart(guitar.id));
     }
   };
 
@@ -47,7 +53,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     if (total < Count.Max) {
       setTotalPrice(totalPrice + price);
       setUserInput(total);
-      dispatch(addToCart(guitar));
+      dispatch(setCartItemCount(guitar.id, total));
     }
   };
 
@@ -61,11 +67,17 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     }
     setTotalPrice(inputValue * price);
     setUserInput(inputValue);
+    dispatch(setCartItemCount(guitar.id, inputValue));
   };
 
   return (
     <div className="cart-item">
-      <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить">
+      <button
+        className="cart-item__close-button button-cross"
+        type="button"
+        aria-label="Удалить"
+        onClick={() => dispatch(removeFromCart(guitar.id))}
+      >
         <span className="button-cross__icon"></span>
         <span className="cart-item__close-button-interactive-area"></span>
       </button>

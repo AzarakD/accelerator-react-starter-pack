@@ -7,7 +7,9 @@ import {
   loadComments,
   loadGuitar,
   loadGuitars,
+  removeFromCart,
   resetForm,
+  setCartItemCount,
   setCurrentPage,
   updateComments
 } from './actions';
@@ -66,15 +68,27 @@ export const reducer = createReducer(initialState, (builder) => {
       state.currentPage = action.payload;
     })
     .addCase(addToCart, (state, action) => {
+      const cart = state.cart.slice();
+
+      cart.push({
+        id: action.payload.id,
+        item: action.payload,
+        count: 1,
+      });
+      state.cart = cart;
+    })
+    .addCase(removeFromCart, (state, action) => {
+      const index = state.cart.findIndex((item) => item.id === action.payload);
+      const cart = state.cart.slice();
+
+      cart.splice(index, 1);
+      state.cart = cart;
+    })
+    .addCase(setCartItemCount, (state, action) => {
       const index = state.cart.findIndex((item) => item.id === action.payload.id);
-      const newCart = state.cart.slice();
+      const cart = state.cart.slice();
 
-      if (index < 0) {
-        newCart.push({id: action.payload.id, items: [action.payload]});
-      } else {
-        newCart[index].items.push(action.payload);
-      }
-
-      state.cart = newCart;
+      cart[index].count = action.payload.count;
+      state.cart = cart;
     });
 });

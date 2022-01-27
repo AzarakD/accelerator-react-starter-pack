@@ -33,7 +33,7 @@ export default function Cart(): JSX.Element {
               {
                 !cart?.length
                   ? <>Корзина пуста</>
-                  : cart.map((item) => <CartItem key={item.id} guitar={item.items[0]} />)
+                  : cart.map((item) => <CartItem key={item.id} guitar={item.item} />)
               }
               <div className="cart__footer">
                 <div className="cart__coupon coupon">
