@@ -134,7 +134,7 @@ describe('Reducer', () => {
     expect(reducer(initialState, addToCart(fakeGuitar)))
       .toEqual({
         ...initialState,
-        cart: [...initialState.cart, fakeGuitar],
+        cart: [...initialState.cart, {id: fakeGuitar.id, items: [fakeGuitar]}],
       });
   });
 });

@@ -4,11 +4,11 @@ import { getCart } from '../../store/selectors';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
-import { AppRoute } from '../../const';
 import CartItem from './components/cart-item/cart-item';
+import { AppRoute } from '../../const';
 
 export default function Cart(): JSX.Element {
-  const cartItems = useSelector(getCart);
+  const cart = useSelector(getCart);
 
   return (
     <>
@@ -31,9 +31,9 @@ export default function Cart(): JSX.Element {
             </ul>
             <div className="cart">
               {
-                !cartItems?.length
+                !cart?.length
                   ? <>Корзина пуста</>
-                  : cartItems.map((item) => <CartItem key={item.id} guitar={item} />)
+                  : cart.map((item) => <CartItem key={item.id} guitar={item.items[0]} />)
               }
               <div className="cart__footer">
                 <div className="cart__coupon coupon">

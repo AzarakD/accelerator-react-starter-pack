@@ -11,12 +11,12 @@ export enum ActionType {
   LoadGuitar = 'data/loadGuitar',
   LoadComments = 'data/loadComments',
   UpdateComments = 'data/updateComments',
-  ChangeSorting = 'app/changeSorting',
-  ChangeFilter = 'app/changeFilter',
-  ChangeSearch = 'app/changeSearch',
-  ResetForm = 'app/resetForm',
-  SetCurrentPage = 'app/setCurrentPage',
-  AddToCart = 'app/addToCart',
+  ChangeSorting = 'filter/changeSorting',
+  ChangeFilter = 'filter/changeFilter',
+  ChangeSearch = 'filter/changeSearch',
+  ResetForm = 'filter/resetForm',
+  SetCurrentPage = 'filter/setCurrentPage',
+  AddToCart = 'cart/addToCart',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

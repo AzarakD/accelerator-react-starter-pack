@@ -7,8 +7,10 @@ import { getCart } from '../../../store/selectors';
 import FormSearch from './form-search/form-search';
 import { AppRoute } from '../../../const';
 
+const INIT_COUNT = 0;
+
 export default function Header(): JSX.Element {
-  const cartItems = useSelector(getCart);
+  const cart = useSelector(getCart);
   const history = useHistory();
   const pathname = history.location.pathname;
 
@@ -39,7 +41,9 @@ export default function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">{cartItems?.length}</span>
+          <span className="header__cart-count">
+            {cart?.reduce((sum, {items}) => sum + items.length, INIT_COUNT)}
+          </span>
         </Link>
       </div>
     </header>

@@ -1,3 +1,4 @@
+import { CartItem } from './cartItem';
 import { Comment } from './comment';
 import { Guitar } from './guitar';
 
@@ -11,5 +12,5 @@ export type State = {
   formReset: boolean,
   currentPage: number,
   totalCount: number | null,
-  cart: Guitar[],
+  cart: CartItem[],
 };

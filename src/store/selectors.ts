@@ -1,3 +1,4 @@
+import { CartItem } from '../types/cartItem';
 import { Comment } from '../types/comment';
 import { Guitar } from '../types/guitar';
 import { State } from '../types/state';
@@ -11,4 +12,4 @@ export const getSearch = ({search}: State): string => search;
 export const getFormReset = ({formReset}: State): boolean => formReset;
 export const getCurrentPage = ({currentPage}: State): number => currentPage;
 export const getTotalCount = ({totalCount}: State): number => totalCount as number;
-export const getCart = ({cart}: State): Guitar[] => cart;
+export const getCart = ({cart}: State): CartItem[] => cart;

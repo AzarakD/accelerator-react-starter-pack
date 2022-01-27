@@ -3,6 +3,12 @@ import {
   useState
 } from 'react';
 import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
+import { addToCart } from '../../../../store/actions';
+import { getCart } from '../../../../store/selectors';
+import {
   setGuitarType,
   setPrice
 } from '../../../../utils';
@@ -10,6 +16,9 @@ import { Count } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
 
 export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
+  const cart = useSelector(getCart);
+  const similarItems = cart.filter((item) => item.id === guitar.id)[0].items;
+
   const {
     name,
     vendorCode,
@@ -19,8 +28,9 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     price,
   } = guitar;
 
-  const [totalPrice, setTotalPrice] = useState(price);
-  const [userInput, setUserInput] = useState(Count.Min);
+  const [totalPrice, setTotalPrice] = useState(price * similarItems.length);
+  const [userInput, setUserInput] = useState(similarItems.length);
+  const dispatch = useDispatch();
 
   const onMinusEvent = () => {
     const total = userInput - 1;
@@ -37,6 +47,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     if (total < Count.Max) {
       setTotalPrice(totalPrice + price);
       setUserInput(total);
+      dispatch(addToCart(guitar));
     }
   };
 

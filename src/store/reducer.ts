@@ -66,6 +66,15 @@ export const reducer = createReducer(initialState, (builder) => {
       state.currentPage = action.payload;
     })
     .addCase(addToCart, (state, action) => {
-      state.cart = [...state.cart, action.payload];
+      const index = state.cart.findIndex((item) => item.id === action.payload.id);
+      const newCart = state.cart.slice();
+
+      if (index < 0) {
+        newCart.push({id: action.payload.id, items: [action.payload]});
+      } else {
+        newCart[index].items.push(action.payload);
+      }
+
+      state.cart = newCart;
     });
 });
