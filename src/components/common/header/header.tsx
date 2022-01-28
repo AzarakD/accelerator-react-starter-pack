@@ -12,6 +12,8 @@ const INIT_COUNT = 0;
 export default function Header(): JSX.Element {
   const cart = useSelector(getCart);
   const history = useHistory();
+
+  const counter = cart?.reduce((sum, {count}) => sum + count, INIT_COUNT);
   const pathname = history.location.pathname;
 
   return (
@@ -41,9 +43,11 @@ export default function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">
-            {cart?.reduce((sum, {count}) => sum + count, INIT_COUNT)}
-          </span>
+          {
+            counter
+              ? <span className="header__cart-count">{counter}</span>
+              : ''
+          }
         </Link>
       </div>
     </header>
