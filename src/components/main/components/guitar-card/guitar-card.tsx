@@ -14,7 +14,7 @@ import { AppRoute } from '../../../../const';
 import { GuitarCardProps } from './type';
 
 export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
-  const [isAddModalShown, setIsModalShown] = useState(false);
+  const [isAddModalShown, setIsAddModalShown] = useState(false);
   const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
 
   const history = useHistory();
@@ -71,7 +71,7 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
               className="button button--red button--mini button--add-to-cart"
               onClick={(evt) => {
                 evt.preventDefault();
-                setIsModalShown(true);
+                setIsAddModalShown(true);
               }}
             >
               Купить
@@ -84,7 +84,7 @@ export default function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
           <ReactFocusLock>
             <CartAddModal
               guitar={guitar}
-              closeModal={() => setIsModalShown(false)}
+              closeModal={() => setIsAddModalShown(false)}
               openSuccessModal={() => setIsSuccessModalShown(true)}
             />
           </ReactFocusLock>

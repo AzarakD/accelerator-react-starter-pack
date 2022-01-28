@@ -6,10 +6,7 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux';
-import {
-  removeFromCart,
-  setCartItemCount
-} from '../../../../store/actions';
+import { setCartItemCount } from '../../../../store/actions';
 import { getCart } from '../../../../store/selectors';
 import {
   setGuitarType,
@@ -17,12 +14,15 @@ import {
 } from '../../../../utils';
 import { Count } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
+import ReactFocusLock from 'react-focus-lock';
+import CartDeleteModal from '../cart-delete-modal/cart-delete-modal';
 
 export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
   const cart = useSelector(getCart);
   const similarItems = cart.filter((item) => item.id === guitar.id)[0];
 
   const {
+    id,
     name,
     vendorCode,
     type,
@@ -33,6 +33,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
 
   const [totalPrice, setTotalPrice] = useState(price * similarItems.count);
   const [userInput, setUserInput] = useState(similarItems.count);
+  const [isModalShown, setIsModalShown] = useState(false);
   const dispatch = useDispatch();
 
   const onMinusEvent = () => {
@@ -41,9 +42,9 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     if (total >= Count.Min) {
       setTotalPrice(totalPrice - price);
       setUserInput(total);
-      dispatch(setCartItemCount(guitar.id, total));
+      dispatch(setCartItemCount(id, total));
     } else {
-      dispatch(removeFromCart(guitar.id));
+      setIsModalShown(true);
     }
   };
 
@@ -53,7 +54,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     if (total < Count.Max) {
       setTotalPrice(totalPrice + price);
       setUserInput(total);
-      dispatch(setCartItemCount(guitar.id, total));
+      dispatch(setCartItemCount(id, total));
     }
   };
 
@@ -67,7 +68,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
     }
     setTotalPrice(inputValue * price);
     setUserInput(inputValue);
-    dispatch(setCartItemCount(guitar.id, inputValue));
+    dispatch(setCartItemCount(id, inputValue));
   };
 
   return (
@@ -76,7 +77,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
         className="cart-item__close-button button-cross"
         type="button"
         aria-label="Удалить"
-        onClick={() => dispatch(removeFromCart(guitar.id))}
+        onClick={() => setIsModalShown(true)}
       >
         <span className="button-cross__icon"></span>
         <span className="cart-item__close-button-interactive-area"></span>
@@ -122,6 +123,17 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
         </button>
       </div>
       <div className="cart-item__price-total">{setPrice(totalPrice)}</div>
+      {
+        isModalShown
+          ?
+          <ReactFocusLock>
+            <CartDeleteModal
+              guitar={guitar}
+              closeModal={() => setIsModalShown(false)}
+            />
+          </ReactFocusLock>
+          : ''
+      }
     </div>
   );
 }
