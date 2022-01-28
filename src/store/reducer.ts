@@ -7,6 +7,7 @@ import {
   loadComments,
   loadGuitar,
   loadGuitars,
+  plusCartItemCount,
   removeFromCart,
   resetForm,
   setCartItemCount,
@@ -89,6 +90,13 @@ export const reducer = createReducer(initialState, (builder) => {
       const cart = state.cart.slice();
 
       cart[index].count = action.payload.count;
+      state.cart = cart;
+    })
+    .addCase(plusCartItemCount, (state, action) => {
+      const index = state.cart.findIndex((item) => item.id === action.payload);
+      const cart = state.cart.slice();
+
+      cart[index].count += 1;
       state.cart = cart;
     });
 });

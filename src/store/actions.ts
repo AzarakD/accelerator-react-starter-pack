@@ -24,8 +24,8 @@ export const loadComments = createAction(
 export const updateComments = createAction(
   ActionType.UpdateComments,
   (comments: Comment[], guitarComments: Comment[]) => ({payload: {
-    comments: comments,
-    guitarComments: guitarComments,
+    comments,
+    guitarComments,
   }}),
 );
 
@@ -65,8 +65,10 @@ export const removeFromCart = createAction(
 
 export const setCartItemCount = createAction(
   ActionType.SetCartItemCount,
-  (id: number, count: number) => ({payload: {
-    id: id,
-    count: count,
-  }}),
+  (id: number, count: number) => ({payload: {id, count}}),
+);
+
+export const plusCartItemCount = createAction(
+  ActionType.PlusCartItemCount,
+  (id: number) => ({payload: id}),
 );

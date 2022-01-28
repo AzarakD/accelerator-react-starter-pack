@@ -2,9 +2,16 @@ import {
   useCallback,
   useEffect
 } from 'react';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  useSelector
+} from 'react-redux';
 import { useDidMountEffect } from '../../../hooks/use-did-mount-effect';
-import { addToCart } from '../../../store/actions';
+import {
+  addToCart,
+  plusCartItemCount
+} from '../../../store/actions';
+import { getCart } from '../../../store/selectors';
 import {
   setGuitarType,
   setPrice
@@ -12,6 +19,7 @@ import {
 import { CartAddModalProps } from './type';
 
 export default function CartAddModal({guitar, closeModal, openSuccessModal}: CartAddModalProps): JSX.Element {
+  const cart = useSelector(getCart);
   const dispatch = useDispatch();
   const {
     name,
@@ -38,7 +46,10 @@ export default function CartAddModal({guitar, closeModal, openSuccessModal}: Car
   }, [onCloseModalEvent]);
 
   const onAddEvent = () => {
-    dispatch(addToCart(guitar));
+    cart.some((item) => item.id === guitar.id)
+      ? dispatch(plusCartItemCount(guitar.id))
+      : dispatch(addToCart(guitar));
+
     onCloseModalEvent();
     openSuccessModal();
   };
