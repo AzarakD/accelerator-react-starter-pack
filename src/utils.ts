@@ -13,13 +13,7 @@ const guitarType: GuitarType = {
 export const setRatingStar = (rating: number, place: number) =>
   `#icon-${ rating >= place ? 'full-star' : 'star' }`;
 
-export const setPrice = (price: number) => {
-  const divider = 1000;
-  if (price >= 1000000) {
-    return `${Math.floor(price / divider ** 2)} ${Math.floor(price / divider / 10)} ${price % divider === 0 ? '000' : price % divider} ₽`;
-  }
-  return `${Math.floor(price / divider)} ${price % divider === 0 ? '000' : price % divider} ₽`;
-};
+export const setPrice = (price: number) => price.toLocaleString().concat(' ₽');
 
 export const setGuitarType = (type: keyof GuitarType) => guitarType[type];
 

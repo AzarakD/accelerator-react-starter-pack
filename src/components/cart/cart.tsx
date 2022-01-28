@@ -5,10 +5,14 @@ import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
 import CartItem from './components/cart-item/cart-item';
+import { setPrice } from '../../utils';
 import { AppRoute } from '../../const';
 
 export default function Cart(): JSX.Element {
   const cart = useSelector(getCart);
+
+  const totalPrice = cart.reduce((sum, {item}) => sum + item.price, 0);
+  const totalCount = cart.reduce((sum, {count}) => sum + count, 0);
 
   return (
     <>
@@ -51,7 +55,9 @@ export default function Cart(): JSX.Element {
                 <div className="cart__total-info">
                   <p className="cart__total-item">
                     <span className="cart__total-value-name">Всего:</span>
-                    <span className="cart__total-value">52 000 ₽</span>
+                    <span className="cart__total-value">
+                      {setPrice(totalPrice * totalCount)}
+                    </span>
                   </p>
                   <p className="cart__total-item">
                     <span className="cart__total-value-name">Скидка:</span>
