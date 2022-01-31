@@ -72,3 +72,8 @@ export const plusCartItemCount = createAction(
   ActionType.PlusCartItemCount,
   (id: number) => ({payload: id}),
 );
+
+export const setDiscount = createAction(
+  ActionType.SetDiscount,
+  (discount: number) => ({payload: discount}),
+);

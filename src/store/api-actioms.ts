@@ -2,6 +2,7 @@ import {
   loadComments,
   loadGuitar,
   loadGuitars,
+  setDiscount,
   updateComments
 } from './actions';
 import { getPageFromUrl } from '../utils';
@@ -62,9 +63,7 @@ export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>
   };
 
 export const sendCouponAction = (coupon: CouponPost): ThunkActionResult =>
-  async (_dispatch, _getState, api): Promise<void> => {
+  async (dispatch, _getState, api): Promise<void> => {
     const {data} = await api.post<number>(APIRoute.Coupons, coupon);
-
-    // eslint-disable-next-line no-console
-    console.log(data, typeof(data));
+    dispatch(setDiscount(data));
   };

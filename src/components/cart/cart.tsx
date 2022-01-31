@@ -1,20 +1,21 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getCart } from '../../store/selectors';
+import {
+  getCart,
+  getDiscount
+} from '../../store/selectors';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
 import CartItem from './components/cart-item/cart-item';
+import Coupon from './components/coupon/coupon';
 import { setPrice } from '../../utils';
 import { AppRoute } from '../../const';
-import { useState } from 'react';
-import Coupon from './components/coupon/coupon';
 
 const PERCENT = 100;
-const DEFAULT_DISCOUNT = 0;
 
 export default function Cart(): JSX.Element {
-  const [discount, setDiscount] = useState(DEFAULT_DISCOUNT);
+  const discount = useSelector(getDiscount);
   const cart = useSelector(getCart);
 
   const totalPrice = cart.reduce((sum, {item}) => sum + item.price, 0);
@@ -50,19 +51,8 @@ export default function Cart(): JSX.Element {
                   : cart.map((item) => <CartItem key={item.id} guitar={item.item} />)
               }
               <div className="cart__footer">
-                {/* <div className="cart__coupon coupon">
-                  <h2 className="title title--little coupon__title">Промокод на скидку</h2>
-                  <p className="coupon__info">Введите свой промокод, если он у вас есть.</p>
-                  <form className="coupon__form" id="coupon-form" method="post" action="/">
-                    <div className="form-input coupon__input">
-                      <label className="visually-hidden">Промокод</label>
-                      <input type="text" placeholder="Введите промокод" id="coupon" name="coupon"/>
-                      <p className="form-input__message form-input__message--success">Промокод принят</p>
-                    </div>
-                    <button className="button button--big coupon__button">Применить</button>
-                  </form>
-                </div> */}
-                <Coupon setDiscount={setDiscount}/>
+                <Coupon />
+
                 <div className="cart__total-info">
                   <p className="cart__total-item">
                     <span className="cart__total-value-name">Всего:</span>

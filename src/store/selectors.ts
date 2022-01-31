@@ -13,3 +13,4 @@ export const getFormReset = ({formReset}: State): boolean => formReset;
 export const getCurrentPage = ({currentPage}: State): number => currentPage;
 export const getTotalCount = ({totalCount}: State): number => totalCount as number;
 export const getCart = ({cart}: State): CartItem[] => cart;
+export const getDiscount = ({discount}: State): number => discount;

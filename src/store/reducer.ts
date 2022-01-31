@@ -12,9 +12,11 @@ import {
   resetForm,
   setCartItemCount,
   setCurrentPage,
+  setDiscount,
   updateComments
 } from './actions';
 import {
+  DEFAULT_DISCOUNT,
   DEFAULT_PAGE,
   FilterQuery,
   SearchQuery,
@@ -34,6 +36,7 @@ export const initialState: State = {
   currentPage: DEFAULT_PAGE,
   totalCount: null,
   cart: [],
+  discount: DEFAULT_DISCOUNT,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -98,5 +101,8 @@ export const reducer = createReducer(initialState, (builder) => {
 
       cart[index].count += 1;
       state.cart = cart;
+    })
+    .addCase(setDiscount, (state, action) => {
+      state.discount = action.payload;
     });
 });

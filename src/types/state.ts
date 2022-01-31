@@ -13,4 +13,5 @@ export type State = {
   currentPage: number,
   totalCount: number | null,
   cart: CartItem[],
+  discount: number,
 };

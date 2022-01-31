@@ -1,39 +1,22 @@
 import {
-  Dispatch,
   FormEvent,
-  SetStateAction,
   useState
 } from 'react';
-import { createAPI } from '../../../../services/api';
-import { APIRoute } from '../../../../const';
-import { CouponPost } from '../../../../types/couponPost';
+import { useDispatch } from 'react-redux';
+import { sendCouponAction } from '../../../../store/api-actioms';
+import { ThunkAppDispatch } from '../../../../types/actions';
 
-type CouponProps = {
-  setDiscount: Dispatch<SetStateAction<number>>,
-};
-
-const api = createAPI();
-const getDiscount = async (coupon: CouponPost) => {
-  try {
-    const {data} = await api.post<number>(APIRoute.Coupons, coupon);
-    return data;
-  } catch {
-    return 0;
-  }
-};
-
-export default function Coupon({setDiscount}: CouponProps): JSX.Element {
+export default function Coupon(): JSX.Element {
   const [isCouponValid, setIsCouponValid] = useState<boolean>();
   const [userInput, setUserInput] = useState('');
+
+  const dispatch = useDispatch<ThunkAppDispatch>();
 
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
 
-    getDiscount({coupon: userInput})
-      .then((value) => {
-        setDiscount(value);
-        setIsCouponValid(true);
-      })
+    dispatch(sendCouponAction({coupon: userInput}))
+      .then(() => setIsCouponValid(true))
       .catch(() => setIsCouponValid(false));
   };
 
