@@ -17,7 +17,7 @@ import {
   changeSearch,
   resetForm
 } from '../../../../store/actions';
-import { getFormReset } from '../../../../store/selectors';
+import { getFormReset } from '../../../../store/filter/selectors';
 import SelectList from './select-list/select-list';
 import { getSearchFromUrl } from '../../../../utils';
 import {

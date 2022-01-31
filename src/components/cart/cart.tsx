@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   getCart,
   getDiscount
-} from '../../store/selectors';
+} from '../../store/cart/selectors';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';

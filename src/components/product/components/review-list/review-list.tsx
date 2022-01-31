@@ -9,7 +9,7 @@ import {
 } from 'react-redux';
 import { useDebounce } from '../../../../hooks/use-debounce';
 import { fetchCommentsAction } from '../../../../store/api-actioms';
-import { getComments } from '../../../../store/selectors';
+import { getComments } from '../../../../store/product/selectors';
 import ReactFocusLock from 'react-focus-lock';
 import Review from '../review/review';
 import ReviewModal from '../review-modal/review-modal';

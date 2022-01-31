@@ -14,7 +14,7 @@ import {
   makeFakeGuitar,
   makeFakeGuitarList
 } from '../mocks/guitar-data';
-import { State } from '../types/state';
+import { ProductState, State } from '../types/state';
 import {
   loadComments,
   loadGuitar,
@@ -119,14 +119,18 @@ describe('Async actions', () => {
       .reply(200, fakeComment);
 
     const store = mockStore({
-      comments: fakeComments,
-      guitar: fakeGuitar,
+      product: {
+        comments: fakeComments,
+        guitar: fakeGuitar,
+      },
     });
 
     await store.dispatch(sendReviewAction(fakeCommentPost));
 
-    const prevComments = store.getState().comments as Comment[];
-    const storedGuitar = store.getState().guitar as Guitar;
+    const productState = store.getState().product as ProductState;
+    const prevComments = productState.comments as Comment[];
+    const storedGuitar = productState.guitar as Guitar;
+
     const update = [fakeComment, ...prevComments.slice(0, COMMENT_PER_STEP - 1)];
     const guitarUpdate = [fakeComment, ...storedGuitar.comments];
 

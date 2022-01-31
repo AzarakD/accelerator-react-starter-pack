@@ -5,7 +5,7 @@ import {
   useHistory
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getCart } from '../../../../store/selectors';
+import { getCart } from '../../../../store/cart/selectors';
 import CartAddModal from '../../../common/cart-add-modal/cart-add-modal';
 import CartAddSuccessModal from '../../../common/cart-add-success-modal/cart-add-success-modal';
 import RatingStars from '../../../common/rating-stars/rating-stars';

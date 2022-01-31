@@ -13,9 +13,9 @@ import { useDidUpdateEffect } from '../../../../hooks/use-did-update';
 import { setCurrentPage } from '../../../../store/actions';
 import {
   getCurrentPage,
-  getFilter,
-  getTotalCount
-} from '../../../../store/selectors';
+  getFilter
+} from '../../../../store/filter/selectors';
+import { getTotalCount } from '../../../../store/product/selectors';
 import {
   getPageFromUrl,
   getPages,

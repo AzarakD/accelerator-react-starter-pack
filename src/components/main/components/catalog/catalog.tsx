@@ -12,7 +12,7 @@ import {
   getFilter,
   getSearch,
   getSorting
-} from '../../../../store/selectors';
+} from '../../../../store/filter/selectors';
 import Cards from '../cards/cards';
 import Filter from '../filter/filter';
 import Pagination from '../pagination/pagination';

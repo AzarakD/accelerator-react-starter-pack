@@ -11,7 +11,7 @@ import {
   addToCart,
   plusCartItemCount
 } from '../../../store/actions';
-import { getCart } from '../../../store/selectors';
+import { getCart } from '../../../store/cart/selectors';
 import {
   setGuitarType,
   setPrice

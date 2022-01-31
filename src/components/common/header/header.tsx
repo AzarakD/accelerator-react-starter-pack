@@ -3,7 +3,7 @@ import {
   useHistory
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getCart } from '../../../store/selectors';
+import { getCart } from '../../../store/cart/selectors';
 import FormSearch from './form-search/form-search';
 import { AppRoute } from '../../../const';
 

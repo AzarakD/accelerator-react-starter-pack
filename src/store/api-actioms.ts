@@ -55,9 +55,9 @@ export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>
   async (dispatch, getState, api): Promise<void> => {
     const {data} = await api.post<Comment>(APIRoute.Comment, review);
 
-    const prevComments = getState().comments;
+    const prevComments = getState().product.comments;
     const update = [data, ...prevComments.slice(0, COMMENT_PER_STEP - 1)];
-    const guitarUpdate = [data, ...getState().guitar.comments];
+    const guitarUpdate = [data, ...getState().product.guitar.comments];
 
     dispatch(updateComments(update, guitarUpdate));
   };

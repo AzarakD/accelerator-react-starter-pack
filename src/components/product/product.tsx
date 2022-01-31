@@ -12,7 +12,7 @@ import {
 } from 'react-router-dom';
 import ReactFocusLock from 'react-focus-lock';
 import { fetchGuitarAction } from '../../store/api-actioms';
-import { getGuitar } from '../../store/selectors';
+import { getGuitar } from '../../store/product/selectors';
 import CartAddModal from '../common/cart-add-modal/cart-add-modal';
 import CartAddSuccessModal from '../common/cart-add-success-modal/cart-add-success-modal';
 import Footer from '../common/footer/footer';

@@ -40,15 +40,19 @@ const mockStore = configureMockStore<
 >(middlewares);
 
 const store = mockStore({
-  guitars: fakeGuitars,
-  guitar: fakeGuitar,
-  comments: fakeComments,
-  sorting: SortQuery.Default,
-  filter: FilterQuery.Default,
-  search: SearchQuery.Default,
-  formReset: false,
-  currentPage: DEFAULT_PAGE,
-  totalCount: ITEM_COUNT,
+  product: {
+    guitars: fakeGuitars,
+    guitar: fakeGuitar,
+    comments: fakeComments,
+    totalCount: ITEM_COUNT,
+  },
+  filter: {
+    sorting: SortQuery.Default,
+    filter: FilterQuery.Default,
+    search: SearchQuery.Default,
+    formReset: false,
+    currentPage: DEFAULT_PAGE,
+  },
 });
 
 const history = createMemoryHistory();

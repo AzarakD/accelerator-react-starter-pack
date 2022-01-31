@@ -7,7 +7,7 @@ import {
   useSelector
 } from 'react-redux';
 import { setCartItemCount } from '../../../../store/actions';
-import { getCart } from '../../../../store/selectors';
+import { getCart } from '../../../../store/cart/selectors';
 import {
   setGuitarType,
   setPrice
