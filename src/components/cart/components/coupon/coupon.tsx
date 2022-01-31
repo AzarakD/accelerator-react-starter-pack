@@ -6,8 +6,11 @@ import { useDispatch } from 'react-redux';
 import { sendCouponAction } from '../../../../store/api-actioms';
 import { ThunkAppDispatch } from '../../../../types/actions';
 
+const validateCoupon = (coupon: string) => !coupon.includes(' ');
+
 export default function Coupon(): JSX.Element {
-  const [isCouponValid, setIsCouponValid] = useState<boolean>();
+  const [isCouponValid, setIsCouponValid] = useState<boolean>(true);
+  const [isCouponAccepted, setIsCouponAccepted] = useState<boolean>(false);
   const [userInput, setUserInput] = useState('');
 
   const dispatch = useDispatch<ThunkAppDispatch>();
@@ -15,9 +18,21 @@ export default function Coupon(): JSX.Element {
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
 
-    dispatch(sendCouponAction({coupon: userInput}))
-      .then(() => setIsCouponValid(true))
-      .catch(() => setIsCouponValid(false));
+    if (validateCoupon(userInput)) {
+      setIsCouponValid(true);
+      dispatch(sendCouponAction({coupon: userInput}))
+        .then(() => {
+          setIsCouponValid(true);
+          setIsCouponAccepted(true);
+        })
+        .catch(() => {
+          setIsCouponValid(false);
+          setIsCouponAccepted(false);
+        });
+
+      return;
+    }
+    setIsCouponValid(false);
   };
 
   return (
@@ -40,8 +55,13 @@ export default function Coupon(): JSX.Element {
             value={userInput}
           />
           {
-            isCouponValid
+            isCouponAccepted
               ? <p className="form-input__message form-input__message--success">Промокод принят</p>
+              : ''
+          }
+          {
+            !isCouponValid
+              ? <p className="form-input__message form-input__message--error">Неверный промокод</p>
               : ''
           }
         </div>

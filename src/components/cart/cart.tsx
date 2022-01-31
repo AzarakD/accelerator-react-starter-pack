@@ -63,7 +63,7 @@ export default function Cart(): JSX.Element {
                   <p className="cart__total-item">
                     <span className="cart__total-value-name">Скидка:</span>
                     <span className="cart__total-value cart__total-value--bonus">
-                      - {setPrice(discountValue)}
+                      {discount ? '-' : ''} {setPrice(discountValue)}
                     </span>
                   </p>
                   <p className="cart__total-item">
