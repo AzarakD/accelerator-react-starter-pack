@@ -18,6 +18,7 @@ import { ThunkActionResult } from '../types/actions';
 import { Guitar } from '../types/guitar';
 import { Comment } from '../types/comment';
 import { CommentPost } from '../types/commentPost';
+import { CouponPost } from '../types/couponPost';
 
 export const fetchGuitarAction = (id: number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -58,4 +59,12 @@ export const sendReviewAction = (review: CommentPost ): ThunkActionResult =>
     const guitarUpdate = [data, ...getState().guitar.comments];
 
     dispatch(updateComments(update, guitarUpdate));
+  };
+
+export const sendCouponAction = (coupon: CouponPost): ThunkActionResult =>
+  async (_dispatch, _getState, api): Promise<void> => {
+    const {data} = await api.post<number>(APIRoute.Coupons, coupon);
+
+    // eslint-disable-next-line no-console
+    console.log(data, typeof(data));
   };
