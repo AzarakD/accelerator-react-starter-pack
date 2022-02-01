@@ -93,6 +93,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
       <div className="cart-item__price">{setPrice(price)}</div>
       <div className="quantity cart-item__quantity">
         <button
+          data-testid="minus"
           className="quantity__button"
           aria-label="Уменьшить количество"
           onClick={onMinusEvent}
@@ -113,6 +114,7 @@ export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
           value={userInput}
         />
         <button
+          data-testid="plus"
           className="quantity__button"
           aria-label="Увеличить количество"
           onClick={onPlusEvent}

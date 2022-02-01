@@ -2,7 +2,6 @@ import {
   useCallback,
   useEffect
 } from 'react';
-
 import { useDispatch } from 'react-redux';
 import { useDidMountEffect } from '../../../../hooks/use-did-mount-effect';
 import { removeFromCart } from '../../../../store/actions';

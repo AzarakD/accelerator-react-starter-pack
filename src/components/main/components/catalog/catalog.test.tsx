@@ -45,15 +45,17 @@ const store = mockStore({
   },
 });
 
+const catalog = (
+  <Provider store={store}>
+    <Router history={history}>
+      <Catalog />
+    </Router>
+  </Provider>
+);
+
 describe('Component: Catalog', () => {
   it('should render correctly if data is loading', () => {
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Catalog />
-        </Router>
-      </Provider>,
-    );
+    render(catalog);
 
     expect(screen.getByText(/Загрузка.../i)).toBeInTheDocument();
   });
@@ -63,18 +65,12 @@ describe('Component: Catalog', () => {
     const useDispatchSpy = jest.spyOn(Redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(dispatch);
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Catalog />
-        </Router>
-      </Provider>,
-    );
+    render(catalog);
 
     await waitFor(() => {
       expect(screen.queryByText(/Загрузка .../)).not.toBeInTheDocument();
     });
-    // expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
+    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
     expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
     expect(screen.getByTestId(/cards/i)).toBeInTheDocument();
     expect(screen.getByTestId(/pagination/i)).toBeInTheDocument();
@@ -85,13 +81,7 @@ describe('Component: Catalog', () => {
     const useDispatchSpy = jest.spyOn(Redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(dispatch);
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Catalog />
-        </Router>
-      </Provider>,
-    );
+    render(catalog);
 
     await waitFor(() => {
       expect(screen.queryByText(/Загрузка .../)).not.toBeInTheDocument();
