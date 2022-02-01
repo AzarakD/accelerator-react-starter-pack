@@ -1,13 +1,17 @@
 import { Action } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { internet } from 'faker';
+import {
+  datatype,
+  internet
+} from 'faker';
 import MockAdapter from 'axios-mock-adapter';
 import { createAPI } from '../services/api';
 import {
   fetchCommentsAction,
   fetchGuitarAction,
   fetchGuitarsAction,
+  sendCouponAction,
   sendReviewAction
 } from './api-actioms';
 import {
@@ -19,6 +23,7 @@ import {
   loadComments,
   loadGuitar,
   loadGuitars,
+  setDiscount,
   updateComments
 } from './actions';
 import { getPageFromUrl } from '../utils';
@@ -136,6 +141,29 @@ describe('Async actions', () => {
 
     expect(store.getActions()).toEqual([
       updateComments(update, guitarUpdate),
+    ]);
+  });
+
+  it('should dispatch setDiscount when Post /coupons', async () => {
+    const DISCOUNT = datatype.number();
+    const coupon = {
+      coupon: datatype.string(),
+    };
+
+    mockAPI
+      .onPost(APIRoute.Coupons)
+      .reply(200, DISCOUNT);
+
+    const store = mockStore({
+      cart: {
+        discount: 0,
+      },
+    });
+
+    await store.dispatch(sendCouponAction(coupon));
+
+    expect(store.getActions()).toEqual([
+      setDiscount(DISCOUNT),
     ]);
   });
 });
