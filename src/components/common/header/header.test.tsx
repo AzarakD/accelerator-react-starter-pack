@@ -18,6 +18,7 @@ import Header from './header';
 import { AppRoute } from '../../../const';
 import { State } from '../../../types/state';
 
+
 const api = createAPI();
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<
@@ -26,7 +27,14 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-const store = mockStore();
+const store = mockStore({
+  filter: {
+    formReset: false,
+  },
+  cart: {
+    cart: [],
+  },
+});
 const history = createMemoryHistory();
 
 describe('Component: Header', () => {

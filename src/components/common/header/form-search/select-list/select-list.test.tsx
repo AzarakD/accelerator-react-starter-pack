@@ -14,7 +14,6 @@ const GUITAR_COUNT = 10;
 const fakeGuitars = makeFakeGuitarList(GUITAR_COUNT);
 const history = createMemoryHistory();
 
-
 describe('Component: SelectList', () => {
   it('should render correctly if closed', () => {
     const isOpened = false;

@@ -18,6 +18,7 @@ import {
 import { makeFakeCommentList } from '../../mocks/comment-data';
 import {
   AppRoute,
+  DEFAULT_DISCOUNT,
   DEFAULT_PAGE,
   FilterQuery,
   SearchQuery,
@@ -52,6 +53,10 @@ const store = mockStore({
     search: SearchQuery.Default,
     formReset: false,
     currentPage: DEFAULT_PAGE,
+  },
+  cart: {
+    cart: [],
+    discount: DEFAULT_DISCOUNT,
   },
 });
 

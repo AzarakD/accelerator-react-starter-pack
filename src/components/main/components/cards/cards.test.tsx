@@ -31,6 +31,7 @@ describe('Component: Cards', () => {
   it('should render correctly if there are guitars', () => {
     const store = mockStore({
       product: {guitars: fakeGuitars},
+      cart: {cart: []},
     });
 
     render(

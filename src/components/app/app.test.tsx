@@ -52,6 +52,9 @@ const store = mockStore({
     formReset: false,
     currentPage: DEFAULT_PAGE,
   },
+  cart: {
+    cart: [],
+  },
 });
 
 const history = createMemoryHistory();

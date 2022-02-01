@@ -23,8 +23,12 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-const store = mockStore();
-const history = createMemoryHistory();
+const store = mockStore({
+  filter: {
+    formReset: false,
+  },
+});
+const history = createMemoryHistory({});
 
 const fakeFormSearch = (
   <Provider store={store}>
