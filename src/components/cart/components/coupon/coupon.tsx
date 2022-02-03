@@ -18,21 +18,16 @@ export default function Coupon(): JSX.Element {
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
 
-    if (validateCoupon(userInput)) {
-      setIsCouponValid(true);
-      dispatch(sendCouponAction({coupon: userInput}))
-        .then(() => {
-          setIsCouponValid(true);
-          setIsCouponAccepted(true);
-        })
-        .catch(() => {
-          setIsCouponValid(false);
-          setIsCouponAccepted(false);
-        });
-
-      return;
-    }
-    setIsCouponValid(false);
+    setIsCouponValid(true);
+    dispatch(sendCouponAction({coupon: userInput}))
+      .then(() => {
+        setIsCouponValid(true);
+        setIsCouponAccepted(true);
+      })
+      .catch(() => {
+        setIsCouponValid(false);
+        setIsCouponAccepted(false);
+      });
   };
 
   return (
@@ -51,7 +46,11 @@ export default function Coupon(): JSX.Element {
             placeholder="Введите промокод"
             id="coupon"
             name="coupon"
-            onInput={(evt) => setUserInput(evt.currentTarget.value)}
+            onInput={(evt) => {
+              if (validateCoupon(evt.currentTarget.value)) {
+                setUserInput(evt.currentTarget.value);
+              }
+            }}
             value={userInput}
           />
           {
