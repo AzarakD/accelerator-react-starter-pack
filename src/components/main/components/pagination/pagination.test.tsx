@@ -10,6 +10,10 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { createAPI } from '../../../../services/api';
 import Pagination from './pagination';
+import {
+  DEFAULT_PAGE,
+  FilterQuery
+} from '../../../../const';
 import { State } from '../../../../types/state';
 
 const api = createAPI();
@@ -20,7 +24,15 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-const store = mockStore();
+const store = mockStore({
+  product: {
+    totalCount: null,
+  },
+  filter: {
+    filter: FilterQuery.Default,
+    currentPage: DEFAULT_PAGE,
+  },
+});
 const history = createMemoryHistory();
 
 const fakePagination = (

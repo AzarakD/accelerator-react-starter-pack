@@ -12,7 +12,7 @@ import { changeSorting } from '../../../../store/actions';
 import {
   getFormReset,
   getSorting
-} from '../../../../store/selectors';
+} from '../../../../store/filter/selectors';
 import {
   QueryKey,
   SortQuery

@@ -39,16 +39,22 @@ const mockStore = configureMockStore<
 >(middlewares);
 
 const store = mockStore({
-  guitars: fakeGuitars,
-  isDataLoaded: true,
-  guitar: fakeGuitar,
-  comments: fakeComments,
-  sorting: SortQuery.Default,
-  filter: FilterQuery.Default,
-  search: SearchQuery.Default,
-  formReset: false,
-  currentPage: DEFAULT_PAGE,
-  totalCount: ITEM_COUNT,
+  product: {
+    guitars: fakeGuitars,
+    guitar: fakeGuitar,
+    comments: fakeComments,
+    totalCount: ITEM_COUNT,
+  },
+  filter: {
+    sorting: SortQuery.Default,
+    filter: FilterQuery.Default,
+    search: SearchQuery.Default,
+    formReset: false,
+    currentPage: DEFAULT_PAGE,
+  },
+  cart: {
+    cart: [],
+  },
 });
 
 const history = createMemoryHistory();
@@ -68,8 +74,6 @@ describe('Application Routing', () => {
 
     expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Главная/i)).toBeInTheDocument();
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
-    expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
   });
 
   it('should render "Product" when user navigate to "/guitars/:id"', () => {

@@ -1,6 +1,7 @@
 import {
   Action,
-  ThunkAction
+  ThunkAction,
+  ThunkDispatch
 } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { State } from './state';
@@ -10,12 +11,17 @@ export enum ActionType {
   LoadGuitar = 'data/loadGuitar',
   LoadComments = 'data/loadComments',
   UpdateComments = 'data/updateComments',
-  FailToFetchData = 'data/failToFetchData',
-  ChangeSorting = 'app/changeSorting',
-  ChangeFilter = 'app/changeFilter',
-  ChangeSearch = 'app/changeSearch',
-  ResetForm = 'app/resetForm',
-  SetCurrentPage = 'app/setCurrentPage',
+  ChangeSorting = 'filter/changeSorting',
+  ChangeFilter = 'filter/changeFilter',
+  ChangeSearch = 'filter/changeSearch',
+  ResetForm = 'filter/resetForm',
+  SetCurrentPage = 'filter/setCurrentPage',
+  AddToCart = 'cart/addToCart',
+  RemoveFromCart = 'cart/removeFromCart',
+  SetCartItemCount = 'cart/setCartItemCount',
+  PlusCartItemCount = 'cart/plusCartItemCount',
+  SetDiscount = 'cart/setDiscount',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;

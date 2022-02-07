@@ -1,34 +1,44 @@
 import { Action } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { internet } from 'faker';
+import {
+  datatype,
+  internet
+} from 'faker';
 import MockAdapter from 'axios-mock-adapter';
 import { createAPI } from '../services/api';
 import {
   fetchCommentsAction,
   fetchGuitarAction,
   fetchGuitarsAction,
+  sendCouponAction,
   sendReviewAction
 } from './api-actioms';
 import {
   makeFakeGuitar,
   makeFakeGuitarList
 } from '../mocks/guitar-data';
-import { State } from '../types/state';
+import { ProductState, State } from '../types/state';
 import {
   loadComments,
   loadGuitar,
   loadGuitars,
+  setDiscount,
   updateComments
 } from './actions';
 import { getPageFromUrl } from '../utils';
 import {
   APIRoute,
+  COMMENT_PER_STEP,
   PageQuery,
   QueryKey,
   SortQuery
 } from '../const';
-import { makeFakeComment, makeFakeCommentList, makeFakeCommentPost } from '../mocks/comment-data';
+import {
+  makeFakeComment,
+  makeFakeCommentList,
+  makeFakeCommentPost
+} from '../mocks/comment-data';
 import { Comment } from '../types/comment';
 import { Guitar } from '../types/guitar';
 
@@ -114,19 +124,46 @@ describe('Async actions', () => {
       .reply(200, fakeComment);
 
     const store = mockStore({
-      comments: fakeComments,
-      guitar: fakeGuitar,
+      product: {
+        comments: fakeComments,
+        guitar: fakeGuitar,
+      },
     });
 
     await store.dispatch(sendReviewAction(fakeCommentPost));
 
-    const prevComments = store.getState().comments as Comment[];
-    const storedGuitar = store.getState().guitar as Guitar;
-    const update = [fakeComment, ...prevComments.slice(0, prevComments.length - 1)];
+    const productState = store.getState().product as ProductState;
+    const prevComments = productState.comments as Comment[];
+    const storedGuitar = productState.guitar as Guitar;
+
+    const update = [fakeComment, ...prevComments.slice(0, COMMENT_PER_STEP - 1)];
     const guitarUpdate = [fakeComment, ...storedGuitar.comments];
 
     expect(store.getActions()).toEqual([
       updateComments(update, guitarUpdate),
+    ]);
+  });
+
+  it('should dispatch setDiscount when Post /coupons', async () => {
+    const DISCOUNT = datatype.number();
+    const coupon = {
+      coupon: datatype.string(),
+    };
+
+    mockAPI
+      .onPost(APIRoute.Coupons)
+      .reply(200, DISCOUNT);
+
+    const store = mockStore({
+      cart: {
+        discount: 0,
+      },
+    });
+
+    await store.dispatch(sendCouponAction(coupon));
+
+    expect(store.getActions()).toEqual([
+      setDiscount(DISCOUNT),
     ]);
   });
 });

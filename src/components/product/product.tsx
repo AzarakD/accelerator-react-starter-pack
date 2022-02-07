@@ -1,4 +1,7 @@
-import { useEffect } from 'react';
+import {
+  useEffect,
+  useState
+} from 'react';
 import {
   useDispatch,
   useSelector
@@ -7,8 +10,11 @@ import {
   Link,
   useParams
 } from 'react-router-dom';
+import ReactFocusLock from 'react-focus-lock';
 import { fetchGuitarAction } from '../../store/api-actioms';
-import { getGuitar } from '../../store/selectors';
+import { getGuitar } from '../../store/product/selectors';
+import CartAddModal from '../common/cart-add-modal/cart-add-modal';
+import CartAddSuccessModal from '../common/cart-add-success-modal/cart-add-success-modal';
 import Footer from '../common/footer/footer';
 import Header from '../common/header/header';
 import Icons from '../common/icons/icons';
@@ -19,6 +25,9 @@ import { setPrice } from '../../utils';
 import { AppRoute } from '../../const';
 
 export default function Product(): JSX.Element {
+  const [isAddModalShown, setIsModalShown] = useState(false);
+  const [isSuccessModalShown, setIsSuccessModalShown] = useState(false);
+
   const guitar = useSelector(getGuitar);
   const dispatch = useDispatch();
 
@@ -92,11 +101,40 @@ export default function Product(): JSX.Element {
               <div className="product-container__price-wrapper">
                 <p className="product-container__price-info product-container__price-info--title">Цена:</p>
                 <p className="product-container__price-info product-container__price-info--value">{setPrice(price)}</p>
-                <a className="button button--red button--big product-container__button" href="#todo">Добавить в корзину</a>
+                <a
+                  onClick={(evt) => {
+                    evt.preventDefault();
+                    setIsModalShown(true);
+                  }}
+                  className="button button--red button--big product-container__button"
+                  href="#buy"
+                >
+                  Добавить в корзину
+                </a>
               </div>
             </div>
 
             <ReviewList guitarId={guitar.id} totalComment={comments.length} />
+            {
+              isAddModalShown
+                ?
+                <ReactFocusLock>
+                  <CartAddModal
+                    guitar={guitar}
+                    closeModal={() => setIsModalShown(false)}
+                    openSuccessModal={() => setIsSuccessModalShown(true)}
+                  />
+                </ReactFocusLock>
+                : ''
+            }
+            {
+              isSuccessModalShown
+                ?
+                <ReactFocusLock>
+                  <CartAddSuccessModal closeModal={() => setIsSuccessModalShown(false)} />
+                </ReactFocusLock>
+                : ''
+            }
           </div>
         </main>
         <Footer />

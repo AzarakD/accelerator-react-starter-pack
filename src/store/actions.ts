@@ -11,10 +11,6 @@ export const loadGuitars = createAction(
   }}),
 );
 
-export const failToFetchData = createAction(
-  ActionType.FailToFetchData,
-);
-
 export const loadGuitar = createAction(
   ActionType.LoadGuitar,
   (guitar: Guitar) => ({payload: guitar}),
@@ -28,8 +24,8 @@ export const loadComments = createAction(
 export const updateComments = createAction(
   ActionType.UpdateComments,
   (comments: Comment[], guitarComments: Comment[]) => ({payload: {
-    comments: comments,
-    guitarComments: guitarComments,
+    comments,
+    guitarComments,
   }}),
 );
 
@@ -55,4 +51,29 @@ export const resetForm = createAction(
 export const setCurrentPage = createAction(
   ActionType.SetCurrentPage,
   (currentPage: number) => ({payload: currentPage}),
+);
+
+export const addToCart = createAction(
+  ActionType.AddToCart,
+  (guitar: Guitar) => ({payload: guitar}),
+);
+
+export const removeFromCart = createAction(
+  ActionType.RemoveFromCart,
+  (id: number) => ({payload: id}),
+);
+
+export const setCartItemCount = createAction(
+  ActionType.SetCartItemCount,
+  (id: number, count: number) => ({payload: {id, count}}),
+);
+
+export const plusCartItemCount = createAction(
+  ActionType.PlusCartItemCount,
+  (id: number) => ({payload: id}),
+);
+
+export const setDiscount = createAction(
+  ActionType.SetDiscount,
+  (discount: number) => ({payload: discount}),
 );

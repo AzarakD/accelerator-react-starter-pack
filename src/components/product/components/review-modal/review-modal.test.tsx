@@ -17,7 +17,9 @@ const fakeGuitar = makeFakeGuitar();
 const history = createMemoryHistory();
 const mockStore = configureMockStore();
 const store = mockStore({
-  guitar: fakeGuitar,
+  product: {
+    guitar: fakeGuitar,
+  },
 });
 
 describe('Component: ReviewModal', () => {

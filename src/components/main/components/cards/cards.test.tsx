@@ -30,7 +30,8 @@ const history = createMemoryHistory();
 describe('Component: Cards', () => {
   it('should render correctly if there are guitars', () => {
     const store = mockStore({
-      guitars: fakeGuitars,
+      product: {guitars: fakeGuitars},
+      cart: {cart: []},
     });
 
     render(
@@ -48,7 +49,7 @@ describe('Component: Cards', () => {
 
   it('should render correctly if there are no guitars', () => {
     const store = mockStore({
-      guitars: [],
+      product: {guitars: []},
     });
 
     render(

@@ -23,7 +23,15 @@ describe('Component: Product', () => {
     useDispatchSpy.mockReturnValue(jest.fn());
 
     const store = mockStore({
-      guitar: fakeGuitar,
+      product: {
+        guitar: fakeGuitar,
+      },
+      cart: {
+        cart: [],
+      },
+      filter: {
+        formReset: false,
+      },
     });
 
     render(

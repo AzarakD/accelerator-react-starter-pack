@@ -16,7 +16,7 @@ import {
 import {
   getFilter,
   getFormReset
-} from '../../../../store/selectors';
+} from '../../../../store/filter/selectors';
 import { createAPI } from '../../../../services/api';
 import {
   checkGuitarType,

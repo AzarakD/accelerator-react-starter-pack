@@ -23,7 +23,9 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-const store = mockStore();
+const store = mockStore({
+  cart: {cart: []},
+});
 const history = createMemoryHistory();
 
 const fakeGuitarCard = (

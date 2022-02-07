@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { getGuitars } from '../../../../store/selectors';
+import { getGuitars } from '../../../../store/product/selectors';
 import GuitarCard from '../guitar-card/guitar-card';
 
 export default function Cards(): JSX.Element {

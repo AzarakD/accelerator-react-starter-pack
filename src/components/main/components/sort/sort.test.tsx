@@ -10,6 +10,7 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { createAPI } from '../../../../services/api';
 import Sort from './sort';
+import { SortQuery } from '../../../../const';
 import { State } from '../../../../types/state';
 
 const api = createAPI();
@@ -20,7 +21,12 @@ const mockStore = configureMockStore<
   ThunkDispatch<State, typeof api, Action>
 >(middlewares);
 
-const store = mockStore();
+const store = mockStore({
+  filter: {
+    formReset: false,
+    sorting: SortQuery.Default,
+  },
+});
 const history = createMemoryHistory();
 
 const fakeSort = (

@@ -5,14 +5,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import { createAPI } from './services/api';
-import { reducer } from './store/reducer';
+import { rootReducer } from './store/root-reducer';
 import App from './components/app/app';
 
 const api = createAPI();
 const history = createBrowserHistory();
 
 const store = configureStore({
-  reducer: reducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: { extraArgument: api },

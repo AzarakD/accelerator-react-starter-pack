@@ -31,8 +31,10 @@ const mockStore = configureMockStore<
 describe('Component: ReviewList', () => {
   it('should render correctly when comments are not loaded', () => {
     const store = mockStore({
-      guitar: fakeGuitar,
-      comments: [],
+      product: {
+        guitar: fakeGuitar,
+        comments: [],
+      },
     });
 
     render(
@@ -48,8 +50,10 @@ describe('Component: ReviewList', () => {
 
   it('should render correctly when comments are loaded', () => {
     const store = mockStore({
-      guitar: fakeGuitar,
-      comments: fakeComments,
+      product: {
+        guitar: fakeGuitar,
+        comments: fakeComments,
+      },
     });
 
     render(

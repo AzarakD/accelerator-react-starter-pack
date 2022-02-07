@@ -18,6 +18,7 @@ import {
 import { makeFakeCommentList } from '../../mocks/comment-data';
 import {
   AppRoute,
+  DEFAULT_DISCOUNT,
   DEFAULT_PAGE,
   FilterQuery,
   SearchQuery,
@@ -40,16 +41,23 @@ const mockStore = configureMockStore<
 >(middlewares);
 
 const store = mockStore({
-  guitars: fakeGuitars,
-  isDataLoaded: true,
-  guitar: fakeGuitar,
-  comments: fakeComments,
-  sorting: SortQuery.Default,
-  filter: FilterQuery.Default,
-  search: SearchQuery.Default,
-  formReset: false,
-  currentPage: DEFAULT_PAGE,
-  totalCount: ITEM_COUNT,
+  product: {
+    guitars: fakeGuitars,
+    guitar: fakeGuitar,
+    comments: fakeComments,
+    totalCount: ITEM_COUNT,
+  },
+  filter: {
+    sorting: SortQuery.Default,
+    filter: FilterQuery.Default,
+    search: SearchQuery.Default,
+    formReset: false,
+    currentPage: DEFAULT_PAGE,
+  },
+  cart: {
+    cart: [],
+    discount: DEFAULT_DISCOUNT,
+  },
 });
 
 const history = createMemoryHistory();
@@ -68,7 +76,5 @@ describe('Component: Main', () => {
 
     expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Главная/i)).toBeInTheDocument();
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
-    expect(screen.getByText(/Сортировать:/i)).toBeInTheDocument();
   });
 });

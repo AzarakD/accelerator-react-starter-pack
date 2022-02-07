@@ -1,10 +1,13 @@
 export const HEADER = 'x-total-count';
 export const DEFAULT_PAGE = 1;
 export const ITEM_COUNT = 9;
+export const COMMENT_PER_STEP = 3;
+export const DEFAULT_DISCOUNT = 0;
 
 export enum AppRoute {
   Main = '/',
   Product = '/guitars/:id',
+  Cart = '/cart',
 }
 
 export enum APIRoute {
@@ -67,4 +70,9 @@ export enum RateValue {
   Fine = 3,
   Good = 4,
   Great = 5,
+}
+
+export enum Count {
+  Max = 99,
+  Min = 1,
 }
