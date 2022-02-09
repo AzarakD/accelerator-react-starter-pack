@@ -3,8 +3,8 @@ import {
   useEffect
 } from 'react';
 import { useHistory } from 'react-router-dom';
-import { AppRoute } from '../../../const';
 import { useDidMountEffect } from '../../../hooks/use-did-mount-effect';
+import { AppRoute } from '../../../const';
 
 export default function CartAddSuccessModal({closeModal}: {closeModal: () => void}): JSX.Element {
   const history = useHistory();

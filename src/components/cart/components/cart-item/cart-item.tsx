@@ -8,14 +8,14 @@ import {
 } from 'react-redux';
 import { setCartItemCount } from '../../../../store/actions';
 import { getCart } from '../../../../store/cart/selectors';
+import ReactFocusLock from 'react-focus-lock';
+import CartDeleteModal from '../cart-delete-modal/cart-delete-modal';
 import {
   setGuitarType,
   setPrice
 } from '../../../../utils';
 import { Count } from '../../../../const';
 import { Guitar } from '../../../../types/guitar';
-import ReactFocusLock from 'react-focus-lock';
-import CartDeleteModal from '../cart-delete-modal/cart-delete-modal';
 
 export default function CartItem({guitar}: {guitar: Guitar}): JSX.Element {
   const cart = useSelector(getCart);
